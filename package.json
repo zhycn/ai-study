@@ -1,0 +1,56 @@
+{
+  "name": "vitepress-starter",
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@10.30.1",
+  "description": "开箱即用的 VitePress 文档站点模板，基于 VitePress 2.x 构建",
+  "keywords": [
+    "vitepress",
+    "documentation",
+    "site-template",
+    "chinese",
+    "pwa",
+    "vue"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@mdit-vue/plugin-component": "^3.0.2",
+    "@mdit/plugin-katex": "^0.25.2",
+    "@vite-pwa/vitepress": "^1.1.0",
+    "eslint": "^10.2.1",
+    "eslint-plugin-vue": "^10.9.0",
+    "katex": "^0.16.45",
+    "lint-staged": "^16.4.0",
+    "markdown-it-container": "^4.0.0",
+    "prettier": "^3.8.3",
+    "simple-git-hooks": "^2.13.1",
+    "typescript-eslint": "^8.59.0",
+    "vitepress": "2.0.0-alpha.17",
+    "vue-eslint-parser": "^10.4.0"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "lint": "eslint . --fix",
+    "lint:check": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "type-check": "tsc --noEmit"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,mts,vue}": "eslint --fix",
+    "*.{md,ts,css,json,yml,yaml}": "prettier --write"
+  },
+  "onlyBuiltDependencies": [
+    "esbuild",
+    "simple-git-hooks"
+  ]
+}

@@ -1,0 +1,65 @@
+:root {
+  --vp-c-brand-1: #e8740c;
+  --vp-c-brand-2: #d06808;
+  --vp-c-brand-3: #c05e06;
+  --vp-c-brand-soft: #e8740c18;
+
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #e8740c 10%, #c05e06 100%);
+  --vp-home-hero-image-background-image: linear-gradient(135deg, #e8740c22 10%, #c05e0622 100%);
+  --vp-home-hero-image-filter: blur(44px);
+
+  /* 中文字体优化 */
+  --vp-font-family-base: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+.dark {
+  --vp-c-brand-1: #f09030;
+  --vp-c-brand-2: #e8740c;
+  --vp-c-brand-3: #d06808;
+  --vp-c-brand-soft: #f0903018;
+}
+
+.vp-doc .card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  background: transparent;
+  border: none;
+}
+
+.vp-doc .card-grid .vp-card {
+  display: block;
+  margin: 0;
+  height: 100%;
+}
+
+.vp-doc .custom-block.steps {
+  counter-reset: step;
+  padding: 1rem 1.5rem;
+}
+
+.vp-doc .custom-block.steps > h3 {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.vp-doc .custom-block.steps > h3::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  background: var(--vp-c-brand-1);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
