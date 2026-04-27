@@ -2,22 +2,28 @@
 layout: home
 
 hero:
-  name: 'VitePress Starter'
-  text: '开箱即用的文档站点'
-  tagline: 基于 VitePress 2.x 构建，快速、美观、易定制
+  name: 'AI Study'
+  text: '学习笔记与资源整理'
+  tagline: 记录 AI 实战经验，整理优质学习资源
   actions:
     - theme: brand
-      text: 开始使用
-      link: /guide/getting-started
+      text: 开始探索
+      link: /prompt/
     - theme: alt
-      text: 查看示例
-      link: /examples/markdown
+      text: 资源导航
+      link: /resources/
 
 features:
-  - title: 极速开发体验
-    details: 基于 Vite 驱动，瞬间启动开发服务器，修改即时生效
-  - title: Markdown 增强
-    details: 内置语法高亮、自定义容器、代码分组等丰富的 Markdown 扩展
-  - title: Vue 驱动
-    details: 在 Markdown 中直接使用 Vue 组件和模板语法，实现交互式文档
+  - title: Prompt Engineering
+    details: 提示词设计技巧与实战模式
+  - title: RAG
+    details: 检索增强生成的架构与优化
+  - title: AI Agent
+    details: 智能体框架选型与开发实践
+  - title: 模型微调
+    details: SFT、LoRA 等微调方法实践
+  - title: 工具与资源
+    details: AI 开发工具链、课程、论文精选
+  - title: 学习路径
+    details: 从入门到进阶的系统化学习指南
 ---

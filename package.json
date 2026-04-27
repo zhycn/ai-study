@@ -1,16 +1,15 @@
 {
-  "name": "vitepress-starter",
+  "name": "ai-study",
   "version": "1.0.0",
   "type": "module",
   "packageManager": "pnpm@10.30.1",
-  "description": "开箱即用的 VitePress 文档站点模板，基于 VitePress 2.x 构建",
+  "description": "AI 学习笔记与资源整理，基于 VitePress 2.x 构建",
   "keywords": [
-    "vitepress",
-    "documentation",
-    "site-template",
-    "chinese",
-    "pwa",
-    "vue"
+    "ai",
+    "llm",
+    "study",
+    "notes",
+    "vitepress"
   ],
   "license": "MIT",
   "engines": {

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-VitePress 2.x 文档站点模板。中文 (zh-CN)，部署于 GitHub Pages。
+AI Study 项目 — AI 学习笔记与资源整理。中文 (zh-CN)，部署于 GitHub Pages。
 
 ## 开发命令
 
@@ -24,7 +24,7 @@ pnpm type-check        # TypeScript 类型检查
 - **VitePress**: 2.0.0-alpha.17（alpha 版本）
 - **配置文件**: `docs/.vitepress/config.mts`，必须用 `withPwa()` 包裹 `defineConfig()`
 - **TypeScript 别名**: `@/*` -> `./docs/.vitepress/*`
-- **部署 base**: `/VitePress-starter/`，部署到 `https://zhycn.github.io/VitePress-starter/`
+- **部署 base**: `/ai-study/`，部署到 `https://zhycn.github.io/ai-study/`
 
 ## 代码风格
 
@@ -42,12 +42,14 @@ docs/
     env.d.ts            # 类型声明
     theme/
       index.ts          # 主题入口，继承 DefaultTheme
-      custom.css        # 品牌色 #e8740c，字体 Noto Sans SC + JetBrains Mono
+      custom.css        # 品牌色 #6366f1，字体 Noto Sans SC + JetBrains Mono
       components/       # 全局注册组件（Card、Badge）
   public/               # 静态资源（favicon.svg）
-  guide/                # 指南文档
-  api/                  # API 文档
-  examples/             # 示例文档
+  prompt/               # Prompt Engineering 笔记
+  rag/                  # RAG 检索增强生成笔记
+  agent/                # AI Agent 智能体笔记
+  finetuning/           # 模型微调笔记
+  resources/            # 资源整理
   index.md              # 首页（layout: home）
 ```
 
@@ -73,7 +75,6 @@ docs/
 ## 已知问题
 
 - README 和 CHANGELOG 中提到 "RSS 订阅" 但该功能已移除（vitepress-plugin-rss 有兼容性问题）
-- README 中目录结构提到 `plugins/` 目录但实际不存在
 
 ## OpenCode 自定义命令
 

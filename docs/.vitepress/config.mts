@@ -5,26 +5,26 @@ import container from 'markdown-it-container'
 
 export default withPwa(defineConfig({
   lang: 'zh-CN',
-  title: 'VitePress Starter',
-  description: '开箱即用的 VitePress 文档站点',
-  base: '/VitePress-starter/',
+  title: 'AI Study',
+  description: 'AI 学习笔记与资源整理',
+  base: '/ai-study/',
   cleanUrls: true,
   lastUpdated: true,
   sitemap: {
-    hostname: 'https://zhycn.github.io/VitePress-starter/'
+    hostname: 'https://zhycn.github.io/ai-study/'
   },
   vite: {},
   pwa: {
     registerType: 'autoUpdate',
     includeAssets: ['favicon.svg'],
     manifest: {
-      name: 'VitePress Starter',
-      short_name: 'VitePress',
-      description: '开箱即用的 VitePress 文档站点',
-      theme_color: '#e8740c',
+      name: 'AI Study',
+      short_name: 'AI Study',
+      description: 'AI 学习笔记与资源整理',
+      theme_color: '#6366f1',
       icons: [
         {
-          src: '/VitePress-starter/favicon.svg',
+          src: '/ai-study/favicon.svg',
           sizes: '32x32',
           type: 'image/svg+xml'
         }
@@ -47,12 +47,11 @@ export default withPwa(defineConfig({
   },
   head: [
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
-    ['meta', { name: 'theme-color', content: '#e8740c' }],
+    ['meta', { name: 'theme-color', content: '#6366f1' }],
     ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
     ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
-    ['meta', { name: 'msapplication-TileColor', content: '#e8740c' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#6366f1' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0' }],
-    // Google Fonts - Noto Sans SC
     ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
     [
       'link',
@@ -69,69 +68,75 @@ export default withPwa(defineConfig({
         href: 'https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap'
       }
     ],
-    // Open Graph
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:locale', content: 'zh_CN' }],
-    ['meta', { property: 'og:site_name', content: 'VitePress Starter' }],
-    // Twitter Card
+    ['meta', { property: 'og:site_name', content: 'AI Study' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }]
   ],
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '指南', link: '/guide/getting-started' },
-      { text: 'API', link: '/api/config' },
-      { text: '示例', link: '/examples/markdown' },
-      {
-        text: '更多',
-        items: [
-          { text: 'Markdown 扩展', link: '/markdown-examples' },
-          { text: '运行时 API', link: '/api-examples' },
-          { text: 'GitHub', link: 'https://github.com/zhycn/VitePress-starter' }
-        ]
-      }
+      { text: 'Prompt', link: '/prompt/' },
+      { text: 'RAG', link: '/rag/' },
+      { text: 'Agent', link: '/agent/' },
+      { text: '微调', link: '/finetuning/' },
+      { text: '资源', link: '/resources/' },
+      { text: 'GitHub', link: 'https://github.com/zhycn/ai-study' }
     ],
     sidebar: {
-      '/guide/': [
+      '/prompt/': [
         {
-          text: '入门',
+          text: 'Prompt Engineering',
           collapsed: false,
           items: [
-            { text: '快速开始', link: '/guide/getting-started' },
-            { text: '配置指南', link: '/guide/config' },
-            { text: '性能优化', link: '/guide/performance' },
-            { text: '多版本文档', link: '/guide/versioning' }
+            { text: '概览', link: '/prompt/' },
+            { text: '基础技巧', link: '/prompt/basics' },
+            { text: '高级技巧', link: '/prompt/advanced' }
           ]
         }
       ],
-      '/api/': [
+      '/rag/': [
         {
-          text: 'API 参考',
+          text: 'RAG',
           collapsed: false,
           items: [
-            { text: '配置 API', link: '/api/config' },
-            { text: '运行时 API', link: '/api/runtime' }
+            { text: '概览', link: '/rag/' },
+            { text: 'RAG 基础', link: '/rag/basics' },
+            { text: '进阶实践', link: '/rag/advanced' }
           ]
         }
       ],
-      '/examples/': [
+      '/agent/': [
         {
-          text: '示例',
+          text: 'AI Agent',
           collapsed: false,
           items: [
-            { text: 'Markdown 扩展', link: '/examples/markdown' },
-            { text: '组件示例', link: '/examples/components' },
-            { text: '数学公式', link: '/examples/katex' }
+            { text: '概览', link: '/agent/' },
+            { text: '框架对比', link: '/agent/framework' },
+            { text: '实战案例', link: '/agent/practice' }
           ]
         }
       ],
-      '/': [
+      '/finetuning/': [
         {
-          text: '示例',
+          text: '模型微调',
           collapsed: false,
           items: [
-            { text: 'Markdown 扩展', link: '/markdown-examples' },
-            { text: '运行时 API', link: '/api-examples' }
+            { text: '概览', link: '/finetuning/' },
+            { text: 'SFT 监督微调', link: '/finetuning/sft' },
+            { text: 'LoRA / QLoRA', link: '/finetuning/lora' }
+          ]
+        }
+      ],
+      '/resources/': [
+        {
+          text: '资源整理',
+          collapsed: false,
+          items: [
+            { text: '资源导航', link: '/resources/' },
+            { text: '常用工具', link: '/resources/tools' },
+            { text: '课程推荐', link: '/resources/courses' },
+            { text: '论文追踪', link: '/resources/papers' }
           ]
         }
       ]
@@ -172,7 +177,7 @@ export default withPwa(defineConfig({
       }
     },
     editLink: {
-      pattern: 'https://github.com/zhycn/VitePress-starter/edit/main/docs/:path',
+      pattern: 'https://github.com/zhycn/ai-study/edit/main/docs/:path',
       text: '在 GitHub 上编辑此页'
     },
     footer: {
@@ -200,6 +205,6 @@ export default withPwa(defineConfig({
       linkText: '回到首页'
     },
     externalLinkIcon: true,
-    socialLinks: [{ icon: 'github', link: 'https://github.com/zhycn/VitePress-starter' }]
+    socialLinks: [{ icon: 'github', link: 'https://github.com/zhycn/ai-study' }]
   }
 }))
