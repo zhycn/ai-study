@@ -5,6 +5,8 @@ description: Agent Orchestration，协调多个 Agent 的工作流
 
 # Agent 编排
 
+当有多个 AI 助手一起干活时，需要有个"项目经理"来协调——谁先干、谁后干、干完了交给谁、出错了怎么办。Agent 编排就是这个项目经理，确保整个团队有条不紊地完成任务。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -176,6 +178,7 @@ async def orchestrator_workflow():
 [LangGraph](https://langchain-ai.github.io/langgraph/) 是当前最流行的 Agent 编排框架之一，基于**状态机**模型。
 
 核心特性：
+
 - **循环支持**：与 DAG 不同，LangGraph 支持循环，适合需要重试和反思的 Agent 场景
 - **持久化**：内置检查点（Checkpoint）机制，支持中断和恢复
 - **可视化**：可以生成执行图，便于调试
@@ -280,6 +283,7 @@ class AgentOrchestrationWorkflow:
 ```
 
 Temporal 的优势：
+
 - **自动重试**：内置重试策略，Agent 失败自动重试
 - **持久化执行**：即使服务重启，工作流也能从断点恢复
 - **可观测性**：内置执行历史和指标收集
@@ -502,15 +506,18 @@ class DynamicOrchestrator:
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [多 Agent 系统](/glossary/multi-agent) — Agent 编排是多 Agent 系统的协调层，没有编排的多 Agent 系统会陷入混乱
 - [工作流](/glossary/workflow) — Agent 编排是工作流的智能化升级，处理的是有决策能力的 Agent 而非固定步骤
 - [工具使用](/glossary/tool-use) — 编排层需要理解每个 Agent 的工具能力，才能做出合理的调度决策
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 自主 Agent 内部也需要编排机制来协调自身的规划、执行、反思循环
 - [人机协作](/glossary/human-in-the-loop) — 编排层可以在关键步骤插入人工审核节点
 
 **技术基础**：
+
 - [规划](/glossary/planning) — 编排本质上是规划能力的工程化实现
 - [记忆](/glossary/memory) — 编排层需要维护跨 Agent 的共享记忆
 

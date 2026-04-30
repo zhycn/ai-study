@@ -5,6 +5,8 @@ description: Vector Database，存储和检索向量数据的数据库系统
 
 # 向量数据库
 
+专门存储和查找"语义相似度"的数据库。传统数据库擅长精确匹配（比如找名字叫"张三"的人），向量数据库则擅长模糊匹配（比如找"跟这段话意思相近的内容"）。它是 RAG 系统的核心基础设施。
+
 ## 概述
 
 **向量数据库**（Vector Database）是专门用于存储和检索高维向量数据的数据库系统。与传统关系型数据库不同，向量数据库的核心能力是**近似最近邻搜索**（Approximate Nearest Neighbor, ANN），能够在海量向量中快速找到与查询向量最相似的数据。
@@ -29,14 +31,15 @@ description: Vector Database，存储和检索向量数据的数据库系统
 
 向量数据库的性能核心在于索引算法，主流方案包括：
 
-| 算法 | 全称 | 特点 | 适用场景 |
-|------|------|------|----------|
-| **HNSW** | Hierarchical Navigable Small World | 多层图结构，查询速度快 | 高召回率要求的场景 |
-| **IVF** | Inverted File Index | 聚类 + 倒排，内存占用低 | 大规模数据集 |
-| **PQ** | Product Quantization | 向量压缩，节省存储 | 内存受限场景 |
-| **LSH** | Locality-Sensitive Hashing | 哈希映射，理论保证 | 近似搜索 |
+| 算法     | 全称                               | 特点                    | 适用场景           |
+| -------- | ---------------------------------- | ----------------------- | ------------------ |
+| **HNSW** | Hierarchical Navigable Small World | 多层图结构，查询速度快  | 高召回率要求的场景 |
+| **IVF**  | Inverted File Index                | 聚类 + 倒排，内存占用低 | 大规模数据集       |
+| **PQ**   | Product Quantization               | 向量压缩，节省存储      | 内存受限场景       |
+| **LSH**  | Locality-Sensitive Hashing         | 哈希映射，理论保证      | 近似搜索           |
 
 **HNSW** 是当前最流行的索引算法，通过构建多层导航图实现高效搜索：
+
 - 上层节点稀疏，快速定位大致区域
 - 下层节点密集，精确查找最近邻
 - 查询复杂度为 O(log N)，远优于暴力搜索的 O(N)
@@ -108,10 +111,11 @@ def dot_product(a, b):
 - **Redis**：Redis Stack 提供向量搜索模块
 
 :::info 选型建议
+
 - 快速验证/小规模：Chroma、pgvector
 - 生产环境/大规模：Milvus、Qdrant、Pinecone
 - 已有 PG 生态：优先 pgvector，减少运维复杂度
-:::
+  :::
 
 ## 工程实践
 
@@ -187,10 +191,11 @@ results = client.search(
 - **缓存策略**：对高频查询结果进行缓存
 
 :::warning 注意事项
+
 - 向量维度必须与 Embedding 模型输出一致
 - 索引构建是 CPU 密集型操作，建议在离线阶段完成
 - 定期监控索引的召回率和延迟指标
-:::
+  :::
 
 ## 与其他概念的关系
 

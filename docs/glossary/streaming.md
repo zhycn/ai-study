@@ -5,6 +5,8 @@ description: Streaming，实时逐字输出响应
 
 # 流式输出
 
+AI 回答时不是等全部写完才显示，而是边写边显示，像打字一样一个字一个字蹦出来。这样你不用干等几秒钟，马上就能看到开头，体验好很多。
+
 ## 概述
 
 流式输出（Streaming）是一种数据传输模式，AI 模型在生成完整回复之前，以流式方式逐字或逐 Token 地将部分结果推送给客户端，让用户能够实时看到生成过程，而非等待完整响应。
@@ -54,17 +56,17 @@ async def stream_chat(request: ChatRequest):
 前端处理 SSE：
 
 ```javascript
-const eventSource = new EventSource('/chat/stream?prompt=' + encodeURIComponent(prompt));
+const eventSource = new EventSource('/chat/stream?prompt=' + encodeURIComponent(prompt))
 
 eventSource.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  appendToUI(data.content);
-};
+  const data = JSON.parse(event.data)
+  appendToUI(data.content)
+}
 
 eventSource.onerror = () => {
-  eventSource.close();
-  console.error('Stream error');
-};
+  eventSource.close()
+  console.error('Stream error')
+}
 ```
 
 ### WebSocket
@@ -144,42 +146,42 @@ for chunk in stream_response("解释量子计算"):
 ### React 实现
 
 ```tsx
-import { useState } from 'react';
+import { useState } from 'react'
 
 function ChatStream({ prompt }: { prompt: string }) {
-  const [response, setResponse] = useState('');
-  const [isStreaming, setIsStreaming] = useState(false);
+  const [response, setResponse] = useState('')
+  const [isStreaming, setIsStreaming] = useState(false)
 
   const handleStream = async () => {
-    setIsStreaming(true);
-    setResponse('');
+    setIsStreaming(true)
+    setResponse('')
 
     const res = await fetch('/chat/stream', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt }),
-    });
+      body: JSON.stringify({ prompt })
+    })
 
-    const reader = res.body?.getReader();
-    const decoder = new TextDecoder();
+    const reader = res.body?.getReader()
+    const decoder = new TextDecoder()
 
     while (reader) {
-      const { done, value } = await reader.read();
-      if (done) break;
+      const { done, value } = await reader.read()
+      if (done) break
 
-      const text = decoder.decode(value);
+      const text = decoder.decode(value)
       // 解析 SSE 格式
-      const lines = text.split('\n');
+      const lines = text.split('\n')
       for (const line of lines) {
         if (line.startsWith('data: ')) {
-          const data = JSON.parse(line.slice(6));
-          setResponse(prev => prev + data.content);
+          const data = JSON.parse(line.slice(6))
+          setResponse((prev) => prev + data.content)
         }
       }
     }
 
-    setIsStreaming(false);
-  };
+    setIsStreaming(false)
+  }
 
   return (
     <div>
@@ -188,7 +190,7 @@ function ChatStream({ prompt }: { prompt: string }) {
       </button>
       <div className="response">{response}</div>
     </div>
-  );
+  )
 }
 ```
 
@@ -196,7 +198,7 @@ function ChatStream({ prompt }: { prompt: string }) {
 
 流式输出 Markdown 内容时，需要处理未闭合的语法：
 
-```typescript
+````typescript
 function StreamingMarkdown({ content }: { content: string }) {
   // 处理未闭合的代码块
   const safeContent = content.split('```').length % 2 === 0
@@ -208,17 +210,17 @@ function StreamingMarkdown({ content }: { content: string }) {
 
   return <ReactMarkdown>{safeContent}</ReactMarkdown>;
 }
-```
+````
 
 ## 应用场景
 
-| 场景 | 流式输出的价值 |
-|------|--------------|
-| **对话系统** | 用户实时看到回复生成，体验接近真人对话 |
+| 场景         | 流式输出的价值                           |
+| ------------ | ---------------------------------------- |
+| **对话系统** | 用户实时看到回复生成，体验接近真人对话   |
 | **代码生成** | 开发者可以边生成边阅读，提前判断代码方向 |
-| **内容创作** | 长文写作时逐步呈现内容，减少等待焦虑 |
-| **搜索增强** | 实时显示检索和生成过程，增加透明度 |
-| **数据分析** | 逐步展示分析结果和图表生成过程 |
+| **内容创作** | 长文写作时逐步呈现内容，减少等待焦虑     |
+| **搜索增强** | 实时显示检索和生成过程，增加透明度       |
+| **数据分析** | 逐步展示分析结果和图表生成过程           |
 
 ## 工程实践
 

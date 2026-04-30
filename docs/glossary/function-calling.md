@@ -5,6 +5,8 @@ description: Function Calling，让模型调用外部工具的能力
 
 # 函数调用
 
+让 AI 从"光说不练"变成"说到做到"的能力。模型发现需要查天气、算数学、搜新闻时，能主动调用相应的工具或程序去执行，而不是只能干巴巴地生成文字。
+
 ## 概述
 
 函数调用（Function Calling）是让大语言模型能够**调用外部函数或 API** 的技术。通过向模型提供函数的签名和描述，模型可以在需要时决定调用哪个函数、传入什么参数，并将函数执行结果融入后续的回复生成中。
@@ -99,12 +101,12 @@ response = client.chat.completions.create(
 # 检查模型是否请求调用函数
 if response.choices[0].message.tool_calls:
     tool_call = response.choices[0].message.tool_calls[0]
-    
+
     # 执行实际的函数调用
     if tool_call.function.name == "get_weather":
         args = json.loads(tool_call.function.arguments)
         result = fetch_weather(args["city"], args.get("unit", "celsius"))
-    
+
     # 第二轮：将结果返回给模型
     final_response = client.chat.completions.create(
         model="gpt-4o",
@@ -188,13 +190,13 @@ if response.choices[0].message.tool_calls:
 
 ## 技术对比
 
-| 特性 | OpenAI Function Calling | Anthropic Tool Use | [MCP](/glossary/mcp) |
-|------|------------------------|-------------------|---------------------|
-| 标准化 | OpenAI 专有 | Anthropic 专有 | 开放标准 |
-| 函数发现 | 通过 API 参数传递 | 通过提示词传递 | Server 自动发现 |
-| 传输方式 | API 请求/响应 | API 请求/响应 | 多种传输层 |
-| 资源访问 | 仅工具调用 | 仅工具调用 | 工具 + 资源 + 提示 |
-| 互操作性 | 绑定 OpenAI | 绑定 Anthropic | 跨厂商 |
+| 特性     | OpenAI Function Calling | Anthropic Tool Use | [MCP](/glossary/mcp) |
+| -------- | ----------------------- | ------------------ | -------------------- |
+| 标准化   | OpenAI 专有             | Anthropic 专有     | 开放标准             |
+| 函数发现 | 通过 API 参数传递       | 通过提示词传递     | Server 自动发现      |
+| 传输方式 | API 请求/响应           | API 请求/响应      | 多种传输层           |
+| 资源访问 | 仅工具调用              | 仅工具调用         | 工具 + 资源 + 提示   |
+| 互操作性 | 绑定 OpenAI             | 绑定 Anthropic     | 跨厂商               |
 
 ::: info 说明
 Function Calling 和 Tool Use 本质上是同一概念的不同实现。MCP 则是一个更上层的协议，旨在标准化整个工具接入生态。

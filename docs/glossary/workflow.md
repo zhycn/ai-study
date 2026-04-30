@@ -5,6 +5,8 @@ description: AI Workflows，AI 任务的自动化流程编排
 
 # 工作流
 
+把 AI 任务拆成一道道工序，像工厂流水线一样自动完成。比如先让 AI 总结文章，再翻译，最后排版——每一步自动衔接，不需要人工干预，高效又省心。
+
 ## 概述
 
 工作流（Workflow）是指将 AI 任务**分解为多个步骤**，并通过自动化的流程将这些步骤串联起来的技术方案。与单次模型调用不同，工作流定义了完整的执行逻辑：从输入处理、模型调用、条件判断、工具执行到结果输出。
@@ -153,7 +155,7 @@ workflow.add_node("verify", verify_node)
 workflow.set_entry_point("search")
 workflow.add_edge("search", "generate")
 workflow.add_edge("generate", "verify")
-workflow.add_conditional_edges("verify", 
+workflow.add_conditional_edges("verify",
     lambda s: "generate" if s["needs_retry"] else END
 )
 ```
@@ -197,13 +199,13 @@ workflow.add_conditional_edges("verify",
 
 ### 错误处理策略
 
-| 策略 | 说明 | 适用场景 |
-|------|------|---------|
-| 重试（Retry） | 失败后自动重试 | 网络超时、临时故障 |
-| 降级（Fallback） | 使用备用方案 | 主服务不可用 |
-| 跳过（Skip） | 跳过失败节点继续执行 | 非关键步骤 |
-| 终止（Abort） | 立即终止工作流 | 关键步骤失败 |
-| 人工介入（Human-in-the-loop） | 等待人工处理 | 需要人工判断的场景 |
+| 策略                          | 说明                 | 适用场景           |
+| ----------------------------- | -------------------- | ------------------ |
+| 重试（Retry）                 | 失败后自动重试       | 网络超时、临时故障 |
+| 降级（Fallback）              | 使用备用方案         | 主服务不可用       |
+| 跳过（Skip）                  | 跳过失败节点继续执行 | 非关键步骤         |
+| 终止（Abort）                 | 立即终止工作流       | 关键步骤失败       |
+| 人工介入（Human-in-the-loop） | 等待人工处理         | 需要人工判断的场景 |
 
 ### 性能优化
 

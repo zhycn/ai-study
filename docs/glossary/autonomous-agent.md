@@ -5,6 +5,8 @@ description: Autonomous Agent，能独立完成任务的 Agent
 
 # 自主 Agent
 
+你给它一个目标，它自己想办法搞定，不需要你一步步指挥。就像请了个靠谱的管家，你说"帮我规划一次旅行"，它自己去查机票、订酒店、排行程，最后把方案给你过目。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -628,17 +630,20 @@ class AutonomousAgentEvaluator:
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — 自主 Agent 是 Agent 能力的高级形态，建立在基础 Agent 能力之上
 - [规划](/glossary/planning) — 规划是自主 Agent 的核心能力，决定 Agent 如何分解和执行任务
 - [记忆](/glossary/memory) — 自主 Agent 需要长期记忆来积累经验和持续改进
 - [工具使用](/glossary/tool-use) — 工具使用是自主 Agent 执行任务的主要手段
 
 **应用场景**：
+
 - [多 Agent 系统](/glossary/multi-agent) — 多个自主 Agent 可以组成更强大的协作系统
 - [人机协作](/glossary/human-in-the-loop) — 自主 Agent 与人机协作形成光谱，实际系统通常介于两者之间
 - [Agent 编排](/glossary/agent-orchestration) — 自主 Agent 内部也需要编排机制来协调自身的执行循环
 
 **技术基础**：
+
 - [Skills](/glossary/skills) — 自主 Agent 通过组合 Skills 构建完整的能力体系
 - [Commands](/glossary/commands) — 用户可以通过 Commands 向自主 Agent 下达目标指令
 

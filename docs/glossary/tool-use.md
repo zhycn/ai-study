@@ -5,6 +5,8 @@ description: Tool Use，Agent 调用外部工具的能力
 
 # 工具使用
 
+让 AI 不再"光说不练"，而是能真正动手干活——搜索网页、查数据库、执行代码、发邮件等。就像给一个聪明的顾问配备了电脑和手机，他不仅能给你建议，还能帮你实际操作。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -142,6 +144,7 @@ def react_agent(task: str, tools: dict[str, Callable], max_steps: int = 10) -> s
 ```
 
 ReAct 模式的关键优势：
+
 - **可解释性**：每个步骤都有明确的思考过程
 - **灵活性**：可以根据观察结果动态调整策略
 - **可调试**：出问题时可以看到哪一步出了问题
@@ -259,6 +262,7 @@ result = executor.invoke({"input": "计算 2 的 10 次方，然后搜索 Python
 ```
 
 LangChain 内置工具：
+
 - `WikipediaQueryRun` — 维基百科搜索
 - `ArxivQueryRun` — 学术论文搜索
 - `PythonREPLTool` — Python 代码执行
@@ -291,6 +295,7 @@ if __name__ == "__main__":
 ```
 
 MCP 的核心优势：
+
 - **标准化**：统一的协议，不同客户端和服务端可以互操作
 - **安全性**：明确的权限模型，用户控制 Agent 可以访问的资源
 - **生态**：越来越多的工具和平台开始支持 MCP
@@ -490,15 +495,18 @@ class ToolCache:
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — 工具使用是 Agent 的核心能力之一，没有工具使用的 Agent 能力受限
 - [函数调用](/glossary/function-calling) — 函数调用是工具使用的底层技术实现
 - [MCP](/glossary/mcp) — MCP 是工具使用的标准化协议
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 自主 Agent 需要丰富的工具集来独立完成复杂任务
 - [多 Agent 系统](/glossary/multi-agent) — 不同 Agent 可以使用不同的工具集，实现专业化分工
 
 **技术基础**：
+
 - [规划](/glossary/planning) — 规划能力决定 Agent 何时、如何使用工具
 - [记忆](/glossary/memory) — 记忆工具调用的历史结果，避免重复调用
 

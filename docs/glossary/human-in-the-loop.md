@@ -5,6 +5,8 @@ description: Human-in-the-loop，人类参与决策的 Agent 模式
 
 # 人机协作
 
+AI 干活时关键节点需要人类"把关确认"。不是完全交给 AI 自动运行，也不是完全人工操作，而是在重要决策点让人来审核——既享受自动化的效率，又保留人类的判断力。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -526,14 +528,17 @@ class ReviewUI:
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — HITL 是 Agent 系统中的人类参与机制，没有 Agent 就无需 HITL
 - [自主 Agent](/glossary/autonomous-agent) — HITL 与自主 Agent 形成光谱的两端，实际系统通常介于两者之间
 
 **应用场景**：
+
 - [多 Agent 系统](/glossary/multi-agent) — 人类可以作为特殊节点加入多 Agent 系统，提供指导和审核
 - [Agent 编排](/glossary/agent-orchestration) — 编排层可以在关键步骤插入人工审核节点
 
 **技术基础**：
+
 - [AI 安全](/glossary/ai-safety) — HITL 是 AI 安全的重要保障机制
 - [规划](/glossary/planning) — 人类可以在规划阶段审核 Agent 的执行计划
 

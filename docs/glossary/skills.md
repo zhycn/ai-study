@@ -5,6 +5,8 @@ description: Agent 可执行的技能集合
 
 # Skills
 
+AI 助手的"专业技能包"。每个 Skill 是一种特定能力，比如写代码、做数据分析、生成文档等。就像人的简历上写的技能一样，AI 拥有的 Skill 越多，能干的活就越多。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -109,7 +111,7 @@ class Skill(ABC):
 
 ### Skill 实现示例
 
-```python
+````python
 class CodeReviewInput(SkillInput):
     code: str = Field(description="需要审查的代码")
     language: str = Field(default="python", description="编程语言")
@@ -145,14 +147,15 @@ class CodeReviewSkill(Skill):
 
 ```{input_data.language}
 {input_data.code}
-```
+````
 
 重点关注：{', '.join(input_data.focus_areas) if input_data.focus_areas else '全面审查'}
 
 请输出：
-1. 发现的问题（严重程度、位置、描述）
-2. 改进建议
-3. 代码质量评分（1-10）"""
+
+1.  发现的问题（严重程度、位置、描述）
+2.  改进建议
+3.  代码质量评分（1-10）"""
 
         response = await llm.invoke(prompt)
         parsed = parse_review_response(response)
@@ -163,7 +166,8 @@ class CodeReviewSkill(Skill):
             suggestions=parsed["suggestions"],
             score=parsed["score"]
         )
-```
+
+````
 
 ### Skill 注册与发现
 
@@ -216,7 +220,7 @@ registry.register(TestingSkill())
 
 # Agent 使用 registry 获取可用工具定义
 tools = registry.get_tool_definitions()
-```
+````
 
 ## 主流框架与实现
 
@@ -490,15 +494,18 @@ class PermissionControlledSkill(Skill):
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — Skill 是 Agent 能力的具体实现单元，Agent 通过组合 Skill 构建完整能力
 - [工具使用](/glossary/tool-use) — Skill 和工具使用相辅相成，Skill 侧重内部逻辑封装，工具侧重外部服务调用
 - [Commands](/glossary/commands) — Commands 是用户触发 Skill 的入口，一个 Command 可以调用一个或多个 Skill
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 自主 Agent 需要丰富的 Skill 集来独立完成复杂任务
 - [多 Agent 系统](/glossary/multi-agent) — 不同 Agent 可以拥有不同的 Skill 集，实现专业化分工
 
 **技术基础**：
+
 - [函数调用](/glossary/function-calling) — Skill 的执行通常通过函数调用机制触发
 - [规划](/glossary/planning) — 规划能力决定 Agent 如何组合和编排多个 Skill
 

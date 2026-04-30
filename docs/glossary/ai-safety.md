@@ -5,6 +5,8 @@ description: AI Safety，确保 AI 系统安全、可靠、可控
 
 # AI 安全
 
+研究怎么让 AI 别"闯祸"的领域。从防止 AI 说出有害内容、泄露隐私，到防范被坏人利用，甚至考虑未来超级智能会不会失控——总之就是确保 AI 越强大越安全，而不是越危险。
+
 ## 概述
 
 **AI 安全**（AI Safety）是研究如何确保 AI 系统在其整个生命周期中安全、可靠、可控的跨学科领域。它涵盖技术、政策、伦理、法律等多个维度，目标是在发挥 AI 能力的同时，最大限度地降低潜在风险。
@@ -86,38 +88,38 @@ JAILBREAK_PATTERNS = [
 
 美国国家标准与技术研究院发布的 AI 风险管理框架，包含四个核心功能：
 
-| 功能 | 英文 | 描述 |
-|------|------|------|
-| **治理** | Govern | 建立 AI 风险治理文化和流程 |
-| **映射** | Map | 识别和评估 AI 系统风险 |
-| **测量** | Measure | 定量评估风险指标 |
-| **管理** | Manage | 持续监控和响应风险 |
+| 功能     | 英文    | 描述                       |
+| -------- | ------- | -------------------------- |
+| **治理** | Govern  | 建立 AI 风险治理文化和流程 |
+| **映射** | Map     | 识别和评估 AI 系统风险     |
+| **测量** | Measure | 定量评估风险指标           |
+| **管理** | Manage  | 持续监控和响应风险         |
 
 ### OWASP Top 10 for LLM
 
 OWASP 发布的十大 LLM 安全风险：
 
-| 排名 | 风险 | 英文 |
-|------|------|------|
-| 1 | 提示词注入 | Prompt Injection |
-| 2 | 不安全输出处理 | Insecure Output Handling |
-| 3 | 训练数据投毒 | Training Data Poisoning |
-| 4 | 模型拒绝服务 | Model Denial of Service |
-| 5 | 供应链漏洞 | Supply Chain Vulnerabilities |
-| 6 | 敏感信息泄露 | Sensitive Information Disclosure |
-| 7 | 不安全的插件设计 | Insecure Plugin Design |
-| 8 | 过度代理 | Excessive Agency |
-| 9 | 过度信任 | Overreliance |
-| 10 | 模型窃取 | Model Theft |
+| 排名 | 风险             | 英文                             |
+| ---- | ---------------- | -------------------------------- |
+| 1    | 提示词注入       | Prompt Injection                 |
+| 2    | 不安全输出处理   | Insecure Output Handling         |
+| 3    | 训练数据投毒     | Training Data Poisoning          |
+| 4    | 模型拒绝服务     | Model Denial of Service          |
+| 5    | 供应链漏洞       | Supply Chain Vulnerabilities     |
+| 6    | 敏感信息泄露     | Sensitive Information Disclosure |
+| 7    | 不安全的插件设计 | Insecure Plugin Design           |
+| 8    | 过度代理         | Excessive Agency                 |
+| 9    | 过度信任         | Overreliance                     |
+| 10   | 模型窃取         | Model Theft                      |
 
 ### 欧盟 AI Act 风险分级
 
-| 风险等级 | 示例 | 要求 |
-|----------|------|------|
-| **不可接受** | 社会评分、实时远程生物识别 | 禁止 |
-| **高风险** | 医疗诊断、关键基础设施 | 严格合规 |
-| **有限风险** | 聊天机器人、深度伪造 | 透明度义务 |
-| **最小风险** | 垃圾邮件过滤、游戏 AI | 无特殊要求 |
+| 风险等级     | 示例                       | 要求       |
+| ------------ | -------------------------- | ---------- |
+| **不可接受** | 社会评分、实时远程生物识别 | 禁止       |
+| **高风险**   | 医疗诊断、关键基础设施     | 严格合规   |
+| **有限风险** | 聊天机器人、深度伪造       | 透明度义务 |
+| **最小风险** | 垃圾邮件过滤、游戏 AI      | 无特殊要求 |
 
 ## 工程实践
 

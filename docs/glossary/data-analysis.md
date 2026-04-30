@@ -5,6 +5,8 @@ description: Data Analysis，AI 辅助数据分析
 
 # 数据分析
 
+用 AI 帮你"从数据里看出门道"。以前需要专业分析师用 SQL、Python 折腾半天，现在直接问 AI"上个月哪个产品卖得最好"，它就能帮你分析数据、生成图表、得出结论。
+
 ## 概述
 
 数据分析（Data Analysis）是指利用 AI 技术辅助或自动化数据分析过程，包括数据理解、模式发现、洞察生成、可视化等。AI 数据分析正在改变企业和研究者处理数据的方式，让数据分析从"专家技能"变为"人人可用"的能力。
@@ -83,12 +85,12 @@ sql = response.choices[0].message.content
 
 Text-to-SQL 的关键挑战：
 
-| 挑战 | 说明 | 解决方案 |
-|------|------|---------|
-| Schema 理解 | 理解表结构和字段含义 | 在提示词中提供 schema 和字段描述 |
-| 复杂查询 | 多表 JOIN、子查询、窗口函数 | Few-shot 示例、思维链 |
-| 方言差异 | MySQL、PostgreSQL、BigQuery 语法差异 | 指定目标数据库方言 |
-| 歧义消除 | 自然语言的歧义性 | 多轮对话澄清、置信度标注 |
+| 挑战        | 说明                                 | 解决方案                         |
+| ----------- | ------------------------------------ | -------------------------------- |
+| Schema 理解 | 理解表结构和字段含义                 | 在提示词中提供 schema 和字段描述 |
+| 复杂查询    | 多表 JOIN、子查询、窗口函数          | Few-shot 示例、思维链            |
+| 方言差异    | MySQL、PostgreSQL、BigQuery 语法差异 | 指定目标数据库方言               |
+| 歧义消除    | 自然语言的歧义性                     | 多轮对话澄清、置信度标注         |
 
 ### 自动洞察发现
 
@@ -173,23 +175,23 @@ Agent: "华东地区电子产品 ¥189,234 (41.4%)，服装 ¥123,456 (27.0%)...
 
 ### 商业产品
 
-| 产品 | 厂商 | 特点 |
-|------|------|------|
-| Microsoft Copilot in Excel | Microsoft | Excel 内置 AI 分析 |
-| Tableau AI (Einstein) | Salesforce | BI 平台集成 AI |
-| ThoughtSpot Sage | ThoughtSpot | 自然语言搜索式分析 |
-| Power BI Copilot | Microsoft | Power BI AI 助手 |
-| Looker Studio AI | Google | Google 生态集成 |
+| 产品                       | 厂商        | 特点               |
+| -------------------------- | ----------- | ------------------ |
+| Microsoft Copilot in Excel | Microsoft   | Excel 内置 AI 分析 |
+| Tableau AI (Einstein)      | Salesforce  | BI 平台集成 AI     |
+| ThoughtSpot Sage           | ThoughtSpot | 自然语言搜索式分析 |
+| Power BI Copilot           | Microsoft   | Power BI AI 助手   |
+| Looker Studio AI           | Google      | Google 生态集成    |
 
 ### 开源工具
 
-| 工具 | 特点 |
-|------|------|
-| PandasAI | 用自然语言查询 Pandas DataFrame |
-| LangChain SQL Agent | 基于 LangChain 的 SQL Agent |
-| LlamaIndex Data Agent | 数据分析和查询 Agent |
-| PyGWalker | 将 DataFrame 转为 Tableau 风格界面 |
-| GPT-SQL | Text-to-SQL 开源实现 |
+| 工具                  | 特点                               |
+| --------------------- | ---------------------------------- |
+| PandasAI              | 用自然语言查询 Pandas DataFrame    |
+| LangChain SQL Agent   | 基于 LangChain 的 SQL Agent        |
+| LlamaIndex Data Agent | 数据分析和查询 Agent               |
+| PyGWalker             | 将 DataFrame 转为 Tableau 风格界面 |
+| GPT-SQL               | Text-to-SQL 开源实现               |
 
 ### 代码示例：PandasAI
 
@@ -232,13 +234,13 @@ result = agent.chat("绘制每月销售额的折线图")
 
 ### 评估框架
 
-| 维度 | 指标 | 说明 |
-|------|------|------|
-| SQL 准确率 | 执行正确率 | 生成的 SQL 是否能正确执行并返回预期结果 |
-| 洞察质量 | 人工评估 | 发现的洞察是否有业务价值 |
-| 可视化合适度 | 图表类型匹配度 | 选择的图表类型是否适合数据特征 |
-| 响应速度 | 查询延迟 | 从提问到返回结果的时间 |
-| 多轮对话能力 | 上下文保持 | 是否能理解多轮对话中的指代和省略 |
+| 维度         | 指标           | 说明                                    |
+| ------------ | -------------- | --------------------------------------- |
+| SQL 准确率   | 执行正确率     | 生成的 SQL 是否能正确执行并返回预期结果 |
+| 洞察质量     | 人工评估       | 发现的洞察是否有业务价值                |
+| 可视化合适度 | 图表类型匹配度 | 选择的图表类型是否适合数据特征          |
+| 响应速度     | 查询延迟       | 从提问到返回结果的时间                  |
+| 多轮对话能力 | 上下文保持     | 是否能理解多轮对话中的指代和省略        |
 
 ### Text-to-SQL 最佳实践
 

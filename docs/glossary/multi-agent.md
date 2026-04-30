@@ -5,6 +5,8 @@ description: Multi-Agent System，多个 AI Agent 协作完成复杂任务
 
 # 多 Agent 系统
 
+让多个 AI 助手分工合作，像一个团队一样完成复杂任务。比如一个负责查资料、一个负责写代码、一个负责审核，各司其职，比单个 AI 单打独斗效率高得多。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -70,6 +72,7 @@ class ContentTeam:
 ```
 
 协作式架构的关键设计点：
+
 - 明确每个 Agent 的**职责边界**
 - 定义清晰的**输入输出格式**
 - 建立有效的**信息传递机制**
@@ -90,6 +93,7 @@ graph TD
 ```
 
 分层式架构的优势：
+
 - **集中控制**：Manager 掌握全局状态，便于协调
 - **易于扩展**：添加新的 Worker 不影响整体架构
 - **职责清晰**：Manager 负责规划，Worker 负责执行
@@ -157,6 +161,7 @@ async def collaborative_task(blackboard: Blackboard):
 [LangGraph](https://langchain-ai.github.io/langgraph/) 是 LangChain 团队推出的多 Agent 编排框架，基于**有向图（Directed Graph）** 模型。
 
 核心概念：
+
 - **节点（Node）**：代表一个 Agent 或一个操作
 - **边（Edge）**：定义节点间的流转关系
 - **状态（State）**：在节点间传递的共享数据
@@ -270,6 +275,7 @@ user_proxy.initiate_chat(
 ```
 
 AutoGen 的独特之处：
+
 - **对话模式**：Agent 通过对话协作，而非显式的任务分配
 - **代码执行**：UserProxyAgent 可以执行代码并返回结果
 - **灵活拓扑**：支持任意 Agent 间的多轮对话
@@ -296,6 +302,7 @@ team.run_project("开发一个待办事项管理 Web 应用")
 ```
 
 MetaGPT 的特点：
+
 - **标准化 SOP**：模拟真实软件公司的标准作业流程
 - **结构化输出**：每个角色产出标准格式的文档（PRD、设计文档、代码等）
 - **端到端**：从需求到代码到测试的完整流程
@@ -445,15 +452,18 @@ class CostOptimizer:
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — 多 Agent 系统的基础构建单元，每个节点都是一个独立的 Agent
 - [Agent 编排](/glossary/agent-orchestration) — 多 Agent 系统需要编排层来协调 Agent 间的协作流程
 - [工具使用](/glossary/tool-use) — 每个 Agent 需要工具来扩展自身能力
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 多 Agent 系统是实现高级自主能力的重要架构
 - [人机协作](/glossary/human-in-the-loop) — 人类可以作为特殊节点加入多 Agent 系统
 
 **技术基础**：
+
 - [记忆](/glossary/memory) — Agent 间共享记忆是实现深度协作的关键
 - [规划](/glossary/planning) — 多 Agent 系统需要更复杂的规划能力来协调多个执行单元
 

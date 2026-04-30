@@ -5,6 +5,8 @@ description: Observability，监控和追踪 AI 应用运行状态
 
 # 可观测性
 
+给 AI 应用装上"监控仪表盘"，随时了解它运行得怎么样——花了多少钱、回答质量如何、有没有出错。出了问题能快速定位原因，而不是瞎猜。
+
 ## 概述
 
 可观测性（Observability）是指通过日志（Logs）、指标（Metrics）、追踪（Traces）等手段，全面了解系统内部运行状态的能力。对于 AI 应用而言，可观测性不仅是传统 IT 运维的延伸，还需要应对 LLM 调用成本高、响应时间长、输出不确定等独特挑战。
@@ -54,6 +56,7 @@ def log_llm_call(prompt, response, metadata):
 ```
 
 日志级别建议：
+
 - **DEBUG**：详细的调试信息（开发环境）
 - **INFO**：关键操作记录（生产环境默认级别）
 - **WARN**：潜在问题，如接近速率限制
@@ -63,13 +66,13 @@ def log_llm_call(prompt, response, metadata):
 
 指标是量化的系统性能数据，用于趋势分析和告警：
 
-| 指标类别 | 具体指标 | 告警阈值示例 |
-|---------|---------|-------------|
-| 延迟指标 | TTFT、TPS、P99 延迟 | P99 > 5s |
-| 错误指标 | 错误率、超时率 | 错误率 > 1% |
+| 指标类别 | 具体指标             | 告警阈值示例  |
+| -------- | -------------------- | ------------- |
+| 延迟指标 | TTFT、TPS、P99 延迟  | P99 > 5s      |
+| 错误指标 | 错误率、超时率       | 错误率 > 1%   |
 | 成本指标 | Token 消耗、API 费用 | 日费用 > $100 |
-| 质量指标 | 用户满意度、重试率 | 重试率 > 5% |
-| 容量指标 | 并发请求数、队列长度 | 并发 > 100 |
+| 质量指标 | 用户满意度、重试率   | 重试率 > 5%   |
+| 容量指标 | 并发请求数、队列长度 | 并发 > 100    |
 
 ```python
 from prometheus_client import Counter, Histogram, Gauge
@@ -208,14 +211,14 @@ processors:
   attributes:
     actions:
       - key: service.name
-        value: "ai-assistant"
+        value: 'ai-assistant'
         action: upsert
 
 exporters:
   prometheus:
-    endpoint: "0.0.0.0:8889"
+    endpoint: '0.0.0.0:8889'
   otlp/jaeger:
-    endpoint: "jaeger:4317"
+    endpoint: 'jaeger:4317'
     tls:
       insecure: true
 
@@ -233,13 +236,13 @@ service:
 
 ### LLM 专属可观测性平台
 
-| 平台 | 特点 | 适用场景 |
-|------|------|---------|
-| **LangSmith** | LangChain 生态集成，追踪 + 评估 | LangChain 用户 |
-| **LangFuse** | 开源，支持多框架，成本追踪 | 需要自托管的团队 |
-| **Arize Phoenix** | 可观测性 + 评估 + 漂移检测 | 生产级 ML 系统 |
-| **Helicone** | API 代理模式，零代码集成 | 快速接入 |
-| **Braintrust** | 评估驱动的可观测性 | 重视评估的团队 |
+| 平台              | 特点                            | 适用场景         |
+| ----------------- | ------------------------------- | ---------------- |
+| **LangSmith**     | LangChain 生态集成，追踪 + 评估 | LangChain 用户   |
+| **LangFuse**      | 开源，支持多框架，成本追踪      | 需要自托管的团队 |
+| **Arize Phoenix** | 可观测性 + 评估 + 漂移检测      | 生产级 ML 系统   |
+| **Helicone**      | API 代理模式，零代码集成        | 快速接入         |
+| **Braintrust**    | 评估驱动的可观测性              | 重视评估的团队   |
 
 ### 可视化与告警
 
@@ -254,7 +257,7 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "LLM 错误率超过 5%"
+          summary: 'LLM 错误率超过 5%'
 
       - alert: HighLatency
         expr: histogram_quantile(0.99, rate(llm_latency_seconds_bucket[5m])) > 5
@@ -262,7 +265,7 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "LLM P99 延迟超过 5 秒"
+          summary: 'LLM P99 延迟超过 5 秒'
 
       - alert: HighDailyCost
         expr: sum(increase(llm_cost_usd[1d])) > 100
@@ -270,7 +273,7 @@ groups:
         labels:
           severity: info
         annotations:
-          summary: "日 API 费用超过 $100"
+          summary: '日 API 费用超过 $100'
 ```
 
 ## 工程实践

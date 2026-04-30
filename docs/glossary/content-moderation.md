@@ -5,6 +5,8 @@ description: Content Moderation，识别和过滤 AI 系统中的有害内容
 
 # 内容审核
 
+AI 系统里的"安检员"——检查用户输入的内容有没有恶意，检查 AI 输出的内容有没有问题（比如暴力、色情、虚假信息）。双向把关，确保整个系统安全合规。
+
 ## 概述
 
 **内容审核**（Content Moderation）是指在 AI 系统中识别、分类和过滤有害内容的实践，涵盖暴力、仇恨、色情、虚假信息、自残指导等不符合安全和道德标准的内容。在 LLM 应用中，内容审核通常作用于两个方向：对用户输入进行审核（防止恶意输入），对模型输出进行审核（防止有害输出）。
@@ -393,7 +395,7 @@ moderation:
         action: flag_for_review
 
   fallback:
-    on_error: block  # 审核服务出错时的默认行为
+    on_error: block # 审核服务出错时的默认行为
     timeout_ms: 500
 ```
 

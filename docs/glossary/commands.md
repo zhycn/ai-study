@@ -5,6 +5,8 @@ description: Agent 的命令系统
 
 # Commands
 
+用户给 AI 下达的"明确指令"。跟随便聊天不同，Command 是用特定格式告诉 AI"你现在去干这个"，就像给员工下达工单一样，确保 AI 准确理解你要它做什么。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -233,6 +235,7 @@ class SystemCommands:
 ```
 
 常见系统命令：
+
 - `/settings` — 查看/修改配置
 - `/reset` — 重置对话
 - `/mode <name>` — 切换工作模式
@@ -504,14 +507,17 @@ class CommandLogger:
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — Command 是用户与 Agent 交互的结构化接口
 - [Skills](/glossary/skills) — Command 通常用于触发和执行 Skill，一个 Command 可以对应一个或多个 Skill
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 自主 Agent 内部也可以使用 Command 系统来管理自身的子任务
 - [人机协作](/glossary/human-in-the-loop) — Command 是人机协作中人类发出指令的主要方式
 
 **技术基础**：
+
 - [工具使用](/glossary/tool-use) — Command 的执行底层往往依赖工具调用
 - [函数调用](/glossary/function-calling) — Command 可以通过函数调用机制触发
 
