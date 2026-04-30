@@ -1,9 +1,9 @@
 ---
-title: 批处理
+title: 批处理 (Batch Processing)
 description: Batch Processing，批量处理大量请求
 ---
 
-# 批处理
+# 批处理 (Batch Processing)
 
 把一堆任务攒起来一起处理，而不是来一个处理一个。虽然不能立刻得到结果，但价格便宜很多——就像快递集中发货比单个寄便宜一样，适合不着急但量大的场景。
 

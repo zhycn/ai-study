@@ -1,9 +1,9 @@
 ---
-title: 版权
-description: Copyright，AI 生成内容的知识产权归属
+title: 版权 (Copyright)
+description: Copyright，AI 生成内容的版权归属
 ---
 
-# 版权
+# 版权 (Copyright)
 
 AI 时代的新难题：用别人的作品训练 AI 算不算侵权？AI 画出来的画版权归谁？传统版权法是基于"人类创作者"设计的，现在 AI 既能"学习"又能"创作"，法律还在努力跟上。
 

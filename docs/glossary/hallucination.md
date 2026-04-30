@@ -1,9 +1,9 @@
 ---
-title: 幻觉
+title: 幻觉 (Hallucination)
 description: Hallucination，模型生成看似合理但实际错误的内容
 ---
 
-# 幻觉
+# 幻觉 (Hallucination)
 
 AI"一本正经地胡说八道"的现象。它说出来的话听起来很有道理、语气很自信，但内容完全是编的。就像一个特别会忽悠的人，能把假话说得跟真的一样，这是目前 AI 最让人头疼的问题之一。
 

@@ -100,7 +100,8 @@ export default withPwa(
               { text: '机器学习', link: '/glossary/machine-learning' },
               { text: '深度学习', link: '/glossary/deep-learning' },
               { text: '神经网络', link: '/glossary/neural-network' },
-              { text: '生成式 AI', link: '/glossary/generative-ai' }
+              { text: '生成式 AI', link: '/glossary/generative-ai' },
+              { text: 'Data-Centric AI', link: '/glossary/data-centric-ai' }
             ]
           },
           {
@@ -111,7 +112,8 @@ export default withPwa(
               { text: 'Transformer', link: '/glossary/transformer' },
               { text: '多模态模型', link: '/glossary/multimodal-model' },
               { text: '开源模型', link: '/glossary/open-source-model' },
-              { text: '闭源模型', link: '/glossary/proprietary-model' }
+              { text: '闭源模型', link: '/glossary/proprietary-model' },
+              { text: 'MoE 混合专家', link: '/glossary/moe' }
             ]
           },
           {
@@ -133,9 +135,9 @@ export default withPwa(
               { text: 'RAG', link: '/glossary/rag' },
               { text: 'Agent', link: '/glossary/agent' },
               { text: 'MCP', link: '/glossary/mcp' },
-              { text: '微调', link: '/glossary/fine-tuning' },
+              { text: '模型微调 (Fine-tuning)', link: '/glossary/fine-tuning' },
               { text: '函数调用', link: '/glossary/function-calling' },
-              { text: '工作流', link: '/glossary/workflow' }
+              { text: 'AI 工作流 (Workflow)', link: '/glossary/workflow' }
             ]
           },
           {
@@ -146,11 +148,12 @@ export default withPwa(
               { text: 'Embedding', link: '/glossary/embedding' },
               { text: '注意力机制', link: '/glossary/attention' },
               { text: '上下文窗口', link: '/glossary/context-window' },
-              { text: '幻觉', link: '/glossary/hallucination' },
-              { text: '温度', link: '/glossary/temperature' },
+              { text: '幻觉 (Hallucination)', link: '/glossary/hallucination' },
+              { text: '温度 (Temperature)', link: '/glossary/temperature' },
               { text: '思维链', link: '/glossary/chain-of-thought' },
-              { text: '对齐', link: '/glossary/alignment' },
-              { text: '基准测试', link: '/glossary/benchmark' }
+              { text: '对齐 (Alignment)', link: '/glossary/alignment' },
+              { text: '基准测试 (Benchmark)', link: '/glossary/benchmark' },
+              { text: '长上下文 (Long Context)', link: '/glossary/long-context' }
             ]
           },
           {
@@ -161,7 +164,9 @@ export default withPwa(
               { text: '知识图谱', link: '/glossary/knowledge-graph' },
               { text: 'GPU', link: '/glossary/gpu' },
               { text: 'TPU', link: '/glossary/tpu' },
-              { text: 'API', link: '/glossary/api' }
+              { text: 'API', link: '/glossary/api' },
+              { text: 'Edge AI', link: '/glossary/edge-ai' },
+              { text: 'AI Infra', link: '/glossary/ai-infra' }
             ]
           },
           {
@@ -171,12 +176,14 @@ export default withPwa(
               { text: '多 Agent 系统', link: '/glossary/multi-agent' },
               { text: 'Agent 编排', link: '/glossary/agent-orchestration' },
               { text: '工具使用', link: '/glossary/tool-use' },
-              { text: '规划', link: '/glossary/planning' },
-              { text: '记忆', link: '/glossary/memory' },
+              { text: '规划 (Planning)', link: '/glossary/planning' },
+              { text: '记忆 (Memory)', link: '/glossary/memory' },
               { text: 'Skills', link: '/glossary/skills' },
               { text: 'Commands', link: '/glossary/commands' },
               { text: '人机协作', link: '/glossary/human-in-the-loop' },
-              { text: '自主 Agent', link: '/glossary/autonomous-agent' }
+              { text: '自主 Agent', link: '/glossary/autonomous-agent' },
+              { text: 'Agentic Workflow', link: '/glossary/agentic-workflow' },
+              { text: 'Computer Use', link: '/glossary/computer-use' }
             ]
           },
           {
@@ -185,12 +192,12 @@ export default withPwa(
             items: [
               { text: '模型评估', link: '/glossary/model-evaluation' },
               { text: '可观测性', link: '/glossary/observability' },
-              { text: '缓存', link: '/glossary/caching' },
-              { text: '流式输出', link: '/glossary/streaming' },
-              { text: '批处理', link: '/glossary/batch-processing' },
+              { text: '缓存 (Caching)', link: '/glossary/caching' },
+              { text: '流式输出 (Streaming)', link: '/glossary/streaming' },
+              { text: '批处理 (Batch Processing)', link: '/glossary/batch-processing' },
               { text: '成本优化', link: '/glossary/cost-optimization' },
               { text: '延迟优化', link: '/glossary/latency-optimization' },
-              { text: '版本管理', link: '/glossary/versioning' }
+              { text: '版本管理 (Versioning)', link: '/glossary/versioning' }
             ]
           },
           {
@@ -200,11 +207,13 @@ export default withPwa(
               { text: 'AI 安全', link: '/glossary/ai-safety' },
               { text: '提示词注入', link: '/glossary/prompt-injection' },
               { text: '数据隐私', link: '/glossary/data-privacy' },
-              { text: '偏见', link: '/glossary/bias' },
+              { text: '偏见 (Bias)', link: '/glossary/bias' },
               { text: '内容审核', link: '/glossary/content-moderation' },
               { text: '红队测试', link: '/glossary/red-teaming' },
               { text: '可解释性', link: '/glossary/explainability' },
-              { text: '版权', link: '/glossary/copyright' }
+              { text: '版权 (Copyright)', link: '/glossary/copyright' },
+              { text: 'RLVR', link: '/glossary/rlvr' },
+              { text: 'Constitutional AI', link: '/glossary/constitutional-ai' }
             ]
           },
           {
@@ -218,16 +227,19 @@ export default withPwa(
               { text: '语音识别', link: '/glossary/speech-recognition' },
               { text: 'AI 搜索', link: '/glossary/ai-search' },
               { text: '推荐系统', link: '/glossary/recommendation-system' },
-              { text: '数据分析', link: '/glossary/data-analysis' }
+              { text: '数据分析', link: '/glossary/data-analysis' },
+              { text: 'AI Coding Agent', link: '/glossary/ai-coding-agent' },
+              { text: '具身智能', link: '/glossary/embodied-ai' }
             ]
           },
           {
             text: '模型优化',
             collapsed: true,
             items: [
-              { text: '量化', link: '/glossary/quantization' },
-              { text: '蒸馏', link: '/glossary/distillation' },
-              { text: '剪枝', link: '/glossary/pruning' }
+              { text: '量化 (Quantization)', link: '/glossary/quantization' },
+              { text: '知识蒸馏 (Knowledge Distillation)', link: '/glossary/distillation' },
+              { text: '剪枝 (Pruning)', link: '/glossary/pruning' },
+              { text: '推测解码 (Speculative Decoding)', link: '/glossary/speculative-decoding' }
             ]
           }
         ],
