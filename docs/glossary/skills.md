@@ -19,7 +19,7 @@ Skill 与 [工具使用](/glossary/tool-use) 中的"工具"概念密切相关但
 >
 > 如果 Agent 是一个人，工具是他使用的设备（手机、电脑），Skill 是他掌握的手艺（编程、写作、翻译）。设备需要购买和连接，手艺需要学习和练习。
 
-## 为什么重要
+## 为什么需要
 
 ### 能力模块化的必要性
 
@@ -43,7 +43,7 @@ Skill 与 [工具使用](/glossary/tool-use) 中的"工具"概念密切相关但
 
 **组合性** 多个 Skill 可以编排成更复杂的工作流，实现能力的乘数效应。
 
-## 核心设计
+## 核心原理
 
 ### Skill 接口定义
 
@@ -315,7 +315,118 @@ assistant = client.beta.assistants.create(
 )
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：定义 Skill 接口
+
+```python
+from abc import ABC, abstractmethod
+from pydantic import BaseModel
+
+class SkillInput(BaseModel):
+    pass
+
+class SkillOutput(BaseModel):
+    success: bool
+    result: Any = None
+    error: str | None = None
+
+class Skill(ABC):
+    @property
+    @abstractmethod
+    def name(self) -> str:
+        pass
+
+    @property
+    @abstractmethod
+    def description(self) -> str:
+        pass
+
+    @abstractmethod
+    async def execute(self, input_data: SkillInput) -> SkillOutput:
+        pass
+```
+
+### 步骤 2：实现具体 Skill
+
+```python
+class CodeReviewInput(SkillInput):
+    code: str
+    language: str = "python"
+
+class CodeReviewOutput(SkillOutput):
+    issues: list[dict] = []
+    suggestions: list[str] = []
+
+class CodeReviewSkill(Skill):
+    @property
+    def name(self) -> str:
+        return "code_review"
+
+    @property
+    def description(self) -> str:
+        return "审查代码质量，发现潜在问题并提供改进建议"
+
+    async def execute(self, input_data: CodeReviewInput) -> CodeReviewOutput:
+        # 实现代码审查逻辑
+        pass
+```
+
+### 步骤 3：注册与发现
+
+```python
+class SkillRegistry:
+    def __init__(self):
+        self.skills: dict[str, Skill] = {}
+
+    def register(self, skill: Skill):
+        self.skills[skill.name] = skill
+
+    def get_tool_definitions(self) -> list[dict]:
+        return [s.to_tool_definition() for s in self.skills.values()]
+```
+
+### 步骤 4：编写 Skill 文档
+
+每个 Skill 需要清晰的文档：
+
+```markdown
+---
+name: code-review
+description: 审查代码质量
+---
+
+# 代码审查 Skill
+
+## 何时使用
+- 用户请求审查代码
+- 提交代码前自动审查
+
+## 输入
+- code: 需要审查的代码
+- language: 编程语言
+
+## 输出
+- issues: 发现的问题
+- suggestions: 改进建议
+```
+
+### 步骤 5：测试与部署
+
+- 编写**单元测试**覆盖正常和异常场景
+- 进行**集成测试**验证与其他 Skill 的协作
+- 部署到**生产环境**并监控表现
+
+## 主流框架对比
+
+| 框架/平台 | Skill 形式 | 特点 | 适用场景 |
+|-----------|-----------|------|---------|
+| **Claude Code Skills** | 目录+SKILL.md | 文档驱动、易扩展 | 开发助手 |
+| **LangChain Tools** | Python 类/装饰器 | 统一接口、丰富生态 | 通用 Agent |
+| **OpenAI Assistant Tools** | API 定义 | 云端托管、免运维 | OpenAI 生态 |
+| **CrewAI Tools** | Python 类 | 角色绑定、易用 | 多 Agent 协作 |
+
+## 最佳实践
 
 ### Skill 组合与编排
 
@@ -490,6 +601,44 @@ class PermissionControlledSkill(Skill):
     async def _do_execute(self, input_data: SkillInput) -> SkillOutput:
         pass
 ```
+
+## 常见问题与避坑
+
+### Q1：Skill 和 Tool 有什么区别？
+
+- **Tool**：外部服务或 API（搜索、计算、数据库）
+- **Skill**：Agent 自身能力封装（代码生成、文档撰写）
+
+### Q2：Skill 太多如何管理？
+
+- **分组管理**：按功能分类
+- **动态加载**：按需加载 Skill
+- **版本控制**：使用语义化版本号
+
+### Q3：如何保证 Skill 质量？
+
+- 每个 Skill 编写**测试用例**
+- 设置**质量门禁**（覆盖率、性能）
+- 定期**审查和优化**
+
+### Q4：Skill 执行失败怎么办？
+
+- 实现**重试机制**
+- 提供**降级方案**
+- 记录**详细错误日志**
+
+### Q5：如何设计 Skill 的输入输出？
+
+- 使用 **Pydantic 模型**验证
+- 定义清晰的**字段描述**
+- 提供**默认值**和**示例**
+
+:::warning 常见陷阱
+- **职责不清**：一个 Skill 做太多事情
+- **缺乏测试**：修改后引入回归 bug
+- **文档缺失**：其他开发者不知道如何使用
+- **版本混乱**：不兼容的变更未做好版本管理
+:::
 
 ## 与其他概念的关系
 

@@ -19,7 +19,7 @@ description: Agent Orchestration，协调多个 Agent 的工作流
 >
 > 工作流像流水线，每个步骤是固定的；Agent 编排像交响乐团指挥，每个乐手（Agent）有自己的演奏能力，指挥负责协调节奏和声部。
 
-## 为什么重要
+## 为什么需要
 
 ### 多 Agent 系统的核心基础设施
 
@@ -43,7 +43,7 @@ description: Agent Orchestration，协调多个 Agent 的工作流
 
 **错误处理与恢复** 当某个 Agent 失败时，编排层需要决定是重试、切换到备用 Agent，还是调整整体策略。
 
-## 核心架构
+## 核心原理
 
 ### 编排器模式（Orchestrator Pattern）
 
@@ -337,7 +337,96 @@ AWS 的 Serverless 工作流编排服务，适合云原生架构。
 }
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：分析任务依赖关系
+
+将复杂任务拆解为有向无环图（DAG）：
+
+```python
+# 任务依赖图示例
+task_graph = {
+    "decompose": {"depends_on": [], "agent": "planner"},
+    "research": {"depends_on": ["decompose"], "agent": "researcher"},
+    "analysis": {"depends_on": ["research"], "agent": "analyst"},
+    "writing": {"depends_on": ["analysis"], "agent": "writer"},
+    "review": {"depends_on": ["writing"], "agent": "reviewer"}
+}
+```
+
+### 步骤 2：选择编排模式
+
+根据任务特征选择模式：
+
+| 模式 | 适用场景 | 特点 |
+|------|---------|------|
+| 编排器模式 | 需要集中控制 | 单点管理，易于调试 |
+| 路由模式 | 请求分类 | 根据内容路由到不同 Agent |
+| 发布-订阅 | 事件驱动 | 解耦，适合异步场景 |
+
+### 步骤 3：定义状态 schema
+
+```python
+from typing import TypedDict, Annotated
+
+class OrchestrationState(TypedDict):
+    task: str
+    current_step: str
+    results: Annotated[list, lambda x, y: x + y]
+    retry_count: int
+    status: str  # pending, running, completed, failed
+```
+
+### 步骤 4：构建执行图
+
+```python
+from langgraph.graph import StateGraph, END
+
+builder = StateGraph(OrchestrationState)
+
+# 添加节点
+builder.add_node("decompose", decompose_node)
+builder.add_node("execute", execute_node)
+builder.add_node("aggregate", aggregate_node)
+
+# 添加边
+builder.add_edge("decompose", "execute")
+builder.add_edge("execute", "aggregate")
+builder.add_edge("aggregate", END)
+
+app = builder.compile()
+```
+
+### 步骤 5：添加错误处理
+
+```python
+async def execute_with_retry(agent: Agent, task: str, max_retries: int = 3):
+    for attempt in range(max_retries):
+        try:
+            return await agent.execute(task)
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+            await asyncio.sleep(2 ** attempt)  # 指数退避
+```
+
+### 步骤 6：实现可观测性
+
+- 记录每个节点的执行时间
+- 追踪状态变更
+- 监控错误率
+
+## 主流框架对比
+
+| 框架 | 类型 | 特点 | 适用场景 |
+|------|------|------|---------|
+| **LangGraph** | 状态机 | 支持循环、持久化、可视化 | AI Agent 编排 |
+| **Temporal** | 工作流引擎 | 高可靠、自动重试、持久化 | 生产级工作流 |
+| **Step Functions** | Serverless | AWS 原生、无需运维 | 云原生架构 |
+| **Airflow** | DAG 调度 | 成熟生态、丰富操作符 | 数据流水线 |
+| **Prefect** | 现代工作流 | Python 原生、易用 | 数据工程 |
+
+## 最佳实践
 
 ### 错误处理策略
 
@@ -502,6 +591,43 @@ class DynamicOrchestrator:
 
         return self.aggregate(self.state)
 ```
+
+## 常见问题与避坑
+
+### Q1：编排器和 Agent 的边界在哪里？
+
+**编排器**负责流程控制（顺序、并行、条件分支），**Agent** 负责智能决策。不要把业务逻辑混入编排器。
+
+### Q2：如何处理长时间运行的工作流？
+
+- 使用**持久化**机制保存中间状态
+- 设置合理的**超时时间**
+- 实现**断点续传**能力
+
+### Q3：循环依赖怎么处理？
+
+- 使用 LangGraph 的循环支持
+- 设置**最大迭代次数**防止死循环
+- 添加**终止条件**检测
+
+### Q4：如何调试编排流程？
+
+- 使用可视化工具查看执行图
+- 记录每个节点的输入输出
+- 添加详细的日志追踪
+
+### Q5：编排层太复杂怎么办？
+
+- 从简单流程开始，逐步增加复杂度
+- 使用**子编排器**分解复杂流程
+- 考虑使用成熟框架而非自研
+
+:::warning 常见陷阱
+- **过度编排**：简单任务不需要复杂编排
+- **状态爆炸**：状态字段过多导致维护困难
+- **忽视错误处理**：一个节点失败导致整个流程崩溃
+- **缺乏监控**：生产环境问题难以定位
+:::
 
 ## 与其他概念的关系
 

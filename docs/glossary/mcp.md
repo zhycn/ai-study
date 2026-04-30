@@ -219,6 +219,72 @@ MCP 社区提供了多个官方 Server 实现：
 | `server-puppeteer`    | 浏览器自动化          |
 | `server-slack`        | Slack 集成            |
 
+## 常见问题与避坑
+
+### FAQ
+
+**Q1：MCP 和 Function Calling 有什么区别？我应该用哪个？**
+
+::: info 说明
+两者不是互斥的，而是互补关系。
+:::
+
+- **Function Calling** 是模型层面的能力，让模型能决定调用哪个函数
+- **MCP** 是工具接入的协议层，标准化了工具的发现、描述和调用方式
+
+如果你的应用只需要连接少量固定工具，Function Calling 足够。如果你需要构建可扩展的工具生态，或者希望工具能在不同 AI 应用间复用，建议使用 MCP。
+
+**Q2：MCP Server 可以部署在远程服务器吗？**
+
+可以。MCP 支持多种传输层：
+- **stdio**：适合本地进程通信
+- **HTTP + SSE**：适合远程服务
+- **WebSocket**：适合双向实时通信
+
+远程部署时需注意网络安全，建议使用 HTTPS 和身份验证。
+
+**Q3：如何保证 MCP 的安全性？**
+
+::: warning 警告
+MCP Server 可以访问本地资源和执行命令，安全配置至关重要。
+:::
+
+- **最小权限原则**：Server 只授予必要的访问权限
+- **用户授权**：每次资源访问需用户明确授权
+- **路径限制**：文件系统 Server 限制在特定目录
+- **审计日志**：记录所有工具调用和资源访问
+- **沙箱隔离**：不受信任的 Server 在隔离环境中运行
+
+**Q4：MCP 的性能开销大吗？**
+
+MCP 基于 JSON-RPC 2.0，通信开销很小。主要性能瓶颈通常在：
+- 工具本身的执行时间（如 API 调用、数据库查询）
+- 网络延迟（远程 Server 场景）
+
+本地 stdio 传输的延迟通常在毫秒级别，可忽略不计。
+
+**Q5：有哪些现成的 MCP Server 可以使用？**
+
+MCP 社区提供了多个官方 Server：
+
+| Server | 功能 | 安装方式 |
+|--------|------|---------|
+| `server-filesystem` | 文件系统访问 | `npx @modelcontextprotocol/server-filesystem` |
+| `server-git` | Git 仓库操作 | `npx @modelcontextprotocol/server-git` |
+| `server-github` | GitHub API | `npx @modelcontextprotocol/server-github` |
+| `server-postgres` | PostgreSQL 查询 | `npx @modelcontextprotocol/server-postgres` |
+| `server-puppeteer` | 浏览器自动化 | `npx @modelcontextprotocol/server-puppeteer` |
+
+### 常见陷阱
+
+| 陷阱 | 表现 | 解决方案 |
+|------|------|---------|
+| 权限过大 | Server 可访问敏感文件 | 严格限制路径范围 |
+| 工具描述模糊 | 模型调用错误的工具 | 提供清晰、具体的工具描述 |
+| 错误处理缺失 | 工具失败导致 Agent 崩溃 | 完善错误返回机制 |
+| 版本不兼容 | SDK 版本与 Server 不匹配 | 锁定依赖版本 |
+| 资源泄漏 | 长时间运行后内存增长 | 定期重启 Server 进程 |
+
 ## 与其他概念的关系
 
 - MCP 为 [Agent](/glossary/agent) 提供了标准化的工具接入方式

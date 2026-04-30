@@ -30,7 +30,7 @@ AI 一次性能"记住"多少内容。就像人的短期记忆有限，一次只
 
 上下文窗口的限制本质上来自 [注意力机制](/glossary/attention) 的计算复杂度。标准自注意力的时间和空间复杂度均为 $O(n^2)$，其中 $n$ 是序列长度。
 
-```
+```text
 序列长度 n    注意力矩阵大小 n²    内存占用（FP32）
 1,024         1,048,576           ~4 MB
 4,096         16,777,216          ~64 MB
@@ -86,6 +86,66 @@ def apply_rotary_emb(x, freqs_cos, freqs_sin):
     ], dim=-1)
 ```
 
+## 应用场景
+
+### 长文档分析
+
+大上下文窗口使模型能够处理完整文档：
+
+| 场景             | 所需上下文      | 说明                           |
+| ---------------- | --------------- | ------------------------------ |
+| 合同审查         | 20K-50K Token   | 完整法律文档分析               |
+| 代码库理解       | 50K-100K Token  | 多文件代码上下文               |
+| 学术论文摘要     | 30K-80K Token   | 完整论文阅读与总结             |
+| 会议记录分析     | 100K+ Token     | 数小时会议内容处理             |
+
+### 多轮对话系统
+
+```python
+# 对话上下文管理
+class ConversationManager:
+    def __init__(self, max_context_tokens: int = 128000):
+        self.max_tokens = max_context_tokens
+        self.history = []
+
+    def add_message(self, role: str, content: str):
+        self.history.append({"role": role, "content": content})
+
+    def get_context(self) -> list[dict]:
+        """获取适合上下文窗口的对话历史"""
+        # 计算 Token 数
+        total = sum(count_tokens(msg["content"]) for msg in self.history)
+        if total <= self.max_tokens * 0.8:
+            return self.history
+        # 超出时压缩历史
+        return self.compress_history()
+```
+
+### RAG 检索增强
+
+在 RAG 系统中，上下文窗口决定了能注入多少检索结果：
+
+```
+用户查询 -> 向量检索 -> Top-K 文档块 -> 组装到上下文窗口 -> LLM 生成
+                                    ↑
+                          窗口大小决定了 K 的最大值
+```
+
+### 代码助手
+
+IDE 中的 AI 助手需要足够的上下文来理解代码：
+
+```python
+# 代码助手上下文组成
+code_context = {
+    "current_file": "当前编辑的文件",      # 5K-20K Token
+    "related_files": "相关导入和调用文件",  # 20K-50K Token
+    "error_message": "错误信息",           # 1K-5K Token
+    "chat_history": "对话历史",            # 5K-20K Token
+}
+# 总计: 31K-95K Token，需要大上下文窗口
+```
+
 ## 扩展技术
 
 ### 上下文扩展训练
@@ -107,7 +167,7 @@ training_config = {
 
 将长序列分割为固定大小的窗口，每个 Token 只关注窗口内的其他 Token：
 
-```
+```text
 完整序列: [T1, T2, T3, T4, T5, T6, T7, T8]
 窗口大小: 4
 

@@ -229,6 +229,258 @@ workflow.add_conditional_edges("verify",
 Total duration: 9.2s
 ```
 
+## 实施步骤
+
+### 步骤 1：需求分析与流程设计
+
+明确工作流的目标和执行逻辑：
+
+```yaml
+# workflow_design.yaml
+workflow:
+  name: content_processing_pipeline
+  description: 内容处理流水线
+  trigger: api  # 触发方式
+  steps:
+    - name: fetch_content
+      type: http
+      description: 从 CMS 获取待处理内容
+    - name: summarize
+      type: llm
+      description: 生成内容摘要
+    - name: translate
+      type: llm
+      description: 翻译为目标语言
+    - name: format
+      type: code
+      description: 格式化输出
+    - name: publish
+      type: http
+      description: 发布到目标平台
+```
+
+### 步骤 2：选择工作流框架
+
+根据需求选择合适的框架：
+
+| 需求 | 推荐框架 | 优势 |
+|------|---------|------|
+| 快速原型 | Dify / Coze | 可视化编排，开箱即用 |
+| 代码控制 | LangGraph | 灵活的图结构，支持循环 |
+| 生产级 | Temporal | 持久化执行，容错机制 |
+| 云原生 | AWS Step Functions | 与 AWS 生态深度集成 |
+
+### 步骤 3：实现工作流
+
+使用 LangGraph 实现内容处理工作流：
+
+```python
+from langgraph.graph import StateGraph, END
+from typing import TypedDict
+
+# 1. 定义状态
+class ContentState(TypedDict):
+    raw_content: str
+    summary: str
+    translated: str
+    formatted: str
+    published_url: str
+    errors: list
+
+# 2. 定义节点
+def fetch_content(state: ContentState) -> ContentState:
+    """获取原始内容"""
+    content = fetch_from_cms()
+    return {'raw_content': content}
+
+def summarize(state: ContentState) -> ContentState:
+    """生成摘要"""
+    summary = llm_summarize(state['raw_content'])
+    return {'summary': summary}
+
+def translate(state: ContentState) -> ContentState:
+    """翻译内容"""
+    translated = llm_translate(state['raw_content'], target_lang='zh')
+    return {'translated': translated}
+
+def format_output(state: ContentState) -> ContentState:
+    """格式化输出"""
+    formatted = format_markdown(
+        summary=state['summary'],
+        translated=state['translated']
+    )
+    return {'formatted': formatted}
+
+def publish(state: ContentState) -> ContentState:
+    """发布内容"""
+    url = publish_to_platform(state['formatted'])
+    return {'published_url': url}
+
+# 3. 构建工作流
+workflow = StateGraph(ContentState)
+workflow.add_node('fetch', fetch_content)
+workflow.add_node('summarize', summarize)
+workflow.add_node('translate', translate)
+workflow.add_node('format', format_output)
+workflow.add_node('publish', publish)
+
+# 4. 定义执行顺序
+workflow.set_entry_point('fetch')
+workflow.add_edge('fetch', 'summarize')
+workflow.add_edge('summarize', 'translate')
+workflow.add_edge('translate', 'format')
+workflow.add_edge('format', 'publish')
+workflow.add_edge('publish', END)
+
+# 5. 编译并执行
+app = workflow.compile()
+result = app.invoke({
+    'raw_content': '',
+    'summary': '',
+    'translated': '',
+    'formatted': '',
+    'published_url': '',
+    'errors': []
+})
+```
+
+### 步骤 4：添加条件分支
+
+```python
+def verify_quality(state: ContentState) -> str:
+    """验证内容质量，决定是否需要重新生成"""
+    quality_score = evaluate_quality(state['formatted'])
+    if quality_score < 0.8:
+        return 'regenerate'
+    return 'publish'
+
+# 添加条件边
+workflow.add_conditional_edges(
+    'format',
+    verify_quality,
+    {
+        'regenerate': 'summarize',  # 质量不达标，重新生成
+        'publish': 'publish'
+    }
+)
+```
+
+### 步骤 5：添加错误处理
+
+```python
+def handle_error(node_name: str, error: Exception) -> dict:
+    """统一错误处理"""
+    return {
+        'errors': [f'{node_name}: {str(error)}']
+    }
+
+# 为每个节点添加 try-catch
+def safe_summarize(state: ContentState) -> ContentState:
+    try:
+        return summarize(state)
+    except Exception as e:
+        return handle_error('summarize', e)
+```
+
+### 步骤 6：监控与优化
+
+```text
+# 工作流执行日志示例
+[2024-01-15 10:00:00] Workflow started: content_processing_pipeline
+[2024-01-15 10:00:01] Node "fetch": completed (1.2s)
+[2024-01-15 10:00:04] Node "summarize": completed (3.1s)
+[2024-01-15 10:00:07] Node "translate": completed (3.5s)
+[2024-01-15 10:00:08] Node "format": completed (0.3s)
+[2024-01-15 10:00:08] Quality check: passed (score: 0.92)
+[2024-01-15 10:00:10] Node "publish": completed (1.8s)
+[2024-01-15 10:00:10] Workflow completed. Total: 10.0s
+```
+
+## 最佳实践
+
+### 工作流设计原则
+
+- **单一职责**：每个节点只做一件事
+- **幂等性**：同一输入多次执行产生相同结果
+- **容错设计**：每个节点考虑失败场景和恢复策略
+- **可观测性**：记录输入、输出、执行时间
+- **版本管理**：工作流定义纳入版本控制
+
+### 错误处理策略
+
+| 策略 | 说明 | 适用场景 |
+|------|------|---------|
+| 重试（Retry） | 失败后自动重试 | 网络超时、临时故障 |
+| 降级（Fallback） | 使用备用方案 | 主服务不可用 |
+| 跳过（Skip） | 跳过失败节点继续 | 非关键步骤 |
+| 终止（Abort） | 立即终止工作流 | 关键步骤失败 |
+| 人工介入 | 等待人工处理 | 需要人工判断 |
+
+### 性能优化
+
+- **缓存**：缓存 LLM 调用和外部 API 响应
+- **并行化**：无依赖节点并行执行
+- **流式输出**：减少用户等待时间
+- **异步执行**：长时间任务异步处理
+
+## 常见问题与避坑
+
+### FAQ
+
+**Q1：工作流和 Agent 应该选哪个？**
+
+::: tip 决策建议
+- 流程明确、步骤固定 → 工作流
+- 需要动态决策、灵活规划 → Agent
+- 复杂场景 → 工作流 + Agent 混合
+:::
+
+| 维度 | 工作流 | Agent |
+|------|--------|-------|
+| 流程 | 预定义 | 动态生成 |
+| 可预测性 | 高 | 低 |
+| 调试难度 | 低 | 高 |
+| 适用场景 | 标准化流程 | 复杂决策 |
+
+**Q2：工作流执行时间太长怎么办？**
+
+- **并行化**：无依赖的节点并行执行
+- **缓存**：缓存重复查询的结果
+- **异步执行**：长时间任务异步处理，通过回调通知
+- **流式输出**：逐步返回结果，减少感知延迟
+- **模型选择**：简单任务使用小模型，复杂任务用大模型
+
+**Q3：如何处理工作流中的状态管理？**
+
+- 使用框架提供的状态管理机制（如 LangGraph 的 StateGraph）
+- 状态对象应包含所有必要的中间结果
+- 避免在状态中存储大量数据，使用引用或 ID
+- 对于长时间运行的工作流，使用持久化存储
+
+**Q4：工作流版本如何管理？**
+
+- 将工作流定义文件纳入 Git 版本控制
+- 使用语义化版本号（如 `v1.2.0`）
+- 保留历史版本，支持回滚
+- 使用 CI/CD 自动化测试和部署
+
+**Q5：如何测试工作流？**
+
+- **单元测试**：测试每个节点的输入输出
+- **集成测试**：测试完整工作流执行
+- **Mock 外部依赖**：使用模拟数据测试异常场景
+- **性能测试**：测试高并发下的表现
+
+### 常见陷阱
+
+| 陷阱 | 表现 | 解决方案 |
+|------|------|---------|
+| 节点职责不清 | 单个节点逻辑复杂 | 拆分节点，单一职责 |
+| 状态膨胀 | 状态对象包含过多数据 | 只存储必要中间结果 |
+| 错误传播 | 一个节点失败导致整个工作流崩溃 | 添加错误处理和降级策略 |
+| 循环依赖 | 节点之间形成循环等待 | 检查并消除依赖环 |
+| 缺乏监控 | 出问题后难以定位 | 添加完整日志和指标 |
+
 ## 与其他概念的关系
 
 - 工作流可以编排多个 [Agent](/glossary/agent) 协同完成任务

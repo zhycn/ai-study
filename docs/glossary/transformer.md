@@ -27,13 +27,38 @@ Transformer 之所以成为 AI 领域的基石架构，原因在于：
 - **可扩展性**（Scalability）：模型规模可从百万参数扩展到万亿参数，性能持续提升
 - **生态繁荣**：基于 Transformer 衍生出 BERT、GPT、T5、ViT 等数百种变体，形成庞大的模型家族
 
+## 核心原理
+
+### 注意力机制的本质
+
+传统 RNN 按顺序处理序列，信息传递路径长度为 $O(n)$，导致长距离依赖难以捕捉。Transformer 的自注意力机制让任意两个位置之间的信息传递路径缩短为 $O(1)$，从根本上解决了长程依赖问题。
+
+### 缩放点积注意力（Scaled Dot-Product Attention）
+
+注意力机制的核心公式：
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+其中除以 $\sqrt{d_k}$ 的原因是：当 $d_k$ 较大时，点积结果方差增大，softmax 容易进入梯度饱和区。缩放因子使点积方差保持在 1 附近，确保训练稳定。
+
+### 并行计算优势
+
+RNN 的序列依赖导致无法并行计算，而 Transformer 的自注意力可以同时对整个序列进行矩阵运算：
+
+- **训练阶段**：所有 Token 的表示可以同时计算，GPU 利用率大幅提升
+- **推理阶段**：虽然生成仍是自回归的，但 KV Cache 技术可避免重复计算
+
+### 位置信息注入
+
+由于自注意力对输入顺序不敏感（置换不变性），必须显式注入位置信息。主流方案从固定的正弦函数演进到可学习的 RoPE，使模型既能感知绝对位置，又能捕捉相对位置关系。
+
 ## 核心技术架构
 
 ### 整体结构
 
 原始 Transformer 采用 **Encoder-Decoder** 结构：
 
-```
+```text
 输入 → Encoder（N 层）→ Decoder（N 层）→ 输出
 ```
 
@@ -46,9 +71,7 @@ Transformer 之所以成为 AI 领域的基石架构，原因在于：
 
 自注意力是 Transformer 的核心，计算公式为：
 
-```
-Attention(Q, K, V) = softmax(QK^T / √d_k) V
-```
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 其中：
 
@@ -65,11 +88,9 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) V
 
 将 Q、K、V 分别投影到多个子空间，并行计算注意力，最后拼接：
 
-```
-MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
-```
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h)W^O$$
 
-多头机制使模型能同时关注不同位置和不同语义维度的信息。
+其中 $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$。
 
 #### 3. 位置编码（Positional Encoding）
 
@@ -83,9 +104,9 @@ MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
 
 对每个位置的特征进行非线性变换：
 
-```
-FFN(x) = max(0, xW_1 + b_1) W_2 + b_2
-```
+$$\text{FFN}(x) = \max(0, xW_1 + b_1)W_2 + b_2$$
+
+现代变体常用 SwiGLU 激活函数替代 ReLU：$\text{SwiGLU}(x) = \text{Swish}(xW_1) \otimes (xW_2)$。
 
 #### 5. 层归一化与残差连接
 
@@ -125,6 +146,15 @@ FFN(x) = max(0, xW_1 + b_1) W_2 + b_2
 
 - **T5**（Google）：统一文本到文本框架
 - **BART**（Meta）：去噪自编码器预训练
+
+### 架构变体对比
+
+| 架构 | 注意力方向 | 代表模型 | 适用场景 | 优缺点 |
+|------|------------|----------|----------|--------|
+| Encoder-only | 双向 | BERT、RoBERTa | 分类、NER、检索 | 理解能力强，无法生成 |
+| Decoder-only | 单向（因果） | GPT、Llama、Qwen | 文本生成、对话 | 通用性强，训练高效 |
+| Encoder-Decoder | 双向 + 交叉 | T5、BART | 翻译、摘要 | 生成质量高，训练成本高 |
+| MoE | 单向 + 路由 | Mixtral、DeepSeek V3 | 大规模生成 | 参数大、计算小，路由复杂 |
 
 ### 混合专家架构（MoE）
 

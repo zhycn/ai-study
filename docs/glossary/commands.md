@@ -19,7 +19,7 @@ Command 与自然语言交互的核心区别在于**明确性**和**可预测性
 >
 > 自然语言对话像日常聊天，Command 像终端命令。聊天灵活但有歧义，命令精确但需要学习语法。好的 Agent 系统同时支持两种方式。
 
-## 为什么重要
+## 为什么需要
 
 ### 自然语言的局限性
 
@@ -43,7 +43,7 @@ Command 与自然语言交互的核心区别在于**明确性**和**可预测性
 
 **可扩展性** 新命令的添加不影响现有命令，系统可以持续增长。
 
-## 核心设计
+## 核心原理
 
 ### 命令格式
 
@@ -367,7 +367,85 @@ async def main():
 asyncio.run(main())
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：设计命令格式
+
+选择合适的命令格式：
+
+| 格式 | 示例 | 适用场景 |
+|------|------|---------|
+| 斜杠命令 | `/format file.py` | CLI、聊天界面 |
+| 前缀命令 | `!format file.py` | 类 Unix 环境 |
+| 自然语言 | "请格式化文件" | 对话式交互 |
+
+### 步骤 2：定义命令解析器
+
+```python
+class CommandParser:
+    def __init__(self, prefix: str = "/"):
+        self.prefix = prefix
+        self.commands: dict[str, CommandDefinition] = {}
+
+    def register(self, command: CommandDefinition):
+        self.commands[command.name] = command
+        for alias in command.aliases or []:
+            self.commands[alias] = command
+
+    def parse(self, input_text: str) -> tuple[str, dict] | None:
+        if not input_text.startswith(self.prefix):
+            return None
+        parts = input_text[1:].split()
+        command_name = parts[0]
+        if command_name in self.commands:
+            return command_name, self._parse_args(command_name, parts[1:])
+        return None
+```
+
+### 步骤 3：实现命令处理器
+
+```python
+class CommandExecutor:
+    async def execute(self, command_name: str, args: dict, context: dict) -> Any:
+        command = self.parser.commands[command_name]
+        try:
+            return await command.handler(args, context)
+        except Exception as e:
+            return f"命令执行失败：{e}"
+```
+
+### 步骤 4：注册命令
+
+```python
+parser = CommandParser()
+
+parser.register(CommandDefinition(
+    name="format",
+    description="格式化代码文件",
+    handler=format_code,
+    aliases=["fmt"],
+    parameters=[
+        {"name": "file", "description": "文件路径"}
+    ]
+))
+```
+
+### 步骤 5：添加辅助功能
+
+- **自动补全**：提升用户体验
+- **权限控制**：限制敏感命令
+- **日志审计**：记录命令执行历史
+
+## 主流框架对比
+
+| 框架/平台 | 命令格式 | 特点 | 适用场景 |
+|-----------|---------|------|---------|
+| **Claude Code** | 斜杠命令 | 内置丰富命令 | 开发助手 |
+| **Discord Bot** | 斜杠命令 | 平台原生支持 | 社群机器人 |
+| **Slack Bot** | 斜杠命令 | 企业集成 | 工作流自动化 |
+| **LangChain Agent** | 工具调用 | LLM 驱动 | AI Agent |
+
+## 最佳实践
 
 ### 命令自动补全
 
@@ -503,6 +581,45 @@ class CommandLogger:
         entries = [json.loads(line) for line in lines[-limit:]]
         return entries[::-1]  # 最新的在前
 ```
+
+## 常见问题与避坑
+
+### Q1：命令与自然语言如何区分？
+
+- 使用**特定前缀**（如 `/`）标识命令
+- 未匹配到命令时**降级为自然语言处理**
+- 提供**模糊匹配**建议（"你是想输入 /format 吗？"）
+
+### Q2：命令参数太多怎么办？
+
+- 使用**命名参数**而非位置参数
+- 提供**合理的默认值**
+- 支持**交互式输入**（逐步引导用户）
+
+### Q3：如何防止命令滥用？
+
+- 实现**权限控制**（角色-based）
+- 记录**审计日志**
+- 设置**频率限制**
+
+### Q4：命令执行失败如何反馈？
+
+- 返回**清晰的错误信息**
+- 提供**解决建议**
+- 记录**详细日志**便于调试
+
+### Q5：如何管理大量命令？
+
+- **分组管理**：按功能分类
+- **命令发现**：提供 `/help` 和搜索
+- **文档完善**：每个命令都有说明
+
+:::warning 常见陷阱
+- **命令冲突**：名称重复或别名冲突
+- **参数验证缺失**：未校验输入导致错误
+- **缺乏反馈**：用户不知道命令是否执行成功
+- **权限失控**：敏感命令未做权限检查
+:::
 
 ## 与其他概念的关系
 

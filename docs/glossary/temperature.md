@@ -75,13 +75,72 @@ T=2.0: [0.448, 0.272, 0.173, 0.107]  # 分布更均匀
 | **0.8-1.0** | 创造性   | 显著的概率分散          | 创意写作、头脑风暴   |
 | **>1.0**    | 高度随机 | 接近均匀分布            | 诗歌、实验性创作     |
 
-```
+```text
 温度变化对概率分布的可视化:
 
 T=0.1  ████░░░░░░░░░░░░░░░░  (高度集中)
 T=0.5  ████████░░░░░░░░░░░░  (适度分散)
 T=1.0  ███████████░░░░░░░░░  (原始分布)
 T=2.0  ████████████████░░░░  (更加分散)
+```
+
+## 应用场景
+
+### 内容创作
+
+不同创作任务需要不同的温度设置：
+
+| 任务类型       | 推荐温度 | 原因                           |
+| -------------- | -------- | ------------------------------ |
+| 新闻写作       | 0.3-0.5  | 需要准确性，适度多样性         |
+| 小说创作       | 0.8-1.0  | 需要丰富的想象力和变化         |
+| 诗歌生成       | 1.0-1.2  | 鼓励非常规的表达方式           |
+| 广告文案       | 0.7-0.9  | 平衡创意与品牌一致性           |
+| 技术文档       | 0.1-0.3  | 准确性和一致性最重要           |
+
+### 对话系统
+
+```python
+# 对话系统中的动态温度
+def get_conversation_temperature(turn: int, user_sentiment: str) -> float:
+    """根据对话状态动态调整温度"""
+    if user_sentiment == "frustrated":
+        return 0.3  # 降低温度，更稳定可靠的回答
+    if turn == 0:
+        return 0.7  # 初始对话，平衡
+    if turn > 10:
+        return 0.5  # 长对话后降低温度，避免偏离主题
+    return 0.7
+```
+
+### 数据增强
+
+```python
+# 使用温度进行数据增强
+def augment_data(texts: list[str], n_variants: int = 3, temperature: float = 0.8) -> list[str]:
+    """通过温度采样生成数据变体"""
+    augmented = []
+    for text in texts:
+        prompt = f"用不同的方式重写以下内容：\n{text}"
+        for _ in range(n_variants):
+            variant = generate(prompt, temperature=temperature)
+            augmented.append(variant)
+    return augmented
+```
+
+### A/B 测试
+
+```python
+# 温度参数的 A/B 测试
+def temperature_ab_test(prompt, user_group):
+    """测试不同温度对用户满意度的影响"""
+    configs = {
+        "control": {"temperature": 0.7},
+        "variant_a": {"temperature": 0.5},
+        "variant_b": {"temperature": 0.9},
+    }
+    config = configs[user_group]
+    return generate(prompt, **config)
 ```
 
 ## 与其他采样策略的关系

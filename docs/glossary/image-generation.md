@@ -135,6 +135,155 @@ GAN 由 Goodfellow 等于 2014 年提出，包含两个相互对抗的网络：
 | 混元生图         | 腾讯     | 多风格支持               |
 | 即梦（Dreamina） | 字节跳动 | 视频生成能力突出         |
 
+## 实施步骤
+
+### 从零搭建图像生成服务
+
+**阶段 1：需求分析与模型选型**
+
+| 需求场景       | 推荐模型                | 理由                         |
+| -------------- | ----------------------- | ---------------------------- |
+| 高质量艺术创作 | Midjourney / FLUX.1     | 艺术风格出色，细节丰富       |
+| 电商产品图     | Stable Diffusion XL     | 可控性强，支持 ControlNet    |
+| 实时生成       | SDXL Turbo / LCM        | 1-4 步出图，延迟低           |
+| 定制化风格     | SD + LoRA 微调          | 轻量定制，成本低             |
+| 中文场景优化   | 通义万相 / 文心一格     | 中文理解好，本土化           |
+
+**阶段 2：环境搭建**
+
+```bash
+# 安装依赖
+pip install diffusers transformers accelerate safetensors
+
+# 下载模型（以 SDXL 为例）
+huggingface-cli download stabilityai/stable-diffusion-xl-base-1.0
+
+# 可选：安装 xformers 加速推理
+pip install xformers
+```
+
+**阶段 3：基础生成管线**
+
+```python
+import torch
+from diffusers import DiffusionPipeline, EulerDiscreteScheduler
+
+# 加载 SDXL 模型
+model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+pipe = DiffusionPipeline.from_pretrained(
+    model_id,
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    variant="fp16"
+)
+pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
+pipe.to("cuda")
+
+# 基础生成
+prompt = "一只橘猫坐在窗台上，窗外是雨中的东京街景，新海诚风格，柔和光线"
+negative_prompt = "low quality, blurry, deformed, ugly, bad anatomy"
+
+image = pipe(
+    prompt=prompt,
+    negative_prompt=negative_prompt,
+    guidance_scale=7.5,
+    num_inference_steps=30,
+    width=1024,
+    height=1024
+).images[0]
+image.save("output.png")
+```
+
+**阶段 4：高级控制（ControlNet + LoRA）**
+
+```python
+from diffusers import StableDiffusionXLControlNetPipeline, ControlNetModel
+from diffusers import AutoencoderKL
+import cv2
+import numpy as np
+
+# 加载 Depth ControlNet
+controlnet = ControlNetModel.from_pretrained(
+    "diffusers/controlnet-depth-sdxl-1.0",
+    torch_dtype=torch.float16
+)
+vae = AutoencoderKL.from_pretrained(
+    "madebyollin/sdxl-vae-fp16-fix",
+    torch_dtype=torch.float16
+)
+
+pipe = StableDiffusionXLControlNetPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-xl-base-1.0",
+    controlnet=controlnet,
+    vae=vae,
+    torch_dtype=torch.float16
+).to("cuda")
+
+# 使用深度图控制生成
+depth_image = cv2.imread("depth_map.png")
+result = pipe(
+    prompt="现代简约风格客厅",
+    image=depth_image,
+    guidance_scale=7.5,
+    num_inference_steps=30
+).images[0]
+```
+
+**阶段 5：服务化部署**
+
+```python
+# 使用 FastAPI 部署图像生成服务
+from fastapi import FastAPI
+from pydantic import BaseModel
+import torch
+from diffusers import DiffusionPipeline
+
+app = FastAPI()
+pipe = DiffusionPipeline.from_pretrained("stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16).to("cuda")
+
+class GenerateRequest(BaseModel):
+    prompt: str
+    negative_prompt: str = "low quality, blurry"
+    guidance_scale: float = 7.5
+    steps: int = 30
+    width: int = 1024
+    height: int = 1024
+
+@app.post("/generate")
+async def generate_image(req: GenerateRequest):
+    image = pipe(
+        prompt=req.prompt,
+        negative_prompt=req.negative_prompt,
+        guidance_scale=req.guidance_scale,
+        num_inference_steps=req.steps,
+        width=req.width,
+        height=req.height
+    ).images[0]
+    # 返回图像...
+    return {"status": "success"}
+```
+
+**阶段 6：监控与优化**
+
+| 监控指标         | 目标值              | 优化手段                     |
+| ---------------- | ------------------- | ---------------------------- |
+| 生成延迟（P99）  | < 10s               | TensorRT 编译、蒸馏模型      |
+| 显存占用         | < 8GB               | FP16 推理、模型卸载          |
+| 生成质量（FID）  | < 20                | 调整参数、优化提示词         |
+| 文本遵循度       | CLIP Score > 0.3    | 提高 Guidance Scale          |
+| 服务可用性       | > 99.9%             | 多 GPU 负载均衡、自动扩缩容  |
+
+## 主流框架对比
+
+| 框架/模型          | 类型     | 参数量  | 生成速度      | 质量    | 适用场景               |
+| ------------------ | -------- | ------- | ------------- | ------- | ---------------------- |
+| FLUX.1             | 开源     | 12B     | 中等（10-20s）| 最优    | 高质量图像生成         |
+| Stable Diffusion XL| 开源     | 2.6B    | 快（5-10s）   | 优秀    | 通用场景，生态完善     |
+| SDXL Turbo         | 开源     | 2.6B    | 极快（< 1s）  | 良好    | 实时交互应用           |
+| DALL-E 3           | 闭源 API | -       | 中等（10-15s）| 优秀    | 文本理解要求高的场景   |
+| Midjourney v6      | 闭源     | -       | 中等（30-60s）| 艺术最优| 艺术创作、设计         |
+| 通义万相           | 闭源 API | -       | 快（3-8s）    | 良好    | 中文场景、电商         |
+
 ## 工程实践
 
 ### 提示词工程
@@ -242,6 +391,53 @@ result = pipe(
 
 ::: warning 注意
 图像生成涉及 [版权](/glossary/copyright) 和 [偏见](/glossary/bias) 问题。训练数据可能包含受版权保护的作品，生成结果可能强化社会偏见。企业应用时务必进行合规审查。
+:::
+
+## 常见问题与避坑
+
+### FAQ
+
+**Q1：生成的图像手指/肢体畸形怎么办？**
+
+- 在负面提示词中添加 `extra limbs, bad anatomy, poorly drawn hands`
+- 使用 ControlNet 的 OpenPose 或 Depth 模式控制人体结构
+- 增加生成步数（Steps）和 Guidance Scale
+- 尝试多次生成（Seed 随机化），选择最佳结果
+
+**Q2：如何让模型生成指定的文字？**
+
+- 使用 Ideogram 或 FLUX.1 等文字渲染能力强的模型
+- 在提示词中用引号明确标注文字内容：`写着"Hello World"的招牌`
+- 增加质量词：`typography, clear text, legible`
+- 如果效果不佳，后期用图像编辑工具添加文字
+
+**Q3：生成速度太慢如何优化？**
+
+- 使用 FP16 半精度推理，显存减半，速度提升
+- 安装 xformers 或启用 `--xformers` 优化注意力计算
+- 使用蒸馏模型（SDXL Turbo、LCM），1-4 步出图
+- 部署时使用 TensorRT 编译模型，推理加速 30%-50%
+
+**Q4：如何保持生成风格的一致性？**
+
+- 训练专属 LoRA 模型，固化品牌风格
+- 使用 IP-Adapter 传入参考图像控制风格
+- 固定提示词模板和随机种子（Seed）
+- 使用 ControlNet 保持构图一致性
+
+**Q5：商用需要注意哪些版权问题？**
+
+- 开源模型需遵守对应许可证（如 CreativeML Open RAIL-M）
+- 避免生成与知名 IP 高度相似的内容
+- 部分云服务禁止生成内容的商业用途，需仔细阅读条款
+- 建议建立内部审核流程，确保生成内容合规
+
+::: warning 避坑指南
+1. **不要忽视负面提示词**：合理设置负面提示词可大幅提升生成质量
+2. **不要过度依赖单次生成**：图像生成有随机性，多次生成选择最佳
+3. **不要忽略显存管理**：大模型需要 8GB+ 显存，注意模型卸载和半精度
+4. **不要直接用于生产**：生成内容需人工审核，避免不当内容
+5. **不要忽视版权风险**：商用前务必确认模型许可证和生成内容版权归属
 :::
 
 ## 与其他概念的关系

@@ -19,7 +19,7 @@ description: Tool Use，Agent 调用外部工具的能力
 >
 > 工具使用让 Agent 从"知道什么"进化到"能做什么"。没有工具使用的 Agent 是一个知识渊博的顾问，有了工具使用的 Agent 是一个能执行任务的助手。
 
-## 为什么重要
+## 为什么需要
 
 ### 突破 LLM 的固有局限
 
@@ -41,7 +41,7 @@ description: Tool Use，Agent 调用外部工具的能力
 
 **任务闭环** 工具使用使 Agent 能够完成端到端的复杂任务，从信息收集到决策到执行，形成完整闭环。
 
-## 核心技术
+## 核心原理
 
 ### 函数调用（Function Calling）
 
@@ -352,7 +352,93 @@ response = client.chat.completions.create(
 )
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：定义工具描述
+
+工具描述质量直接影响 LLM 的选择准确性：
+
+```python
+tool_definition = {
+    "type": "function",
+    "function": {
+        "name": "search_database",
+        "description": "在数据库中搜索记录。当用户需要查询数据时使用。",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "搜索关键词"},
+                "limit": {"type": "integer", "description": "返回结果数量", "default": 10}
+            },
+            "required": ["query"]
+        }
+    }
+}
+```
+
+### 步骤 2：实现工具执行逻辑
+
+```python
+def search_database(query: str, limit: int = 10) -> list[dict]:
+    """执行数据库搜索"""
+    # 实现搜索逻辑
+    return db.search(query, limit=limit)
+```
+
+### 步骤 3：集成到 Agent 循环
+
+```python
+def agent_loop(user_input: str, tools: dict, llm: Any) -> str:
+    messages = [{"role": "user", "content": user_input}]
+
+    while True:
+        response = llm.chat(messages, tools=tools)
+
+        if response.tool_calls:
+            # 执行工具调用
+            for tool_call in response.tool_calls:
+                result = tools[tool_call.name](**tool_call.args)
+                messages.append({"role": "tool", "content": result})
+        else:
+            return response.content
+```
+
+### 步骤 4：添加工具验证
+
+```python
+def validate_tool_result(tool_name: str, result: Any) -> bool:
+    """验证工具返回结果"""
+    if tool_name == "search_database":
+        return isinstance(result, list)
+    elif tool_name == "calculator":
+        return isinstance(result, (int, float))
+    return True
+```
+
+### 步骤 5：实现错误处理与重试
+
+```python
+async def execute_tool_with_retry(tool: Tool, input_data: dict, max_retries: int = 3):
+    for attempt in range(max_retries):
+        try:
+            result = await tool.execute(input_data)
+            if validate_tool_result(tool.name, result):
+                return result
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+```
+
+## 主流框架对比
+
+| 框架/协议 | 类型 | 特点 | 适用场景 |
+|-----------|------|------|---------|
+| **OpenAI Function Calling** | API 原生 | 简单易用、广泛支持 | OpenAI 生态 |
+| **LangChain Tools** | 框架 | 丰富内置工具、统一接口 | 快速原型 |
+| **MCP** | 开放协议 | 标准化、跨平台 | 通用工具集成 |
+| **Anthropic Tool Use** | API 原生 | Claude 专用 | Anthropic 生态 |
+
+## 最佳实践
 
 ### 工具选择策略
 
@@ -491,6 +577,47 @@ class ToolCache:
             del self.cache[oldest_key]
         self.cache[key] = (result, time.time())
 ```
+
+## 常见问题与避坑
+
+### Q1：工具描述写不好怎么办？
+
+- 使用**动词开头**的命名（如 `search_database` 而非 `database`）
+- 添加**使用场景说明**
+- 提供**参数示例**
+- 让 LLM 帮你优化工具描述
+
+### Q2：工具调用陷入死循环怎么办？
+
+- 设置**最大调用次数**限制
+- 检测**重复调用**相同工具
+- 添加**终止条件**判断
+
+### Q3：工具执行太慢怎么办？
+
+- 使用**异步调用**
+- 设置合理的**超时时间**
+- 对结果进行**缓存**
+
+### Q4：如何保证工具调用安全？
+
+- 使用**沙箱环境**执行代码
+- 限制**文件系统访问**权限
+- 验证**输入参数**合法性
+- 记录所有**操作日志**
+
+### Q5：工具太多 LLM 选不准怎么办？
+
+- **分组管理**：先选类别再选具体工具
+- **动态加载**：只加载当前场景需要的工具
+- **提供示例**：在描述中加入使用示例
+
+:::warning 常见陷阱
+- **描述模糊**：LLM 无法理解何时使用该工具
+- **缺乏验证**：工具返回错误结果未被检测
+- **忽视安全**：代码执行工具未做沙箱隔离
+- **过度调用**：简单问题也调用工具增加成本
+:::
 
 ## 与其他概念的关系
 

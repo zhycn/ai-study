@@ -26,23 +26,61 @@ Token 是 LLM 处理文本的基本单位，可以是词、子词或字符。例
 - **技术范式的转变**：LLM 带来了 **Prompt as Code** 的新范式——通过自然语言提示词（Prompt）而非传统编程来驱动 AI 完成任务
 - **涌现能力**（Emergent Abilities）：当模型规模达到临界点时，会突然展现出训练目标之外的能力，如思维链推理（Chain-of-Thought）、代码理解和多步规划
 
+## 核心原理
+
+### 语言建模（Language Modeling）
+
+LLM 的本质是一个**自回归语言模型**（Autoregressive Language Model），目标是学习自然语言的概率分布：
+
+$$P(x_1, x_2, ..., x_n) = \prod_{i=1}^{n} P(x_i | x_1, x_2, ..., x_{i-1})$$
+
+即给定前面的 Token 序列，预测下一个 Token 的条件概率。通过最大化训练数据的似然函数，模型学会语言的统计规律和语义结构。
+
+### 缩放定律（Scaling Law）
+
+OpenAI 研究发现，LLM 的性能与三个因素呈幂律关系：
+
+- **模型参数量**（N）：参数越多，拟合能力越强
+- **训练数据量**（D）：数据越多，泛化能力越好
+- **计算量**（C）：计算资源决定训练规模
+
+$$L(N, D, C) \approx \left(\frac{N_c}{N}\right)^{\alpha} + \left(\frac{D_c}{D}\right)^{\beta} + L_0$$
+
+其中 $L$ 为损失函数，$\alpha \approx 0.34$，$\beta \approx 0.28$。这意味着单纯增加参数或数据都能持续提升模型能力，这是 LLM 发展的理论基础。
+
+### 涌现能力（Emergent Abilities）
+
+当模型规模超过临界阈值时，会突然出现训练目标之外的能力：
+
+- **思维链推理**（Chain-of-Thought）：多步逻辑推理
+- **上下文学习**（In-Context Learning）：无需微调即可学习新任务
+- **代码理解与生成**：从未专门训练过编程任务
+- **跨语言迁移**：训练以英文为主，但具备多语言能力
+
+涌现能力的出现机制尚无定论，可能与模型的**相变**（Phase Transition）行为有关。
+
 ## 核心技术架构
 
-### Transformer 架构
+### Decoder-only 架构
 
-LLM 的基础是 Transformer 架构，其核心组件包括：
+现代 LLM 大多采用 Decoder-only 变体，相比原始 Encoder-Decoder 结构更简洁高效：
 
-1. **自注意力机制**（Self-Attention Mechanism）：计算序列中每个位置与其他位置的关系，捕捉长距离依赖
-2. **多头注意力**（Multi-Head Attention）：并行运行多个注意力头，捕捉不同维度的语义关系
-3. **前馈神经网络**（Feed-Forward Network，FFN）：对每个位置的特征进行非线性变换
-4. **层归一化**（Layer Normalization）：稳定训练过程，加速收敛
-5. **残差连接**（Residual Connection）：解决深层网络的梯度消失问题
+| 架构类型 | 代表模型 | 擅长任务 | 特点 |
+|----------|----------|----------|------|
+| Decoder-only | GPT、Llama、Qwen | 文本生成、对话 | 自回归，单向注意力 |
+| Encoder-only | BERT、RoBERTa | 分类、NER | 双向编码，无生成能力 |
+| Encoder-Decoder | T5、BART | 翻译、摘要 | 序列到序列，训练成本高 |
+
+Decoder-only 架构成为主流的原因：
+1. **训练简单**：只需预测下一个 Token，无需额外目标
+2. **推理高效**：自回归生成天然适合流式输出
+3. **扩展性强**：易于扩展到万亿参数规模
 
 ### 训练流程
 
 LLM 的训练通常分为三个阶段：
 
-```
+```text
 预训练（Pre-training）→ 监督微调（SFT）→ 人类对齐（Alignment）
 ```
 
@@ -67,6 +105,16 @@ LLM 的训练通常分为三个阶段：
 
 ## 主流模型与实现
 
+### 主流模型对比
+
+| 模型 | 参数量 | 上下文 | 架构 | 特点 |
+|------|--------|--------|------|------|
+| GPT-4o | ~200B | 128K | Decoder-only | 多模态，速度快 |
+| Claude 3.5 Sonnet | ~175B | 200K | Decoder-only | 安全性强，代码优 |
+| Llama 3.1 405B | 405B | 128K | Decoder-only | 开源标杆 |
+| Qwen 2.5 72B | 72B | 256K | Decoder-only | 中文能力强 |
+| DeepSeek V3 | 671B(MoE) | 128K | Decoder-only + MoE | 激活 37B，性价比高 |
+
 ### 闭源模型
 
 - **GPT-4/4o**（OpenAI）：多模态能力，支持文本、图像输入，实时语音交互
@@ -82,7 +130,7 @@ LLM 的训练通常分为三个阶段：
 
 ### 模型选择建议
 
-```
+```text
 快速原型/生产环境 → 闭源 API（GPT-4o、Claude）
 数据敏感/定制需求 → 开源模型（Llama、Qwen）+ 本地部署
 成本敏感/高并发   → 小参数开源模型（8B-14B）+ 量化
@@ -115,7 +163,7 @@ LLM 的上下文窗口（Context Window）限制了单次交互能处理的 Toke
 3. 使用分隔符区分不同部分
 4. 指定输出格式和约束条件
 5. 对关键步骤要求模型"逐步思考"
-   :::
+:::
 
 ### 评估与测试
 

@@ -130,6 +130,143 @@ tts.tts_to_file(
 | Fish Speech | 轻量级音色克隆方案                    |
 | OpenVoice   | InstantVoice 的开源实现               |
 
+## 实施步骤
+
+### 从零搭建语音合成服务
+
+**阶段 1：需求分析与技术选型**
+
+| 需求场景       | 推荐方案                    | 理由                           |
+| -------------- | --------------------------- | ------------------------------ |
+| 高质量有声书   | Azure TTS / 讯飞 TTS        | 自然度高，情感丰富             |
+| 实时对话       | CosyVoice / Fish Speech     | 低延迟，支持流式合成           |
+| 音色克隆       | CosyVoice / VALL-E          | 零样本克隆，3-10 秒参考音频    |
+| 多语言支持     | Google Cloud TTS / Coqui TTS| 100+ 语言覆盖                  |
+| 离线部署       | VITS / Coqui TTS            | 开源可本地部署，数据不出域     |
+
+**阶段 2：环境搭建**
+
+```bash
+# 使用 Coqui TTS（开源方案）
+pip install TTS
+
+# 或使用 CosyVoice
+git clone https://github.com/FunAudioLLM/CosyVoice.git
+cd CosyVoice
+pip install -r requirements.txt
+
+# 下载预训练模型
+# CosyVoice 模型约 1GB，支持零样本音色克隆
+```
+
+**阶段 3：基础合成**
+
+```python
+# 使用 Coqui TTS 进行基础语音合成
+from TTS.api import TTS
+
+# 加载中文模型
+tts = TTS(model_name="tts_models/zh-CN/baker/tacotron2-DDC-GST", progress_bar=False)
+
+# 基础合成
+tts.tts_to_file(
+    text="你好，欢迎使用语音合成系统。今天天气真不错。",
+    file_path="output.wav"
+)
+
+# 使用 CosyVoice 进行音色克隆合成
+from cosyvoice.cli.cosyvoice import CosyVoice
+
+model = CosyVoice('pretrained_models/CosyVoice-300M')
+
+# 零样本克隆：提供参考音频即可
+output = model.inference_zero_shot(
+    text="这是克隆音色后的语音合成效果",
+    prompt_text="参考音频中的文本内容",
+    prompt_speech_16k=reference_audio  # 3-10 秒参考音频
+)
+```
+
+**阶段 4：文本前端处理**
+
+```python
+# 中文文本规范化处理
+import re
+from pypinyin import pinyin, Style
+
+def normalize_text(text: str) -> str:
+    """文本规范化：数字、缩写、多音字处理"""
+    # 数字转中文
+    text = re.sub(r'\d+', lambda m: num_to_chinese(m.group()), text)
+    # 英文缩写处理
+    text = text.replace('Dr.', '医生').replace('Mr.', '先生')
+    return text
+
+def handle_polyphone(text: str) -> str:
+    """多音字消歧"""
+    # 使用词典或规则处理常见多音字
+    polyphone_dict = {
+        '银行': 'yín háng',
+        '行长': 'háng zhǎng',
+        '重': {'重要': 'zhòng', '重复': 'chóng'}
+    }
+    # 根据上下文选择正确读音
+    ...
+```
+
+**阶段 5：情感与风格控制**
+
+```python
+# 情感控制合成
+def synthesize_with_emotion(text: str, emotion: str, intensity: float = 0.5):
+    """
+    情感语音合成
+    emotion: happy/sad/angry/surprised/neutral
+    intensity: 0.0-1.0 情感强度
+    """
+    # 方式 1：使用 GST（全局风格令牌）
+    # 从参考音频提取风格特征
+    style_embedding = extract_style_from_reference(emotion_audio)
+
+    # 方式 2：使用情感嵌入
+    emotion_vector = get_emotion_embedding(emotion, intensity)
+
+    # 合成
+    audio = tts.synthesize(
+        text=text,
+        style=style_embedding,
+        emotion=emotion_vector
+    )
+    return audio
+```
+
+**阶段 6：服务化部署**
+
+```text
+部署架构：
+客户端 → API Gateway → TTS 服务 → 声学模型 → 声码器 → 音频流
+                            ↓
+                      音色库管理
+                      文本前端处理
+
+性能指标：
+- 实时率（RTF）< 0.5（合成 1 秒音频耗时 < 0.5 秒）
+- 首字延迟 < 200ms（流式合成）
+- 支持并发请求数 > 100
+- 音频质量 MOS > 4.0
+```
+
+## 主流框架对比
+
+| 框架/模型    | 类型     | 语言支持    | 音色克隆 | 延迟     | 适用场景               |
+| ------------ | -------- | ----------- | -------- | -------- | ---------------------- |
+| CosyVoice    | 开源     | 中/英/日等  | 支持     | 中等     | 对话场景，音色克隆     |
+| Fish Speech  | 开源     | 多语言      | 支持     | 低       | 轻量级音色克隆         |
+| VITS         | 开源     | 多语言      | 不支持   | 低       | 高质量端到端合成       |
+| Coqui TTS    | 开源框架 | 100+ 语言   | 部分支持 | 中等     | 多语言通用方案         |
+| Azure TTS    | 商业 API | 100+ 语言   | 有限     | 低       | 企业级应用，高可用性   |
+| 讯飞 TTS     | 商业 API | 中文/方言   | 支持     | 低       | 中文场景最优           |
+
 ## 工程实践
 
 ### 评估维度
@@ -196,6 +333,53 @@ tts.synthesize(
 
 ::: warning 注意
 音色克隆技术可能被用于语音诈骗和身份冒充。在涉及金融、身份验证等敏感场景时，务必部署反欺骗（Anti-spoofing）检测系统。
+:::
+
+## 常见问题与避坑
+
+### FAQ
+
+**Q1：合成语音听起来不自然、有机械感怎么办？**
+
+- 选择更先进的模型架构（VITS > FastSpeech 2 > Tacotron 2）
+- 增加训练数据量和多样性
+- 调整韵律参数（语速、音调、停顿）
+- 使用情感 TTS 模型，注入情感特征
+
+**Q2：中文多音字读错如何处理？**
+
+- 在文本前端加入多音字消歧模块
+- 使用基于上下文的多音字预测模型
+- 提供拼音标注作为模型输入
+- 对高频错误词建立词典映射
+
+**Q3：如何实现低延迟的实时合成？**
+
+- 使用非自回归模型（FastSpeech 2），支持并行合成
+- 流式合成：边生成边播放，不等待完整音频
+- 模型量化（INT8）和推理加速（ONNX/TensorRT）
+- 预合成常用语句，缓存结果
+
+**Q4：音色克隆需要多少参考音频？**
+
+- 零样本克隆：3-10 秒参考音频即可
+- 高质量克隆：建议 30 秒 -3 分钟
+- 参考音频要求：清晰无噪音、语速适中、情感中性
+- 参考音频的文本内容最好与目标文本风格接近
+
+**Q5：多语言混合（中英混读）如何处理？**
+
+- 使用支持代码切换（Code-Switching）的模型
+- 在文本前端识别语言边界，分别处理
+- 使用统一音素集，覆盖多种语言的发音
+- 部分模型（如 CosyVoice）原生支持中英混读
+
+::: warning 避坑指南
+1. **不要忽视文本前端**：TTS 质量 50% 取决于文本规范化处理
+2. **不要忽略多音字**：中文场景必须处理多音字消歧
+3. **不要直接克隆音色用于商业用途**：需获得音色授权，避免法律风险
+4. **不要忽视音频后处理**：添加适当的淡入淡出、降噪处理
+5. **不要忽略无障碍设计**：为视障用户提供清晰的语音反馈
 :::
 
 ## 与其他概念的关系

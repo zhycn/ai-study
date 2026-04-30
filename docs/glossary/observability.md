@@ -276,62 +276,133 @@ groups:
           summary: '日 API 费用超过 $100'
 ```
 
-## 工程实践
+## 实施步骤
 
-### 可观测性架构设计
+### 第一步：确定可观测性目标
 
-```text
-┌─────────────┐     ┌──────────────┐     ┌─────────────┐
-│  应用服务    │────▶│ OTel Collector│────▶│  Jaeger     │
-│  (SDK)      │     │  (聚合/过滤)  │     │  (Traces)   │
-└─────────────┘     └──────────────┘     └─────────────┘
-       │                     │
-       ▼                     ▼
-┌─────────────┐     ┌─────────────┐
-│  业务日志    │     │ Prometheus  │
-│  (结构化)    │     │  (Metrics)  │
-└─────────────┘     └─────────────┘
-                           │
-                           ▼
-                    ┌─────────────┐
-                    │   Grafana   │
-                    │ (Dashboard) │
-                    └─────────────┘
+明确你需要监控什么：
+
+- **成本追踪**：Token 消耗、API 费用、各模型的使用占比
+- **性能监控**：TTFT、TPS、P99 延迟、错误率
+- **质量监控**：用户满意度、重试率、输出长度分布
+- **安全合规**：敏感信息脱敏、审计日志、数据隐私
+
+### 第二步：选择可观测性平台
+
+根据团队需求选择合适的平台：
+
+| 需求 | 推荐方案 |
+| ---- | -------- |
+| LangChain 生态用户 | LangSmith |
+| 需要自托管、开源 | LangFuse |
+| 生产级 ML 系统 | Arize Phoenix |
+| 快速接入、零代码 | Helicone |
+| 评估驱动 | Braintrust |
+
+### 第三步：集成 OpenTelemetry SDK
+
+```python
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+
+# 配置追踪
+trace.set_tracer_provider(TracerProvider())
+tracer = trace.get_tracer("ai-app")
+
+exporter = OTLPSpanExporter(endpoint="http://otel-collector:4317")
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(exporter))
 ```
 
-### 敏感信息脱敏
+### 第四步：定义关键指标
+
+```python
+from prometheus_client import Counter, Histogram, Gauge
+
+# 核心指标
+llm_calls_total = Counter("llm_calls_total", "Total LLM API calls", ["model", "status"])
+llm_latency = Histogram("llm_latency_seconds", "LLM API latency", ["model"])
+llm_tokens = Counter("llm_tokens_total", "Total tokens consumed", ["model", "type"])
+llm_cost = Counter("llm_cost_usd", "Total API cost in USD", ["model"])
+```
+
+### 第五步：配置告警规则
+
+```yaml
+groups:
+  - name: ai-app-alerts
+    rules:
+      - alert: HighErrorRate
+        expr: rate(llm_calls_total{status="error"}[5m]) / rate(llm_calls_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+```
+
+### 第六步：搭建可视化仪表盘
+
+使用 Grafana 创建仪表盘，展示：
+- 实时请求量和错误率
+- 各模型的延迟分布（P50、P95、P99）
+- Token 消耗趋势和成本分析
+- 缓存命中率和用户满意度
+
+## 最佳实践
+
+- **结构化日志**：所有日志使用 JSON 格式，包含 trace_id 便于关联分析
+- **敏感信息脱敏**：在采集、存储、展示各阶段做好脱敏，遵守 GDPR 等法规
+- **合理采样**：全量采集成本高昂，使用头部采样、尾部采样或自适应采样策略
+- **版本关联**：将可观测性数据与模型版本、提示词版本关联，便于按版本对比
+- **告警分级**：区分 critical、warning、info 级别，避免告警疲劳
+- **定期审查**：每周审查告警规则和仪表盘，确保监控指标与业务目标一致
+
+## 常见问题与避坑
+
+### Q1：可观测性和监控有什么区别？
+
+- **监控（Monitoring）**：已知未知——预先定义好要检查什么（如 CPU 使用率是否超过 80%）
+- **可观测性（Observability）**：未知未知——当出现从未见过的问题时，仍有足够信息去诊断
+
+AI 应用需要两者结合：监控已知指标，可观测性帮助诊断未知问题。
+
+### Q2：如何控制可观测性成本？
+
+- **采样策略**：不要全量采集，使用尾部采样保留错误和高延迟请求
+- **数据保留策略**：原始日志保留 7 天，聚合指标保留 90 天
+- **按需采集**：开发环境全量采集，生产环境采样采集
+- **选择合适平台**：开源方案（LangFuse）比商业方案成本更低
+
+### Q3：流式输出如何监控？
+
+流式场景需要特殊指标：
+- **TTFT**：首字响应时间（而非总延迟）
+- **TPS**：Token 生成速度
+- **流式中断率**：连接意外断开的比例
+- **完整响应率**：成功完成流式输出的比例
+
+### Q4：如何处理敏感信息？
 
 ```python
 def sanitize_prompt(prompt: str) -> str:
     """脱敏提示词中的敏感信息"""
     import re
 
-    # 替换邮箱
-    prompt = re.sub(r'[\w.-]+@[\w.-]+\.\w+', '[EMAIL]', prompt)
-    # 替换手机号
-    prompt = re.sub(r'\b1[3-9]\d{9}\b', '[PHONE]', prompt)
-    # 替换 API Key
-    prompt = re.sub(r'sk-[a-zA-Z0-9]{20,}', '[API_KEY]', prompt)
-    # 替换身份证号
-    prompt = re.sub(r'\b\d{17}[\dXx]\b', '[ID_CARD]', prompt)
+    prompt = re.sub(r"[\w.-]+@[\w.-]+\.\w+", "[EMAIL]", prompt)
+    prompt = re.sub(r"\b1[3-9]\d{9}\b", "[PHONE]", prompt)
+    prompt = re.sub(r"sk-[a-zA-Z0-9]{20,}", "[API_KEY]", prompt)
 
     return prompt
-
-# 在记录日志前脱敏
-logger.info("LLM prompt", extra={"prompt": sanitize_prompt(user_input)})
 ```
 
-::: warning
-AI 应用的可观测性数据可能包含用户隐私信息。务必在采集、存储、展示各阶段做好脱敏处理，遵守 GDPR、个人信息保护法等法规要求。
-:::
+在记录日志前务必脱敏，避免泄露用户隐私。
 
-### 采样策略
+### Q5：多模型场景如何对比分析？
 
-全量采集成本高昂，合理的采样策略可以在成本和可观测性之间取得平衡：
-
-- **头部采样**：在请求入口决定是否采样，适合均匀采样
-- **尾部采样**：请求完成后根据特征（如错误、高延迟）决定是否保留，适合异常分析
-- **自适应采样**：根据系统负载动态调整采样率
+- 在指标中添加 model 标签
+- 在 Grafana 中按 model 分组展示
+- 定期生成各模型的成本-性能对比报告
+- 结合 [模型评估](/glossary/model-evaluation) 数据做综合决策
 
 ## 与其他概念的关系
 

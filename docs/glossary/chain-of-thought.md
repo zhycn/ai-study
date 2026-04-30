@@ -101,7 +101,7 @@ def self_consistency(prompt, model, n_paths=5):
 
 将 CoT 扩展为树状搜索结构，在每一步评估多个可能的推理方向：
 
-```
+```text
 问题: "用 3, 3, 8, 8 通过四则运算得到 24"
 
 根节点

@@ -223,130 +223,115 @@ for output in outputs:
     print(f"Generated: {output.outputs[0].text}\n")
 ```
 
-## 工程实践
+## 实施步骤
 
-### 批处理任务管理
+### 第一步：识别适合批处理的场景
 
-```python
-class BatchJobManager:
-    """批处理任务管理器"""
+以下场景适合使用批处理：
 
-    def __init__(self):
-        self.jobs = {}
+- 离线数据分析（如批量文本分类）
+- 大规模内容生成（如批量生成产品描述）
+- 模型评估测试（如批量运行测试用例）
+- 定时报告生成（如每日摘要）
 
-    def create_job(self, name, tasks, config):
-        """创建批处理任务"""
-        job = {
-            "id": f"job-{uuid4().hex[:8]}",
-            "name": name,
-            "tasks": tasks,
-            "config": config,
-            "status": "pending",  # pending, running, completed, failed
-            "created_at": datetime.now(),
-            "started_at": None,
-            "completed_at": None,
-            "results": [],
-            "errors": [],
-        }
-        self.jobs[job["id"]] = job
-        return job["id"]
+判断标准：任务可以接受延迟完成（分钟/小时级），且数量较大（> 100 条）。
 
-    def get_job_status(self, job_id):
-        """查询任务状态"""
-        job = self.jobs.get(job_id)
-        if not job:
-            return None
+### 第二步：选择批处理服务
 
-        total = len(job["tasks"])
-        completed = len(job["results"])
-        failed = len(job["errors"])
+| 需求 | 推荐方案 |
+| ---- | -------- |
+| 使用 OpenAI API | OpenAI Batch API（50% 折扣） |
+| 本地部署模型 | vLLM 批量推理 |
+| 需要任务队列 | Celery + Redis |
+| 云原生方案 | AWS Batch、Google Cloud Batch |
 
-        return {
-            "id": job["id"],
-            "status": job["status"],
-            "progress": f"{completed}/{total}",
-            "completion_rate": completed / total if total > 0 else 0,
-            "error_rate": failed / total if total > 0 else 0,
-        }
-
-    def get_results(self, job_id):
-        """获取任务结果"""
-        job = self.jobs.get(job_id)
-        return {
-            "results": job["results"],
-            "errors": job["errors"],
-        } if job else None
-```
-
-### 错误重试机制
+### 第三步：准备批处理输入
 
 ```python
-async def batch_with_retry(tasks, max_retries=3):
-    """批处理中的错误重试"""
-    results = []
-    failed_tasks = tasks[:]
-
-    for attempt in range(max_retries + 1):
-        if not failed_tasks:
-            break
-
-        batch_results = await execute_batch(failed_tasks)
-        successful = []
-        failed_tasks = []
-
-        for task, result in zip(failed_tasks, batch_results):
-            if result.success:
-                successful.append(result)
-            elif attempt < max_retries:
-                failed_tasks.append(task)
-            else:
-                results.append({"task": task, "error": result.error})
-
-        results.extend(successful)
-
-        if failed_tasks:
-            await asyncio.sleep(2 ** attempt)  # 指数退避
-
-    return results
+# OpenAI Batch API 使用 JSONL 格式
+# requests.jsonl:
+# {"custom_id": "req-1", "method": "POST", "url": "/v1/chat/completions",
+#  "body": {"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]}}
 ```
 
-### 批处理与实时处理的混合架构
+### 第四步：提交批处理任务
 
-```text
-┌──────────────────────────────────────────────────────┐
-│                    用户请求                            │
-└──────────────┬───────────────────────┬───────────────┘
-               ▼                       ▼
-      ┌────────────────┐     ┌────────────────┐
-      │  实时处理路径   │     │  批处理路径     │
-      │  (低延迟)      │     │  (高吞吐)       │
-      └───────┬────────┘     └───────┬────────┘
-              ▼                      ▼
-      ┌────────────────┐     ┌────────────────┐
-      │  流式输出       │     │  任务队列       │
-      │  即时响应       │     │  定时执行       │
-      └────────────────┘     └───────┬────────┘
-                                     ▼
-                              ┌────────────────┐
-                              │  结果存储       │
-                              │  异步通知       │
-                              └────────────────┘
+```python
+import openai
+
+client = openai.OpenAI()
+
+# 上传文件
+file = client.files.create(file=open("requests.jsonl", "rb"), purpose="batch")
+
+# 创建批处理任务
+batch = client.batches.create(
+    input_file_id=file.id,
+    endpoint="/v1/chat/completions",
+    completion_window="24h",
+)
 ```
 
-路由决策：
+### 第五步：监控任务状态
 
+轮询任务状态，处理完成后的结果文件。
+
+### 第六步：处理结果和错误
+
+解析结果文件，处理成功和失败的请求，对失败请求进行重试。
+
+## 最佳实践
+
+- **合理设置批次大小**：太小无法享受批量优化，太大可能增加延迟
+- **做好错误重试**：批处理中部分请求失败是常态，实现指数退避重试
+- **混合架构**：实时路径处理交互式请求，批处理路径处理离线任务
+- **结果存储**：将批处理结果持久化，支持后续查询和分析
+- **成本监控**：跟踪批处理的实际成本节省，验证优化效果
+- **数据分片**：超大批次按时间或类型分片，便于并行处理和错误隔离
+
+## 常见问题与避坑
+
+### Q1：批处理和实时处理如何选择？
+
+- **实时处理**：交互式对话、需要即时反馈的场景
+- **批处理**：离线分析、大批量任务、可以接受延迟的场景
+
+路由决策参考：
 ```python
 def route_request(request):
-    """路由决策：实时 vs 批处理"""
     if request.is_interactive:
-        return "realtime"  # 交互式对话走实时路径
-    elif request.batch_size > 100:
-        return "batch"     # 大批量任务走批处理
-    elif request.deadline > 3600:
-        return "batch"     # 截止时间宽松走批处理
-    else:
-        return "realtime"  # 默认实时处理
+        return "realtime"
+    elif request.batch_size > 100 or request.deadline > 3600:
+        return "batch"
+    return "realtime"
 ```
+
+### Q2：批处理任务失败了怎么办？
+
+- 检查输入文件格式是否正确（JSONL 每行一个合法 JSON）
+- 查看错误日志，定位失败的具体请求
+- 对失败请求单独重试
+- 使用 `batch_with_retry` 实现自动重试
+
+### Q3：批处理的最大批次大小是多少？
+
+- OpenAI Batch API：单个文件最大 100MB，最多 50,000 个请求
+- vLLM：取决于 GPU 显存，通常可以同时处理数十到数百个 prompt
+- 建议将超大批次拆分为多个小批次，便于并行和错误处理
+
+### Q4：如何估算批处理的完成时间？
+
+- OpenAI Batch API：承诺 24 小时内完成，通常几小时内完成
+- 本地 vLLM：取决于模型大小、GPU 数量和批次大小
+- 建议在实际使用前做小规模测试，建立时间估算模型
+
+### Q5：批处理如何与流式输出结合？
+
+批处理和流式输出是两种不同的模式：
+- 批处理：离线、高吞吐、延迟完成
+- 流式输出：实时、低延迟、逐字返回
+
+两者可以结合使用：批处理完成后，用户查询结果时使用流式输出展示。
 
 ## 与其他概念的关系
 

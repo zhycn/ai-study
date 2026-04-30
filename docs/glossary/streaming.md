@@ -212,106 +212,130 @@ function StreamingMarkdown({ content }: { content: string }) {
 }
 ````
 
-## 应用场景
+## 主流框架对比
 
-| 场景         | 流式输出的价值                           |
-| ------------ | ---------------------------------------- |
-| **对话系统** | 用户实时看到回复生成，体验接近真人对话   |
-| **代码生成** | 开发者可以边生成边阅读，提前判断代码方向 |
-| **内容创作** | 长文写作时逐步呈现内容，减少等待焦虑     |
-| **搜索增强** | 实时显示检索和生成过程，增加透明度       |
-| **数据分析** | 逐步展示分析结果和图表生成过程           |
+| 框架/协议 | 特点 | 适用场景 | 浏览器支持 |
+| --------- | ---- | -------- | ---------- |
+| **SSE** | 基于 HTTP 的单向推送，实现简单 | 服务端→客户端单向流式 | 原生支持 |
+| **WebSocket** | 双向实时通信，功能强大 | 需要客户端→服务端频繁交互 | 原生支持 |
+| **HTTP Chunked** | 分块传输编码，兼容性好 | 简单的流式响应 | 原生支持 |
+| **gRPC Streaming** | 高性能 RPC 框架 | 微服务间流式通信 | 需额外库 |
+| **WebTransport** | 基于 QUIC，低延迟 | 对延迟极度敏感的场景 | 部分支持 |
 
-## 工程实践
+## 实施步骤
 
-### 错误处理
+### 第一步：选择传输协议
 
-流式场景下的错误处理比传统请求-响应更复杂：
+- **单向推送**（AI 回答用户）：选择 SSE，实现简单、浏览器原生支持
+- **双向交互**（实时对话、工具调用）：选择 WebSocket
+- **微服务间通信**：选择 gRPC Streaming
 
-```python
-async def stream_with_error_handling(prompt):
-    """流式输出中的错误处理"""
-    try:
-        async for chunk in call_llm_streaming(prompt):
-            yield json.dumps({"type": "chunk", "data": chunk})
-    except openai.RateLimitError:
-        yield json.dumps({
-            "type": "error",
-            "code": "rate_limit",
-            "message": "请求过于频繁，请稍后重试"
-        })
-    except openai.APITimeoutError:
-        yield json.dumps({
-            "type": "error",
-            "code": "timeout",
-            "message": "请求超时，请重试"
-        })
-    except Exception as e:
-        yield json.dumps({
-            "type": "error",
-            "code": "internal_error",
-            "message": "服务异常，请稍后重试"
-        })
-    finally:
-        yield json.dumps({"type": "done"})
-```
-
-### 中断处理
+### 第二步：实现服务端流式接口
 
 ```python
-class StreamController:
-    """流式输出控制器，支持中断"""
+from fastapi import FastAPI
+from fastapi.responses import StreamingResponse
 
-    def __init__(self):
-        self.aborted = False
+app = FastAPI()
 
-    def abort(self):
-        self.aborted = True
 
-    async def stream(self, prompt):
-        async for chunk in call_llm_streaming(prompt):
-            if self.aborted:
-                yield json.dumps({"type": "aborted"})
-                return
-            yield json.dumps({"type": "chunk", "data": chunk})
-
-        yield json.dumps({"type": "done"})
-```
-
-### 流式输出的缓存策略
-
-```python
-async def stream_with_cache(prompt, cache):
-    """流式输出与缓存结合"""
-    cached = cache.get(prompt)
-    if cached:
-        # 缓存命中：模拟流式输出
-        words = cached.split(" ")
-        for i, word in enumerate(words):
-            yield word + (" " if i < len(words) - 1 else "")
-            await asyncio.sleep(0.03)  # 模拟生成速度
-        return
-
-    # 缓存未命中：真实流式调用
-    response = ""
+async def generate_stream(prompt: str):
+    """流式生成响应"""
     async for chunk in call_llm_streaming(prompt):
-        response += chunk
-        yield chunk
+        yield f"data: {json.dumps({'content': chunk})}\n\n"
 
-    # 完整响应后缓存
-    cache.set(prompt, response)
+
+@app.post("/chat/stream")
+async def stream_chat(request: ChatRequest):
+    return StreamingResponse(generate_stream(request.prompt), media_type="text/event-stream")
 ```
 
-::: warning
-流式输出场景下的 [可观测性](/glossary/observability) 需要特殊处理。传统的请求-响应指标（如总延迟）不再适用，需要关注 TTFT、TPS、流式中断率等流式专属指标。
-:::
+### 第三步：实现客户端流式接收
 
-### 性能优化
+```javascript
+const eventSource = new EventSource("/chat/stream?prompt=" + encodeURIComponent(prompt))
 
+eventSource.onmessage = (event) => {
+  const data = JSON.parse(event.data)
+  appendToUI(data.content)
+}
+
+eventSource.onerror = () => {
+  eventSource.close()
+}
+```
+
+### 第四步：处理错误和中断
+
+- 服务端：捕获异常并发送错误事件
+- 客户端：处理 onerror 事件，提供重试机制
+- 实现中断接口，允许用户提前终止生成
+
+### 第五步：处理 Markdown 渲染
+
+流式输出 Markdown 时需要处理未闭合的语法（如代码块、粗体），在渲染前做安全检查。
+
+### 第六步：监控流式指标
+
+通过 [可观测性](/glossary/observability) 监控：
+- TTFT（首字响应时间）
+- TPS（Token 生成速度）
+- 流式中断率
+- 完整响应率
+
+## 最佳实践
+
+- **优先使用 SSE**：对于 AI 回答场景，SSE 比 WebSocket 更简单且足够
+- **处理未闭合语法**：流式渲染 Markdown 时，临时闭合未完成的代码块和格式标记
+- **实现中断机制**：允许用户提前终止生成，节省 Token 成本
+- **错误处理要完善**：流式场景下错误处理更复杂，需要发送结构化错误事件
 - **连接复用**：保持 HTTP 连接复用，减少握手开销
-- **缓冲优化**：合理设置缓冲区大小，平衡延迟和吞吐量
-- **CDN 加速**：对于静态流式内容，可使用 CDN 边缘节点
-- **协议选择**：SSE 适合单向推送，WebSocket 适合双向交互
+- **缓存结合**：缓存命中时模拟流式输出，保持一致的用户体验
+
+## 常见问题与避坑
+
+### Q1：SSE 和 WebSocket 如何选择？
+
+- **SSE**：适合服务端→客户端单向推送，基于 HTTP，自动重连，实现简单
+- **WebSocket**：适合双向通信，支持客户端→服务端消息，但需要处理心跳和重连
+
+AI 对话场景如果只需要服务端推送回答，选 SSE；如果需要实时工具调用或多人协作，选 WebSocket。
+
+### Q2：流式输出如何缓存？
+
+缓存命中时可以模拟流式输出：
+```python
+# 缓存命中：逐词返回，模拟流式效果
+for word in cached_response.split(" "):
+    yield word + " "
+    await asyncio.sleep(0.03)  # 模拟生成速度
+```
+
+### Q3：如何处理流式输出中的错误？
+
+在流式过程中发生错误时，不能直接抛出异常（连接已建立），应该：
+- 发送结构化错误事件：`{"type": "error", "code": "...", "message": "..."}`
+- 然后发送完成事件：`{"type": "done"}`
+- 客户端根据错误类型决定是否重试
+
+### Q4：Nginx 反向代理下 SSE 不工作怎么办？
+
+Nginx 默认会缓冲响应，导致 SSE 无法实时推送。需要配置：
+```nginx
+location /chat/stream {
+    proxy_buffering off;
+    proxy_cache off;
+    proxy_pass http://backend;
+}
+```
+
+### Q5：流式输出如何影响可观测性？
+
+传统请求-响应指标（如总延迟）不再适用，需要关注：
+- TTFT 而非总延迟
+- TPS 而非吞吐量
+- 流式中断率
+- 需要特殊的指标聚合方式
 
 ## 与其他概念的关系
 

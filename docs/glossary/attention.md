@@ -62,6 +62,8 @@ def scaled_dot_product_attention(Q, K, V):
 单一注意力头可能只捕捉到一种类型的关系。多头注意力将 Q、K、V 投影到多个子空间，并行计算注意力，最后拼接结果：
 
 ```python
+import torch.nn as nn
+
 class MultiHeadAttention(nn.Module):
     def __init__(self, d_model, num_heads):
         super().__init__()
@@ -116,6 +118,67 @@ def causal_mask(size):
 
 # 应用因果掩码
 scores = scores + causal_mask(seq_len)
+```
+
+## 应用场景
+
+### 自然语言理解
+
+注意力机制在 NLP 任务中无处不在：
+
+| 任务           | 注意力类型         | 作用                               |
+| -------------- | ------------------ | ---------------------------------- |
+| 机器翻译       | 交叉注意力         | 源语言与目标语言对齐               |
+| 文本摘要       | 自注意力           | 识别关键信息并压缩                 |
+| 情感分析       | 自注意力           | 关注情感关键词                     |
+| 命名实体识别   | 自注意力           | 捕捉上下文依赖关系                 |
+| 问答系统       | 交叉注意力         | 问题与文档的语义匹配               |
+
+### 计算机视觉
+
+Vision Transformer（ViT）将注意力机制应用于图像：
+
+```python
+# ViT 简化流程
+def vision_attention(image_patches):
+    """图像块的自注意力"""
+    # 1. 将图像切分为固定大小的 patch
+    # 2. 每个 patch 线性投影为向量
+    # 3. 添加位置编码
+    # 4. 通过 Transformer 编码器
+    # 5. 输出用于分类或检测
+    return transformer_encoder(patch_embeddings)
+```
+
+### 多模态融合
+
+注意力机制用于融合不同模态的信息：
+
+```
+文本 Embedding ──┐
+                 ├── 交叉注意力 ──> 多模态表示
+图像 Embedding ──┘
+
+应用场景:
+- 图文匹配（CLIP）
+- 视觉问答（VQA）
+- 图像描述生成
+```
+
+### 推荐系统
+
+注意力机制用于用户行为建模：
+
+```python
+# 用户行为序列注意力
+def user_behavior_attention(user_history, candidate_item):
+    """基于注意力的用户兴趣建模"""
+    # 计算候选商品与历史行为的注意力权重
+    weights = attention(candidate_item, user_history)
+    # 加权聚合用户兴趣
+    user_interest = weighted_sum(user_history, weights)
+    # 预测点击概率
+    return predict(user_interest, candidate_item)
 ```
 
 ## 工程实践

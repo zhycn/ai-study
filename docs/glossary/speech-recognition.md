@@ -157,6 +157,132 @@ for segment in result["segments"]:
 | Paraformer  | 阿里达摩院 | -          | 非自回归，速度快 |
 | Conformer   | -          | -          | 工业界主流架构   |
 
+## 实施步骤
+
+### 从零搭建语音识别服务
+
+**阶段 1：需求分析与模型选型**
+
+| 需求场景       | 推荐方案                  | 理由                           |
+| -------------- | ------------------------- | ------------------------------ |
+| 多语言识别     | Whisper large-v3          | 99 种语言，开箱即用            |
+| 实时字幕       | Whisper + 流式处理        | 支持流式识别，延迟低           |
+| 中文优化       | SenseVoice / Paraformer   | 中文效果优秀，支持方言         |
+| 离线部署       | Whisper / wav2vec 2.0     | 开源可本地部署                 |
+| 定制化场景     | Whisper 微调              | 针对特定领域术语优化           |
+
+**阶段 2：环境搭建**
+
+```bash
+# 安装 OpenAI Whisper
+pip install openai-whisper
+
+# 或安装 faster-whisper（推理速度更快）
+pip install faster-whisper
+
+# 安装中文优化模型 SenseVoice
+pip install modelscope funasr
+
+# 下载模型（首次运行自动下载）
+# Whisper large-v3 约 3GB
+```
+
+**阶段 3：基础识别**
+
+```python
+import whisper
+
+# 加载模型
+model = whisper.load_model("large-v3")
+
+# 基础识别
+result = model.transcribe(
+    "audio.wav",
+    language="zh",
+    task="transcribe",
+    verbose=False,
+    fp16=True  # 使用半精度加速
+)
+
+print(result["text"])
+
+# 带时间戳的输出
+for segment in result["segments"]:
+    print(f"[{segment['start']:.1f}s → {segment['end']:.1f}s] {segment['text']}")
+```
+
+**阶段 4：流式识别**
+
+```python
+# 使用 faster-whisper 实现流式识别
+from faster_whisper import WhisperModel
+
+model = WhisperModel("large-v3", device="cuda", compute_type="float16")
+
+def streaming_transcribe(audio_chunks):
+    """流式识别：边录音边识别"""
+    for chunk in audio_chunks:
+        segments, info = model.transcribe(
+            chunk,
+            language="zh",
+            beam_size=5,
+            vad_filter=True,  # 启用语音活动检测
+            vad_parameters=dict(min_silence_duration_ms=500)
+        )
+        for segment in segments:
+            yield f"[{segment.start:.1f}s → {segment.end:.1f}s] {segment.text}"
+```
+
+**阶段 5：中文优化**
+
+```python
+# 使用 SenseVoice 进行中文识别（支持情感识别）
+from funasr import AutoModel
+
+model = AutoModel(
+    model="iic/SenseVoiceSmall",
+    vad_model="fsmn-vad",
+    punc_model="ct-punc"
+)
+
+result = model.generate(
+    input="chinese_audio.wav",
+    cache={},
+    language="zh",  # zh/en/ja/ko/yue
+    use_itn=True    # 逆文本规范化
+)
+
+# 输出包含情感标签：高兴/悲伤/愤怒/中性
+```
+
+**阶段 6：服务化部署**
+
+```text
+部署架构：
+音频流 → WebSocket → VAD 检测 → ASR 模型 → 文本输出 → 客户端
+                            ↓
+                      说话人分离
+                      标点恢复
+                      逆文本规范化
+
+性能指标：
+- 实时率（RTF）< 0.3
+- 首字延迟 < 500ms
+- 中文 CER < 5%（干净语音）
+- 支持并发数 > 50
+```
+
+## 主流框架对比
+
+| 框架/模型    | 类型     | 语言支持    | 实时性  | 准确率  | 适用场景               |
+| ------------ | -------- | ----------- | ------- | ------- | ---------------------- |
+| Whisper      | 开源     | 99 种语言   | 支持    | 优秀    | 通用多语言识别         |
+| SenseVoice   | 开源     | 中/英/日/韩/粤 | 支持 | 优秀（中文）| 中文场景，情感识别  |
+| wav2vec 2.0  | 开源     | 多语言      | 不支持  | 良好    | 自监督预训练基础       |
+| Paraformer   | 开源     | 中文        | 支持    | 优秀    | 非自回归，速度快       |
+| Azure Speech | 商业 API | 100+ 语言   | 支持    | 优秀    | 企业级应用             |
+| 讯飞 ASR     | 商业 API | 中文/方言   | 支持    | 最优    | 中文场景最优           |
+
 ## 工程实践
 
 ### 评估指标
@@ -242,6 +368,64 @@ for audio_chunk in audio_stream:
 
 ::: warning 注意
 语音数据包含声纹等生物特征信息，属于敏感个人数据。在处理语音数据时，务必遵守 [数据隐私](/glossary/data-privacy) 相关法规，获取用户同意，并采取加密存储和传输措施。
+:::
+
+## 常见问题与避坑
+
+### FAQ
+
+**Q1：噪声环境下识别率大幅下降怎么办？**
+
+- 启用 VAD（语音活动检测）过滤静音段
+- 使用前端降噪处理（频谱减法、维纳滤波）
+- 在训练数据中添加噪声进行数据增强
+- 使用多麦克风阵列和波束成形（Beamforming）
+
+**Q2：中文同音字识别错误如何处理？**
+
+- 接入语言模型（LM）进行解码优化
+- 使用 LLM 对识别结果进行后处理纠错
+- 针对特定领域建立热词（Hot Words）列表
+- 提供上下文信息辅助消歧
+
+**Q3：如何实现实时低延迟识别？**
+
+- 使用流式模型（RNN-T、Conformer）
+- 分块处理（Chunk Size 1-2 秒）
+- 启用半精度推理（FP16）
+- 使用 TensorRT 或 ONNX Runtime 加速
+
+**Q4：多人会议场景如何区分说话人？**
+
+- 使用说话人分离（Speaker Diarization）技术
+- 先进行语音活动检测（VAD）
+- 提取声纹特征（x-vector、d-vector）
+- 聚类算法区分不同说话人
+
+```python
+# 使用 pyannote.audio 进行说话人分离
+from pyannote.audio import Pipeline
+
+pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1")
+diarization = pipeline("meeting.wav")
+
+for turn, _, speaker in diarization.itertracks(yield_label=True):
+    print(f"[{turn.start:.1f}s → {turn.end:.1f}s] {speaker}")
+```
+
+**Q5：如何处理中英文混合场景？**
+
+- 使用支持代码切换（Code-Switching）的模型
+- Whisper 原生支持多语言混合识别
+- SenseVoice 支持中英混读场景
+- 在提示词中指定主要语言
+
+::: warning 避坑指南
+1. **不要忽略音频质量**：低质量音频（低采样率、高噪声）会严重影响识别效果
+2. **不要忽视 VAD**：语音活动检测可大幅提升识别效率和准确率
+3. **不要直接用于敏感场景**：语音数据包含声纹信息，需遵守隐私法规
+4. **不要忽略标点恢复**：原始识别结果无标点，需后处理添加
+5. **不要忽略领域适配**：通用模型在专业领域效果差，需微调或添加热词
 :::
 
 ## 与其他概念的关系
