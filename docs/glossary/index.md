@@ -47,7 +47,7 @@ description: AI 领域基础概念词条集
 | [MCP](/glossary/mcp) | Model Context Protocol，模型上下文协议 |
 | [微调](/glossary/fine-tuning) | Fine-tuning，模型微调 |
 | [函数调用](/glossary/function-calling) | Function Calling，让模型调用外部工具的能力 |
-| [工作流](/glossary/workflow) | Workflow，AI 任务的流程编排 |
+| [工作流](/glossary/workflow) | AI Workflows，AI 任务的自动化流程编排 |
 
 ## 关键概念
 

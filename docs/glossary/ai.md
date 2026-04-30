@@ -1,32 +1,43 @@
 ---
 title: AI
-description: 人工智能（Artificial Intelligence）
+description: 人工智能（Artificial Intelligence），让机器模拟人类智能的技术
 ---
 
 # AI
 
 ## 概述
 
-AI（Artificial Intelligence，人工智能）是计算机科学的一个分支，致力于让机器能够模拟、延伸和扩展人类的智能行为，包括学习、推理、感知、理解、决策等能力。
+人工智能（Artificial Intelligence，AI）是指使计算机系统具有模拟、扩展和增强人类智能的能力，包括感知、推理、学习、决策等。
 
 ## 为什么重要
 
-AI 正在重塑各行各业，从搜索引擎、推荐系统到自动驾驶、医疗诊断，AI 技术已成为现代社会的基础设施。理解 AI 的基本概念是深入学习后续技术（如提示词工程、RAG、Agent 等）的前提。
+- **技术革命**：引领新一轮科技革命
+- **应用广泛**：渗透各行各业
+- **效率提升**：大幅提升生产效率
+- **新质生产力**：成为重要的生产要素
 
-## 核心分类
+## AI 发展历程
 
-- **弱人工智能（Narrow AI）**：专注于特定任务，如图像识别、语音助手
-- **强人工智能（General AI）**：具备人类级别的通用智能，目前仍在研究中
-- **大语言模型（LLM）**：基于海量文本训练的生成式 AI，如 GPT、Claude、Gemini
+- **1950s**：AI 概念诞生
+- **1980s**：专家系统兴起
+- **2010s**：深度学习突破
+- **2020s**：大语言模型时代
+
+## 核心领域
+
+- **机器学习**：从数据中学习
+- **计算机视觉**：图像理解
+- **自然语言处理**：语言理解与生成
+- **机器人**： physical AI
 
 ## 与其他概念的关系
 
-- [提示词工程](/glossary/prompt-engineering) 是与 LLM 交互的核心技能
-- [RAG](/rag/) 通过检索增强 AI 的知识边界
-- [Agent](/agent/) 让 AI 具备自主规划和执行能力
+- 是整个 [大语言模型](/glossary/llm) 和 [生成式 AI](/glossary/generative-ai) 的上位概念
+- 基于 [机器学习](/glossary/machine-learning) 和 [深度学习](/glossary/deep-learning) 技术
+- 包括 [神经网络](/glossary/neural-network) 等算法
 
 ## 延伸阅读
 
-- [Prompt Engineering 专题](/prompt/)
-- [RAG 检索增强生成](/rag/)
-- [AI Agent 智能体](/agent/)
+- [机器学习](/glossary/machine-learning)
+- [深度学习](/glossary/deep-learning)
+- [生成式 AI](/glossary/generative-ai)
