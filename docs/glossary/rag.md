@@ -7,40 +7,181 @@ description: Retrieval-Augmented Generation，检索增强生成
 
 ## 概述
 
-RAG（Retrieval-Augmented Generation，检索增强生成）是一种结合信息检索和文本生成的技术，通过检索外部知识来增强大语言模型的回答。
+RAG（Retrieval-Augmented Generation，检索增强生成）是一种**结合信息检索与文本生成**的技术架构。其核心思想是：在模型生成回答之前，先从外部知识库中检索与问题相关的文档片段，将这些检索结果作为上下文补充到提示词中，从而让模型基于真实、最新的信息生成回答。
+
+RAG 由 Facebook AI Research（FAIR）于 2020 年提出，最初用于解决开放域问答中的知识更新问题。随着大语言模型的普及，RAG 已成为企业级 AI 应用中最主流的技术方案之一。
 
 ## 为什么重要
 
-- **知识更新**：解决知识截止问题
-- **减少幻觉**：基于真实文档回答
-- **可解释性**：答案可追溯来源
-- **成本效率**：无需重新训练模型
+RAG 解决了大语言模型的几个核心痛点：
 
-## 核心流程
+- **知识截止（Knowledge Cutoff）**：模型训练数据有截止时间，无法回答之后的事件。RAG 通过检索外部知识，让模型"实时"获取最新信息
+- **幻觉问题（Hallucination）**：模型可能编造看似合理但实际错误的信息。RAG 强制模型基于检索到的真实文档作答，大幅降低幻觉率
+- **领域知识缺失**：通用模型缺乏企业私有知识。RAG 允许接入内部文档、数据库等私有数据源
+- **可解释性与可追溯性**：RAG 可以明确标注答案来源，便于验证和审计
+- **成本效益**：相比微调（Fine-tuning），RAG 无需重新训练模型，部署和维护成本更低
 
-1. **文档处理**：将知识库文档分块
-2. **向量化**：将文本块转为向量
-3. **存储**：存入向量数据库
-4. **检索**：根据问题检索相关文档
-5. **增强**：将检索结果加入提示
-6. **生成**：让模型基于增强上下文生成
+::: tip 提示
+RAG 不是微调的替代品，而是互补方案。当需要模型学习特定输出风格或格式时，微调更合适；当需要模型访问动态更新的知识时，RAG 更合适。
+:::
 
-## 关键技术
+## 核心架构
 
-- **分块策略**：如何分割文档
-- **向量化模型**：文本转向量
-- **向量检索**：相似度搜索
-- **重排序**：优化检索结果
+### 标准 RAG 流程
+
+```text
+用户问题 → 向量化 → 向量检索 → 检索结果 → 构建提示词 → LLM 生成 → 返回答案
+                              ↑
+                        向量数据库
+                              ↑
+                        文档分块 → 向量化
+```
+
+### 关键组件
+
+**1. 文档处理（Document Processing）**
+
+将原始文档转换为可检索的格式：
+
+- **格式解析**：处理 PDF、Word、HTML、Markdown 等不同格式
+- **文本清洗**：去除噪声、统一编码、处理特殊字符
+- **元数据提取**：保留文档标题、作者、时间等元信息
+
+**2. 分块策略（Chunking Strategy）**
+
+将长文档分割为适当大小的文本块：
+
+| 策略 | 说明 | 适用场景 |
+|------|------|---------|
+| 固定长度分块 | 按字符数或 token 数均匀分割 | 通用场景 |
+| 语义分块 | 按段落、章节等语义边界分割 | 结构化文档 |
+| 重叠分块 | 相邻块之间保留一定重叠 | 避免关键信息被截断 |
+| 递归分块 | 先大后小，递归分割 | 复杂文档结构 |
+
+::: warning 注意
+分块大小直接影响检索效果。块太小会丢失上下文，块太大会引入噪声。常见设置为 500-1000 个 token，重叠 10%-20%。
+:::
+
+**3. 向量化（Embedding）**
+
+使用 Embedding 模型将文本块转换为向量表示。向量化质量直接决定检索效果。
+
+**4. 向量存储（Vector Storage）**
+
+将向量及其元数据存入向量数据库，支持高效的相似度搜索。常用方案包括：
+
+- **专用向量数据库**：Milvus、Pinecone、Weaviate、Qdrant
+- **传统数据库扩展**：PostgreSQL（pgvector）、Elasticsearch
+- **嵌入式方案**：Chroma、FAISS（适合小规模场景）
+
+**5. 检索（Retrieval）**
+
+根据用户问题的向量，在向量数据库中检索最相关的文档块：
+
+- **稠密检索（Dense Retrieval）**：基于向量相似度（余弦相似度、内积）
+- **稀疏检索（Sparse Retrieval）**：基于关键词匹配（BM25）
+- **混合检索（Hybrid Retrieval）**：结合稠密和稀疏检索的优势
+
+**6. 重排序（Reranking）**
+
+对检索结果进行二次排序，提升 Top-K 结果的相关性：
+
+- **交叉编码器（Cross-Encoder）**：精度高但速度慢
+- **轻量级重排模型**：如 BGE-Reranker、Cohere Rerank
+- **规则重排**：基于时间、权重等业务规则
+
+**7. 生成（Generation）**
+
+将检索结果与用户问题组合成提示词，交由 LLM 生成最终回答。提示词设计直接影响生成质量。
+
+## 进阶架构
+
+### Naive RAG → Advanced RAG → Modular RAG
+
+RAG 技术经历了三个发展阶段：
+
+**Naive RAG（基础 RAG）**
+
+最简单的"检索-生成"流程，存在检索不精确、生成质量不稳定等问题。
+
+**Advanced RAG（进阶 RAG）**
+
+引入预处理和后处理优化：
+
+- **预处理优化**：更好的分块策略、索引优化、元数据增强
+- **后处理优化**：重排序、上下文压缩、冗余消除
+
+**Modular RAG（模块化 RAG）**
+
+将 RAG 拆解为可组合的模块，支持灵活的架构定制：
+
+- **搜索模块**：支持多种检索方式的组合
+- **记忆模块**：引入对话历史和用户偏好
+- **路由模块**：根据问题类型选择不同的处理路径
+- **预测模块**：预测是否需要检索、检索什么内容
+
+### Graph RAG
+
+将知识图谱（Knowledge Graph）与 RAG 结合，利用实体关系网络提升检索的准确性和推理能力。适用于需要理解实体间复杂关系的场景。
+
+### Agentic RAG
+
+将 Agent 引入 RAG 流程，让 Agent 自主决定：
+
+- 是否需要检索
+- 检索什么内容
+- 如何组合多个检索结果
+- 是否需要多轮检索
+
+## 工程实践
+
+### 评估指标
+
+| 指标 | 说明 | 工具 |
+|------|------|------|
+| 上下文相关性 | 检索结果与问题的相关程度 | RAGAS、DeepEval |
+| 上下文召回率 | 检索结果覆盖正确答案的比例 | RAGAS、TruLens |
+| 答案忠实度 | 答案是否忠实于检索到的上下文 | RAGAS、DeepEval |
+| 答案相关性 | 答案是否直接回答问题 | RAGAS、TruLens |
+
+### 常见问题与解决方案
+
+| 问题 | 原因 | 解决方案 |
+|------|------|---------|
+| 检索不到相关内容 | 分块不合理、Embedding 质量差 | 优化分块策略、更换 Embedding 模型 |
+| 检索结果过多噪声 | 块太大、检索阈值过低 | 减小块大小、调整相似度阈值、引入重排序 |
+| 答案与检索结果不一致 | 提示词设计不当 | 在提示词中强调"仅基于提供的信息回答" |
+| 响应延迟高 | 检索链路长、模型大 | 缓存热门查询、使用更小的模型、异步检索 |
+
+### 技术栈推荐
+
+```text
+文档处理：Unstructured、LangChain Document Loaders
+分块：LangChain Text Splitters、LlamaIndex Node Parser
+Embedding：OpenAI text-embedding-3、BGE、Jina Embeddings
+向量数据库：Milvus、Qdrant、pgvector
+重排序：BGE-Reranker、Cohere Rerank
+框架：LangChain、LlamaIndex、Haystack
+评估：RAGAS、DeepEval、TruLens
+```
 
 ## 与其他概念的关系
 
-- 使用 [向量数据库](/glossary/vector-database) 存储向量
-- 使用 [Embedding](/glossary/embedding) 将文本转为向量
-- 与 [知识图谱](/glossary/knowledge-graph) 可结合使用
+- RAG 依赖 [Embedding](/glossary/embedding) 技术将文本转换为向量
+- 使用 [向量数据库](/glossary/vector-database) 存储和检索向量
+- 检索结果的呈现依赖 [提示词工程](/glossary/prompt-engineering) 的技巧
+- [Agent](/glossary/agent) 可以自主决定何时使用 RAG 检索
+- 与 [知识图谱](/glossary/knowledge-graph) 结合形成 Graph RAG
+- 当 RAG 无法满足需求时，可考虑 [微调](/glossary/fine-tuning) 模型
 
 ## 延伸阅读
 
+- [RAG 论文（Lewis et al., 2020）](https://arxiv.org/abs/2005.11401)
+- [RAGAS 评估框架](https://docs.ragas.io/)
+- [LangChain RAG 教程](https://python.langchain.com/docs/tutorials/rag/)
+- [LlamaIndex 文档](https://docs.llamaindex.ai/)
+- [Graph RAG 论文](https://arxiv.org/abs/2404.16130)
+- [Embedding 技术](/glossary/embedding)
 - [向量数据库](/glossary/vector-database)
-- [Embedding](/glossary/embedding)
-- [知识图谱](/glossary/knowledge-graph)
 - [提示词工程](/glossary/prompt-engineering)
+- [Agent 智能体](/glossary/agent)
