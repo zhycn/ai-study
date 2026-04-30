@@ -1,9 +1,11 @@
 ---
-title: 记忆
+title: 记忆 (Memory)
 description: Memory，Agent 的短期/长期记忆机制
 ---
 
-# 记忆
+# 记忆 (Memory)
+
+让 AI 能"记住"之前说过什么、做过什么、你喜欢什么。没有记忆的 AI 每次对话都是初次见面，有了记忆它就能像老朋友一样，了解你的偏好、延续之前的话题、越用越懂你。
 
 > 面向开发者的技术实战文章
 
@@ -17,7 +19,7 @@ description: Memory，Agent 的短期/长期记忆机制
 >
 > LLM 的大脑像金鱼——每次对话后一切归零。记忆系统就是给金鱼配一个笔记本，让它每次对话前翻一翻，知道之前说了什么、做了什么。
 
-## 为什么重要
+## 为什么需要
 
 ### 无状态模型的能力瓶颈
 
@@ -41,7 +43,7 @@ description: Memory，Agent 的短期/长期记忆机制
 
 **任务延续** 支持长时间运行的多步骤任务，即使跨会话也能继续。
 
-## 记忆架构
+## 核心原理
 
 ### 记忆分层模型
 
@@ -93,6 +95,7 @@ class ShortTermMemory:
 ```
 
 短期记忆的关键策略：
+
 - **滑动窗口** 只保留最近的 N 条消息
 - **摘要压缩** 将早期对话压缩为摘要，节省 token
 - **重要信息保留** 标记关键信息（如用户偏好），不被删除
@@ -160,6 +163,7 @@ class LongTermMemory:
 ```
 
 长期记忆的关键设计点：
+
 - **分块策略** 将长文本切分为合适大小的块（通常 500-1000 token）
 - **元数据过滤** 存储时添加类型、时间、来源等元数据，检索时可过滤
 - **记忆衰减** 旧的记忆可以降低权重，但不应直接删除
@@ -272,6 +276,7 @@ memory.delete(memory_id=memories[0]["id"])
 ```
 
 Mem0 的特点：
+
 - **自动提取** 从对话中自动识别和提取有价值的信息
 - **用户画像** 为每个用户维护独立的记忆空间
 - **记忆管理** 支持更新、删除、去重等操作
@@ -305,7 +310,81 @@ results = client.memory.search_memory(
 )
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：选择记忆类型
+
+根据需求选择记忆层级：
+
+| 记忆类型 | 存储内容 | 存储方式 | 保留时间 |
+|---------|---------|---------|---------|
+| 短期记忆 | 当前对话 | 内存列表 | 会话期间 |
+| 长期记忆 | 知识经验 | 向量数据库 | 持久化 |
+| 情景记忆 | 历史经历 | 向量+元数据 | 持久化 |
+| 语义记忆 | 事实知识 | 知识图谱/向量库 | 持久化 |
+
+### 步骤 2：实现短期记忆
+
+```python
+class ShortTermMemory:
+    def __init__(self, max_messages: int = 20):
+        self.messages = []
+        self.max_messages = max_messages
+
+    def add(self, role: str, content: str):
+        self.messages.append({"role": role, "content": content})
+        if len(self.messages) > self.max_messages:
+            self.messages = self.messages[-self.max_messages:]
+```
+
+### 步骤 3：配置向量存储
+
+```python
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_openai import OpenAIEmbeddings
+
+vectorstore = InMemoryVectorStore(OpenAIEmbeddings())
+
+def store_memory(text: str, metadata: dict):
+    vectorstore.add_texts([text], metadatas=[metadata])
+
+def retrieve_memory(query: str, k: int = 5) -> list[str]:
+    results = vectorstore.similarity_search(query, k=k)
+    return [doc.page_content for doc in results]
+```
+
+### 步骤 4：实现记忆检索
+
+```python
+def get_relevant_memories(user_input: str, context: dict) -> str:
+    """检索与当前输入相关的记忆"""
+    memories = retrieve_memory(user_input, k=3)
+
+    # 过滤过期记忆
+    active_memories = [
+        m for m in memories
+        if not is_expired(m.metadata.get("expires_at"))
+    ]
+
+    return "\n".join(active_memories)
+```
+
+### 步骤 5：添加记忆管理
+
+- **压缩**：定期将早期对话压缩为摘要
+- **遗忘**：基于重要性、频率、时效性删除低价值记忆
+- **更新**：当信息变化时更新记忆
+
+## 主流框架对比
+
+| 框架 | 特点 | 适用场景 | 成本 |
+|------|------|---------|------|
+| **LangChain Memory** | 多种实现、易集成 | 快速原型 | 低 |
+| **Mem0** | 自动提取、用户画像 | 个性化应用 | 中 |
+| **Zep** | 生产级、自动摘要 | 企业应用 | 中-高 |
+| **Letta** | 结构化记忆、主动管理 | 复杂 Agent | 中 |
+
+## 最佳实践
 
 ### 记忆检索优化
 
@@ -475,18 +554,66 @@ class SecureMemory:
         return [doc.page_content for doc in store.similarity_search("", k=10000)]
 ```
 
+## 常见问题与避坑
+
+### Q1：记忆太多影响性能怎么办？
+
+- 使用**混合检索**（向量+关键词）
+- 添加**元数据过滤**缩小范围
+- 定期**压缩**旧记忆
+
+### Q2：如何避免检索到不相关记忆？
+
+- 优化**分块策略**（500-1000 token）
+- 使用**查询改写**提高匹配度
+- 添加**相关性评分**过滤低分结果
+
+### Q3：记忆系统如何保证隐私？
+
+- **用户隔离**：不同用户记忆严格分开
+- **加密存储**：敏感信息加密
+- **用户控制**：允许查看、编辑、删除
+
+### Q4：上下文窗口不够用怎么办？
+
+- 使用**摘要压缩**早期对话
+- **分层检索**：先检索摘要，再按需检索详情
+- **选择性注入**：只注入最相关的记忆
+
+### Q5：记忆衰减策略怎么设计？
+
+```python
+# 多维度评估记忆价值
+def calculate_memory_score(memory: dict) -> float:
+    importance = memory.get("importance", 0.5)
+    frequency = memory.get("access_count", 0)
+    recency = time.time() - memory["created_at"]
+
+    return importance * 0.5 + frequency * 0.3 + (1 / (recency + 1)) * 0.2
+```
+
+:::warning 常见陷阱
+- **过度存储**：所有信息都存导致检索质量下降
+- **缺乏更新**：过时信息未被清理
+- **隐私泄露**：不同用户记忆未隔离
+- **检索低效**：未做索引优化导致延迟高
+:::
+
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — 记忆是 Agent 实现连续性和个性化的基础设施
 - [上下文窗口](/glossary/context-window) — 短期记忆受限于上下文窗口大小，需要压缩和摘要策略
 - [Embedding](/glossary/embedding) — 长期记忆依赖 Embedding 技术实现语义检索
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 自主 Agent 需要长期记忆来积累经验、持续改进
 - [多 Agent 系统](/glossary/multi-agent) — Agent 间共享记忆是实现深度协作的关键
 
 **技术基础**：
+
 - [规划](/glossary/planning) — 规划需要记忆来保持对之前步骤和结果的了解
 - [工具使用](/glossary/tool-use) — 工具调用的历史结果需要被记忆，避免重复调用
 

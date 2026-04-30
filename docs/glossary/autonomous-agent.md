@@ -5,6 +5,8 @@ description: Autonomous Agent，能独立完成任务的 Agent
 
 # 自主 Agent
 
+你给它一个目标，它自己想办法搞定，不需要你一步步指挥。就像请了个靠谱的管家，你说"帮我规划一次旅行"，它自己去查机票、订酒店、排行程，最后把方案给你过目。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -17,7 +19,7 @@ description: Autonomous Agent，能独立完成任务的 Agent
 >
 > 常规 Agent 像实习生——你告诉他做什么，他帮你做；自主 Agent 像资深员工——你告诉他目标，他自己拆解任务、制定计划、执行并交付结果。
 
-## 为什么重要
+## 为什么需要
 
 ### 从"对话"到"行动"的范式转变
 
@@ -41,7 +43,7 @@ description: Autonomous Agent，能独立完成任务的 Agent
 
 **复杂任务处理** 能够处理涉及多个领域、多个步骤的开放式任务，这是传统自动化脚本无法做到的。
 
-## 核心架构
+## 核心原理
 
 ### 自主 Agent 架构模型
 
@@ -409,7 +411,103 @@ result = app.invoke({
 })
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：定义目标解析器
+
+```python
+class GoalParser:
+    def parse(self, user_input: str) -> dict:
+        """解析用户输入，提取目标、约束、成功标准"""
+        prompt = f"""分析以下请求，提取关键信息：
+        用户请求：{user_input}
+        输出 JSON：goal, constraints, success_criteria, domain"""
+        return self.llm.invoke(prompt, format="json")
+```
+
+### 步骤 2：实现规划模块
+
+```python
+class Planner:
+    def create_plan(self, goal: str, tools: list[str]) -> list[dict]:
+        """将目标分解为可执行步骤"""
+        prompt = f"""为目标制定计划：
+        目标：{goal}
+        可用工具：{tools}
+        输出步骤列表，包含 id, description, tool, expected_output"""
+        return self.llm.invoke(prompt, format="json")
+```
+
+### 步骤 3：构建执行循环
+
+```python
+class AutonomousAgent:
+    async def run(self, goal: str) -> Any:
+        plan = await self.planner.create_plan(goal)
+        context = {"goal": goal, "plan": plan, "history": []}
+
+        for _ in range(self.max_iterations):
+            step = self.get_next_step(plan, context)
+            if step is None:
+                return self.generate_output(context)
+
+            result = await self.execute_step(step)
+            context["history"].append({"step": step, "result": result})
+
+            reflection = await self.reflect(step, result, context)
+            if reflection.needs_replan:
+                plan = await self.planner.replan(plan, reflection)
+            elif reflection.is_complete:
+                return self.generate_output(context)
+```
+
+### 步骤 4：添加反思机制
+
+```python
+class Reflector:
+    async def reflect(self, step: dict, result: Any, goal: str) -> dict:
+        """评估执行结果，判断是否需要调整"""
+        prompt = f"""评估执行结果：
+        步骤：{step['description']}
+        结果：{result}
+        目标：{goal}
+        输出：success, needs_replan, is_complete, reason"""
+        return self.llm.invoke(prompt, format="json")
+```
+
+### 步骤 5：实现错误恢复
+
+- **重试机制**：失败后自动重试
+- **替代方案**：尝试其他工具或方法
+- **跳过策略**：无法解决时跳过继续
+
+### 步骤 6：设置安全边界
+
+```python
+class SafetyGuardrails:
+    restricted_operations = {"delete_data", "send_email", "deploy"}
+    max_budget = 10.0  # 美元
+    max_runtime = 3600  # 秒
+
+    def check(self, step: dict, context: dict) -> bool:
+        if step.get("operation") in self.restricted_operations:
+            return False
+        if context.get("total_cost", 0) > self.max_budget:
+            return False
+        return True
+```
+
+## 主流框架对比
+
+| 框架 | 核心模式 | 特点 | 适用场景 |
+|------|---------|------|---------|
+| **AutoGPT** | 自主循环 | 早期实现、简单直接 | 实验性项目 |
+| **CrewAI** | 角色协作 | 易用、文档好 | 内容创作、调研 |
+| **LangGraph** | 状态机 | 灵活可控、支持循环 | 复杂工作流 |
+| **OpenAI Swarm** | 轻量编排 | 简单、官方支持 | 简单多 Agent |
+| **Devin** | 全自主开发 | 专业领域、强大 | 软件开发 |
+
+## 最佳实践
 
 ### 安全边界
 
@@ -625,20 +723,65 @@ class AutonomousAgentEvaluator:
         return max(0, min(1, score))
 ```
 
+## 常见问题与避坑
+
+### Q1：自主 Agent 陷入死循环怎么办？
+
+- 设置**最大迭代次数**
+- 检测**重复操作**模式
+- 添加**终止条件**判断
+
+### Q2：如何控制 API 成本？
+
+- 使用**小模型**处理简单任务
+- 设置**预算上限**
+- **缓存**重复查询结果
+
+### Q3：Agent 执行结果不符合预期怎么办？
+
+- 优化**目标描述**的清晰度
+- 添加更多**约束条件**
+- 提供**示例**指导行为
+
+### Q4：如何保证自主 Agent 的安全性？
+
+- 限制**可执行操作**类型
+- 设置**预算和时间**上限
+- 对所有**输出进行审查**
+- 关键操作需要**人工审批**
+
+### Q5：如何评估自主 Agent 的表现？
+
+- **成功率**：目标达成比例
+- **效率**：完成任务的步数和耗时
+- **成本**：API 调用花费
+- **质量**：输出结果评分
+
+:::warning 常见陷阱
+- **缺乏安全边界**：Agent 可能执行危险操作
+- **成本失控**：长时间运行产生高额费用
+- **死循环**：Agent 无法终止任务
+- **目标漂移**：执行过程中偏离原始目标
+- **缺乏监控**：出问题后无法定位原因
+:::
+
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — 自主 Agent 是 Agent 能力的高级形态，建立在基础 Agent 能力之上
 - [规划](/glossary/planning) — 规划是自主 Agent 的核心能力，决定 Agent 如何分解和执行任务
 - [记忆](/glossary/memory) — 自主 Agent 需要长期记忆来积累经验和持续改进
 - [工具使用](/glossary/tool-use) — 工具使用是自主 Agent 执行任务的主要手段
 
 **应用场景**：
+
 - [多 Agent 系统](/glossary/multi-agent) — 多个自主 Agent 可以组成更强大的协作系统
 - [人机协作](/glossary/human-in-the-loop) — 自主 Agent 与人机协作形成光谱，实际系统通常介于两者之间
 - [Agent 编排](/glossary/agent-orchestration) — 自主 Agent 内部也需要编排机制来协调自身的执行循环
 
 **技术基础**：
+
 - [Skills](/glossary/skills) — 自主 Agent 通过组合 Skills 构建完整的能力体系
 - [Commands](/glossary/commands) — 用户可以通过 Commands 向自主 Agent 下达目标指令
 

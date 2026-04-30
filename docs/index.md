@@ -5,6 +5,9 @@ hero:
   name: 'AI Study'
   text: '学习笔记与资源整理'
   tagline: 记录 AI 实战经验，整理优质学习资源
+  image:
+    src: /hero-image.svg
+    alt: AI Study
   actions:
     - theme: brand
       text: 开始探索

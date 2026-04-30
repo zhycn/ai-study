@@ -5,6 +5,8 @@ description: Multi-Agent System，多个 AI Agent 协作完成复杂任务
 
 # 多 Agent 系统
 
+让多个 AI 助手分工合作，像一个团队一样完成复杂任务。比如一个负责查资料、一个负责写代码、一个负责审核，各司其职，比单个 AI 单打独斗效率高得多。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -17,7 +19,7 @@ description: Multi-Agent System，多个 AI Agent 协作完成复杂任务
 >
 > 单 Agent 像一个全栈工程师，什么都会但深度有限；多 Agent 系统像一个完整团队，有产品经理、设计师、前端工程师、后端工程师，各司其职又协同工作。
 
-## 为什么重要
+## 为什么需要
 
 ### 突破单 Agent 的能力瓶颈
 
@@ -39,7 +41,7 @@ description: Multi-Agent System，多个 AI Agent 协作完成复杂任务
 
 **涌现行为（Emergent Behavior）** 多个 Agent 的交互可能产生单个 Agent 不具备的能力。例如辩论式架构中，两个 Agent 相互质疑，最终得出比任一 Agent 单独思考更优的结论。
 
-## 核心架构模式
+## 核心原理
 
 ### 协作式架构（Collaborative）
 
@@ -70,6 +72,7 @@ class ContentTeam:
 ```
 
 协作式架构的关键设计点：
+
 - 明确每个 Agent 的**职责边界**
 - 定义清晰的**输入输出格式**
 - 建立有效的**信息传递机制**
@@ -90,6 +93,7 @@ graph TD
 ```
 
 分层式架构的优势：
+
 - **集中控制**：Manager 掌握全局状态，便于协调
 - **易于扩展**：添加新的 Worker 不影响整体架构
 - **职责清晰**：Manager 负责规划，Worker 负责执行
@@ -157,6 +161,7 @@ async def collaborative_task(blackboard: Blackboard):
 [LangGraph](https://langchain-ai.github.io/langgraph/) 是 LangChain 团队推出的多 Agent 编排框架，基于**有向图（Directed Graph）** 模型。
 
 核心概念：
+
 - **节点（Node）**：代表一个 Agent 或一个操作
 - **边（Edge）**：定义节点间的流转关系
 - **状态（State）**：在节点间传递的共享数据
@@ -270,6 +275,7 @@ user_proxy.initiate_chat(
 ```
 
 AutoGen 的独特之处：
+
 - **对话模式**：Agent 通过对话协作，而非显式的任务分配
 - **代码执行**：UserProxyAgent 可以执行代码并返回结果
 - **灵活拓扑**：支持任意 Agent 间的多轮对话
@@ -296,11 +302,131 @@ team.run_project("开发一个待办事项管理 Web 应用")
 ```
 
 MetaGPT 的特点：
+
 - **标准化 SOP**：模拟真实软件公司的标准作业流程
 - **结构化输出**：每个角色产出标准格式的文档（PRD、设计文档、代码等）
 - **端到端**：从需求到代码到测试的完整流程
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：明确任务边界与分工
+
+在构建多 Agent 系统前，先回答以下问题：
+
+- 任务可以拆分为哪些独立子任务？
+- 每个子任务需要什么专业技能？
+- 子任务之间存在什么依赖关系？
+
+```python
+# 任务分解示例
+task_breakdown = {
+    "research": {"agent": "researcher", "tools": ["search", "web_scraper"], "depends_on": []},
+    "analysis": {"agent": "analyst", "tools": ["data_analyzer"], "depends_on": ["research"]},
+    "writing": {"agent": "writer", "tools": ["text_editor"], "depends_on": ["analysis"]},
+    "review": {"agent": "reviewer", "tools": ["grammar_checker"], "depends_on": ["writing"]}
+}
+```
+
+### 步骤 2：设计 Agent 角色与配置
+
+为每个 Agent 定义清晰的职责边界：
+
+```python
+class AgentConfig:
+    def __init__(self, name: str, role: str, system_prompt: str, tools: list[str]):
+        self.name = name
+        self.role = role
+        self.system_prompt = system_prompt  # 定义 Agent 的行为准则
+        self.tools = tools  # 可用工具集
+        self.max_tokens = 4000  # 上下文限制
+
+# 配置示例
+researcher_config = AgentConfig(
+    name="researcher",
+    role="高级研究员",
+    system_prompt="你是一位资深技术研究员，擅长收集和分析技术趋势。",
+    tools=["web_search", "arxiv_search", "web_scraper"]
+)
+```
+
+### 步骤 3：选择通信机制
+
+根据场景复杂度选择通信方式：
+
+| 场景 | 推荐机制 | 优点 | 缺点 |
+|------|---------|------|------|
+| 简单流水线 | 直接调用 | 实现简单 | 耦合度高 |
+| 需要解耦 | 消息队列 | 异步、可扩展 | 增加复杂度 |
+| 频繁共享状态 | 共享黑板 | 信息透明 | 并发控制复杂 |
+
+### 步骤 4：实现编排逻辑
+
+使用框架（如 LangGraph）或自研编排器：
+
+```python
+from langgraph.graph import StateGraph, END
+
+# 定义状态
+class TeamState(TypedDict):
+    task: str
+    research_result: str
+    analysis_result: str
+    draft: str
+    final_output: str
+
+# 构建图
+graph = StateGraph(TeamState)
+graph.add_node("research", researcher_node)
+graph.add_node("analyze", analyst_node)
+graph.add_node("write", writer_node)
+graph.add_node("review", reviewer_node)
+
+graph.add_edge("research", "analyze")
+graph.add_edge("analyze", "write")
+graph.add_edge("write", "review")
+graph.add_edge("review", END)
+
+app = graph.compile()
+```
+
+### 步骤 5：添加可观测性与监控
+
+```python
+class MultiAgentMonitor:
+    def __init__(self):
+        self.metrics = {
+            "agent_calls": {},
+            "errors": [],
+            "costs": {},
+            "latencies": []
+        }
+
+    def record_call(self, agent_name: str, duration: float, cost: float):
+        self.metrics["agent_calls"][agent_name] = \
+            self.metrics["agent_calls"].get(agent_name, 0) + 1
+        self.metrics["costs"][agent_name] = \
+            self.metrics["costs"].get(agent_name, 0) + cost
+        self.metrics["latencies"].append(duration)
+```
+
+### 步骤 6：测试与迭代
+
+- **单元测试**：每个 Agent 独立测试
+- **集成测试**：测试 Agent 间的协作
+- **端到端测试**：验证完整流程
+- **压力测试**：模拟高并发场景
+
+## 主流框架对比
+
+| 框架 | 核心模式 | 适用场景 | 学习曲线 | 生态 |
+|------|---------|---------|---------|------|
+| **LangGraph** | 有向图/状态机 | 需要精细控制流程 | 中等 | 丰富（LangChain 生态） |
+| **CrewAI** | 角色扮演 | 内容创作、调研 | 低 | 增长中 |
+| **AutoGen** | 对话驱动 | 代码生成、数据分析 | 中等 | 微软支持 |
+| **MetaGPT** | 软件公司隐喻 | 软件开发全流程 | 较高 | 开源社区 |
+| **OpenAI Swarm** | 轻量级编排 | 简单多 Agent 场景 | 低 | OpenAI 生态 |
+
+## 最佳实践
 
 ### Agent 通信机制
 
@@ -442,18 +568,71 @@ class CostOptimizer:
         return result
 ```
 
+## 常见问题与避坑
+
+### Q1：Agent 数量越多越好吗？
+
+**不是**。Agent 数量增加会带来：
+- 通信开销呈指数增长
+- 调试难度急剧上升
+- API 成本线性增加
+
+**建议**：从 2-3 个 Agent 开始，只在必要时扩展。
+
+### Q2：如何处理 Agent 间的冲突？
+
+当多个 Agent 对同一问题给出不同答案时：
+
+```python
+# 投票机制
+def vote_resolution(agents: list[Agent], question: str) -> str:
+    votes = [agent.answer(question) for agent in agents]
+    return Counter(votes).most_common(1)[0][0]
+```
+
+**建议**：引入仲裁者 Agent 或设置权重决策。
+
+### Q3：上下文窗口不够用怎么办？
+
+- 使用**摘要压缩**：将早期对话压缩为摘要
+- **分层记忆**：只保留关键信息
+- **任务拆分**：将大任务拆为小任务，每个 Agent 处理一部分
+
+### Q4：如何控制多 Agent 系统的成本？
+
+- **缓存复用**：相同输入返回缓存结果
+- **小模型优先**：简单任务用小模型
+- **设置预算上限**：监控 API 花费
+
+### Q5：调试多 Agent 系统太困难怎么办？
+
+- 使用 [LangSmith](https://smith.langchain.com/) 等可视化工具
+- 记录每个 Agent 的输入输出
+- 添加详细的执行日志
+- 从单 Agent 开始，逐步增加
+
+:::warning 常见陷阱
+- **过度设计**：简单任务不需要多 Agent
+- **职责不清**：Agent 边界模糊导致重复工作
+- **缺乏监控**：出问题后无法定位原因
+- **忽视成本**：多 Agent 系统成本可能是单 Agent 的数倍
+:::
+
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — 多 Agent 系统的基础构建单元，每个节点都是一个独立的 Agent
 - [Agent 编排](/glossary/agent-orchestration) — 多 Agent 系统需要编排层来协调 Agent 间的协作流程
 - [工具使用](/glossary/tool-use) — 每个 Agent 需要工具来扩展自身能力
 
 **应用场景**：
+
 - [自主 Agent](/glossary/autonomous-agent) — 多 Agent 系统是实现高级自主能力的重要架构
 - [人机协作](/glossary/human-in-the-loop) — 人类可以作为特殊节点加入多 Agent 系统
 
 **技术基础**：
+
 - [记忆](/glossary/memory) — Agent 间共享记忆是实现深度协作的关键
 - [规划](/glossary/planning) — 多 Agent 系统需要更复杂的规划能力来协调多个执行单元
 

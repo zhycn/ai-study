@@ -1,9 +1,11 @@
 ---
-title: 缓存
+title: 缓存 (Caching)
 description: Caching，减少重复调用、降低成本的技术
 ---
 
-# 缓存
+# 缓存 (Caching)
+
+把 AI 回答过的问题存起来，下次有人问同样的问题直接拿出来，不用再花时间和钱让 AI 重新算一遍。就像餐厅的招牌菜提前做好，客人点了直接端上去，又快又省钱。
 
 ## 概述
 
@@ -147,12 +149,12 @@ class SemanticCache:
 
 ### TTL 与缓存失效策略
 
-| 策略 | 说明 | 适用场景 |
-|------|------|---------|
-| **固定 TTL** | 设置统一的过期时间 | 通用场景 |
-| **分级 TTL** | 根据数据类型设置不同 TTL | 多类型数据混合 |
-| **主动失效** | 数据更新时主动清除缓存 | 数据变更频繁 |
-| **惰性失效** | 访问时检查是否过期 | 读多写少场景 |
+| 策略         | 说明                       | 适用场景                              |
+| ------------ | -------------------------- | ------------------------------------- |
+| **固定 TTL** | 设置统一的过期时间         | 通用场景                              |
+| **分级 TTL** | 根据数据类型设置不同 TTL   | 多类型数据混合                        |
+| **主动失效** | 数据更新时主动清除缓存     | 数据变更频繁                          |
+| **惰性失效** | 访问时检查是否过期         | 读多写少场景                          |
 | **版本失效** | 模型或提示词版本变更时失效 | [版本管理](/glossary/versioning) 场景 |
 
 ## 实现方式
@@ -274,67 +276,116 @@ class PromptCache:
         self.version_map[name] = new_version
 ```
 
-## 工程实践
+## 实施步骤
 
-### 缓存预热
+### 第一步：分析缓存需求
 
-```python
-def warmup_cache(frequent_queries, cache):
-    """预热缓存：提前加载高频查询结果"""
-    for query in frequent_queries:
-        if cache.get(query) is None:
-            result = call_llm_api(query)
-            cache.set(query, result, ttl=7200)  # 2 小时
-            print(f"Warmed up: {query[:50]}...")
-```
+- **识别高频查询**：通过日志分析找出重复率最高的查询
+- **评估缓存收益**：计算缓存命中率预期和成本节省
+- **确定缓存类型**：精确缓存（FAQ）还是语义缓存（开放问答）
 
-### 缓存穿透防护
+### 第二步：选择缓存策略
 
-```python
-class CacheWithNullMarker:
-    """防止缓存穿透：缓存空结果"""
+| 场景 | 推荐策略 | 预期命中率 |
+| ---- | -------- | ---------- |
+| FAQ、固定问答 | 精确缓存 | 40%-70% |
+| 开放问答 | 语义缓存（阈值 0.95） | 20%-40% |
+| 多类型混合 | 分层缓存（L1+L2+L3） | 50%-80% |
+| Embedding 计算 | 向量缓存 | 60%-90% |
 
-    def __init__(self, cache, null_ttl=60):
-        self.cache = cache
-        self.null_ttl = null_ttl
-        self.NULL_MARKER = "__NULL__"
-
-    def get(self, key):
-        result = self.cache.get(key)
-        if result == self.NULL_MARKER:
-            return None  # 确认无数据
-        return result
-
-    def set(self, key, value, ttl=3600):
-        if value is None:
-            self.cache.set(key, self.NULL_MARKER, ex=self.null_ttl)
-        else:
-            self.cache.set(key, value, ex=ttl)
-```
-
-### 缓存与流式输出的结合
+### 第三步：实现缓存层
 
 ```python
-async def streaming_with_cache(user_input, cache):
-    """流式输出与缓存的结合"""
-    # 先检查精确缓存
-    cached = cache.get(user_input)
-    if cached:
-        # 缓存命中：模拟流式输出
-        for chunk in cached.split(" "):
-            yield chunk + " "
-            await asyncio.sleep(0.05)  # 模拟流式延迟
-        return
+import hashlib
+import json
+import redis
 
-    # 缓存未命中：调用 API 并流式返回
-    response = ""
-    async for chunk in call_llm_streaming(user_input):
-        response += chunk
-        yield chunk
 
-    # 完整响应后存入缓存
-    cache.set(user_input, response)
+class LLMCache:
+    """LLM 缓存实现"""
+
+    def __init__(self, redis_url="redis://localhost:6379"):
+        self.redis = redis.from_url(redis_url)
+
+    def _make_key(self, model, prompt, params):
+        content = json.dumps({"model": model, "prompt": prompt, "params": params}, sort_keys=True)
+        return f"llm:{hashlib.sha256(content.encode()).hexdigest()}"
+
+    def get(self, model, prompt, params):
+        key = self._make_key(model, prompt, params)
+        data = self.redis.get(key)
+        return json.loads(data) if data else None
+
+    def set(self, model, prompt, params, response, ttl=3600):
+        key = self._make_key(model, prompt, params)
+        self.redis.setex(key, ttl, json.dumps(response))
 ```
+
+### 第四步：配置缓存失效策略
+
+- **固定 TTL**：通用场景，设置统一过期时间（如 1 小时）
+- **分级 TTL**：根据数据类型设置不同 TTL（FAQ 24 小时，开放问答 1 小时）
+- **版本失效**：模型或提示词版本变更时主动清除相关缓存
+
+### 第五步：监控缓存效果
+
+通过 [可观测性](/glossary/observability) 监控：
+- 缓存命中率（目标 > 30%）
+- 缓存命中延迟（目标 < 10ms）
+- 缓存存储使用量
+
+### 第六步：持续优化
+
+- 定期分析缓存未命中的原因
+- 调整语义缓存阈值
+- 优化缓存键生成策略
+- 评估是否需要引入更高级的缓存策略
+
+## 最佳实践
+
+- **缓存键要包含所有影响输出的因素**：模型名称、提示词、温度参数等
+- **语义缓存阈值要调优**：过高降低命中率，过低返回不相关结果，建议从 0.95 开始
+- **防止缓存穿透**：对无结果的情况也缓存空标记（Null Marker）
+- **缓存预热**：服务启动前预加载高频查询结果
+- **与版本管理联动**：模型或提示词变更时及时清除旧缓存
+- **流式输出特殊处理**：缓存命中时模拟流式返回提升用户体验
+
+## 常见问题与避坑
+
+### Q1：精确缓存和语义缓存如何选择？
+
+- **精确缓存**：适合 FAQ、固定模板问答等确定性输出场景，实现简单、命中准确
+- **语义缓存**：适合开放问答，能处理措辞不同但语义相似的查询，但实现复杂、可能误命中
+
+建议先用精确缓存覆盖高频确定场景，再逐步引入语义缓存。
+
+### Q2：缓存一致性如何保证？
+
+当模型或提示词更新时，旧缓存可能返回过时结果：
+- 缓存键中包含模型版本和提示词版本
+- 版本变更时主动清除相关缓存（按模式清除）
+- 设置合理的 TTL，避免缓存长期不更新
+
+### Q3：语义缓存的性能开销大吗？
+
+语义缓存需要计算查询的 Embedding 并做向量相似度搜索，会增加 10-50ms 延迟。优化建议：
+- 缓存 Embedding 结果本身（向量缓存）
+- 使用轻量级 Embedding 模型
+- 限制向量搜索的 top_k（如 top_k=5）
+
+### Q4：如何防止缓存雪崩？
+
+缓存雪崩指大量缓存在同一时间过期，导致后端压力骤增：
+- TTL 设置随机偏移（如 3600 ± 300 秒）
+- 使用分级缓存，L1 缓存不设置过期时间
+- 缓存预热时分散加载时间
+
+### Q5：缓存数据的存储成本如何控制？
+
+- 定期清理低频访问的缓存
+- 对缓存数据做压缩（如 gzip）
+- 使用 Redis 的内存淘汰策略（如 allkeys-lru）
+- 评估缓存数据的价值，只缓存高成本查询结果
 
 ## 与其他概念的关系
 

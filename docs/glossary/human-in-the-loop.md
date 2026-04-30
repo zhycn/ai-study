@@ -5,6 +5,8 @@ description: Human-in-the-loop，人类参与决策的 Agent 模式
 
 # 人机协作
 
+AI 干活时关键节点需要人类"把关确认"。不是完全交给 AI 自动运行，也不是完全人工操作，而是在重要决策点让人来审核——既享受自动化的效率，又保留人类的判断力。
+
 > 面向开发者的技术实战文章
 
 ## 概述
@@ -17,7 +19,7 @@ HITL 不是"AI 做不了才找人"，而是一种**主动设计**——在系统
 >
 > HITL 不是 AI 的缺陷，而是负责任 AI 的设计原则。就像飞机有自动驾驶，但起飞、降落和紧急情况必须由飞行员控制。
 
-## 为什么重要
+## 为什么需要
 
 ### 纯自动化的风险
 
@@ -41,7 +43,7 @@ HITL 不是"AI 做不了才找人"，而是一种**主动设计**——在系统
 
 **合规与审计** 保留人类审核记录，满足行业合规要求和审计需要。
 
-## 核心模式
+## 核心原理
 
 ### 审批模式（Approval）
 
@@ -357,7 +359,90 @@ async def notifications(websocket: WebSocket):
         await asyncio.sleep(1)
 ```
 
-## 工程实践
+## 实施步骤
+
+### 步骤 1：识别需要人类介入的场景
+
+| 场景类型 | 示例 | 介入方式 |
+|---------|------|---------|
+| 高风险操作 | 删除数据、发送邮件 | 必须审批 |
+| 创意内容 | 文章生成、设计 | 建议审核 |
+| 低置信度 | Agent 不确定 | 可选介入 |
+
+### 步骤 2：设计介入策略
+
+```python
+class InterventionPolicy:
+    def __init__(self):
+        self.rules = []
+
+    def add_rule(self, condition: Callable, action: str, required: bool):
+        self.rules.append({
+            "condition": condition,
+            "action": action,
+            "required": required
+        })
+
+    def should_intervene(self, context: dict) -> list[dict]:
+        return [
+            rule for rule in self.rules
+            if rule["condition"](context)
+        ]
+```
+
+### 步骤 3：实现审批流程
+
+```python
+class ApprovalWorkflow:
+    async def request_approval(self, action: str, details: str) -> bool:
+        # 通知人类
+        await notify_human(action, details)
+
+        # 等待审批（带超时）
+        result = await wait_for_approval(timeout=300)
+
+        if result is None:
+            # 超时处理
+            return self.handle_timeout(action)
+
+        return result
+```
+
+### 步骤 4：构建用户界面
+
+- **清晰的信息展示**：Agent 做了什么、为什么这么做
+- **便捷的操作**：一键审批、批量操作
+- **完整的上下文**：提供足够背景信息
+
+### 步骤 5：收集反馈并改进
+
+```python
+class FeedbackLoop:
+    def record_feedback(self, task: str, output: str, feedback: str):
+        # 存储反馈
+        self.feedback_log.append({
+            "task": task,
+            "output": output,
+            "feedback": feedback
+        })
+
+    def analyze_and_improve(self):
+        # 分析常见问题
+        issues = self.get_common_issues()
+        # 生成改进建议
+        report = self.generate_improvement_report(issues)
+```
+
+## 主流框架对比
+
+| 框架 | 实现方式 | 特点 | 适用场景 |
+|------|---------|------|---------|
+| **LangGraph** | 中断机制 | 原生支持、易集成 | Agent 工作流 |
+| **LangChain** | HumanInputTool | 简单直接 | 快速原型 |
+| **自定义 Web** | API+WebSocket | 灵活可控 | 生产环境 |
+| **Email/Slack** | 异步通知 | 无需额外界面 | 轻量场景 |
+
+## 最佳实践
 
 ### 介入时机设计
 
@@ -523,17 +608,59 @@ class ReviewUI:
         return badges.get(risk_level, badges["medium"])
 ```
 
+## 常见问题与避坑
+
+### Q1：人类响应太慢怎么办？
+
+- 设置合理的**超时时间**
+- 实现**降级策略**（低风险自动批准，高风险拒绝）
+- 使用**异步通知**（邮件、Slack）
+
+### Q2：审核者缺乏上下文怎么办？
+
+- 提供**完整的背景信息**
+- 展示 Agent 的**推理过程**
+- 使用**可视化卡片**呈现关键信息
+
+### Q3：如何避免审核疲劳？
+
+- **批量处理**：合并多个审批请求
+- **智能过滤**：高置信度结果自动通过
+- **快捷键支持**：提升操作效率
+
+### Q4：人类反馈如何用于改进 Agent？
+
+- 记录所有**审核反馈**
+- 定期**分析常见问题**
+- 针对性**优化提示词**和工具
+
+### Q5：如何平衡自动化与人工审核？
+
+- **风险分级**：高风险必审，低风险免审
+- **置信度阈值**：低于阈值才需要审核
+- **渐进式自动化**：随 Agent 成熟度提高减少审核
+
+:::warning 常见陷阱
+- **过度介入**：每个步骤都要审核，降低效率
+- **介入不足**：关键操作无人审核，风险高
+- **上下文缺失**：审核者无法做出正确判断
+- **反馈未利用**：收集了反馈但不用于改进
+:::
+
 ## 与其他概念的关系
 
 **核心依赖**：
+
 - [Agent](/glossary/agent) — HITL 是 Agent 系统中的人类参与机制，没有 Agent 就无需 HITL
 - [自主 Agent](/glossary/autonomous-agent) — HITL 与自主 Agent 形成光谱的两端，实际系统通常介于两者之间
 
 **应用场景**：
+
 - [多 Agent 系统](/glossary/multi-agent) — 人类可以作为特殊节点加入多 Agent 系统，提供指导和审核
 - [Agent 编排](/glossary/agent-orchestration) — 编排层可以在关键步骤插入人工审核节点
 
 **技术基础**：
+
 - [AI 安全](/glossary/ai-safety) — HITL 是 AI 安全的重要保障机制
 - [规划](/glossary/planning) — 人类可以在规划阶段审核 Agent 的执行计划
 

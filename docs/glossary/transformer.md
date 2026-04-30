@@ -5,6 +5,8 @@ description: 现代 AI 模型的核心架构
 
 # Transformer
 
+当今几乎所有 AI 模型的"骨架"。它最大的本事是读一段话时能同时注意到里面所有词之间的关系，而不是像以前那样一个字一个字挨着读。正是这个设计让 ChatGPT 等 AI 变得如此聪明。
+
 ## 概述
 
 **Transformer** 是一种基于**自注意力机制**（Self-Attention Mechanism）的深度学习架构，由 Google 研究团队在 2017 年的论文《Attention Is All You Need》中首次提出。它彻底改变了自然语言处理（NLP）领域，并逐步扩展到计算机视觉（CV）、语音识别、蛋白质结构预测等多个领域，成为现代 AI 模型的**统一架构**。
@@ -25,13 +27,38 @@ Transformer 之所以成为 AI 领域的基石架构，原因在于：
 - **可扩展性**（Scalability）：模型规模可从百万参数扩展到万亿参数，性能持续提升
 - **生态繁荣**：基于 Transformer 衍生出 BERT、GPT、T5、ViT 等数百种变体，形成庞大的模型家族
 
+## 核心原理
+
+### 注意力机制的本质
+
+传统 RNN 按顺序处理序列，信息传递路径长度为 $O(n)$，导致长距离依赖难以捕捉。Transformer 的自注意力机制让任意两个位置之间的信息传递路径缩短为 $O(1)$，从根本上解决了长程依赖问题。
+
+### 缩放点积注意力（Scaled Dot-Product Attention）
+
+注意力机制的核心公式：
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
+
+其中除以 $\sqrt{d_k}$ 的原因是：当 $d_k$ 较大时，点积结果方差增大，softmax 容易进入梯度饱和区。缩放因子使点积方差保持在 1 附近，确保训练稳定。
+
+### 并行计算优势
+
+RNN 的序列依赖导致无法并行计算，而 Transformer 的自注意力可以同时对整个序列进行矩阵运算：
+
+- **训练阶段**：所有 Token 的表示可以同时计算，GPU 利用率大幅提升
+- **推理阶段**：虽然生成仍是自回归的，但 KV Cache 技术可避免重复计算
+
+### 位置信息注入
+
+由于自注意力对输入顺序不敏感（置换不变性），必须显式注入位置信息。主流方案从固定的正弦函数演进到可学习的 RoPE，使模型既能感知绝对位置，又能捕捉相对位置关系。
+
 ## 核心技术架构
 
 ### 整体结构
 
 原始 Transformer 采用 **Encoder-Decoder** 结构：
 
-```
+```text
 输入 → Encoder（N 层）→ Decoder（N 层）→ 输出
 ```
 
@@ -44,11 +71,10 @@ Transformer 之所以成为 AI 领域的基石架构，原因在于：
 
 自注意力是 Transformer 的核心，计算公式为：
 
-```
-Attention(Q, K, V) = softmax(QK^T / √d_k) V
-```
+$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
 其中：
+
 - **Q**（Query，查询）：当前位置的查询向量
 - **K**（Key，键）：所有位置的键向量，用于匹配
 - **V**（Value，值）：所有位置的值向量，携带实际信息
@@ -62,11 +88,9 @@ Attention(Q, K, V) = softmax(QK^T / √d_k) V
 
 将 Q、K、V 分别投影到多个子空间，并行计算注意力，最后拼接：
 
-```
-MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
-```
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h)W^O$$
 
-多头机制使模型能同时关注不同位置和不同语义维度的信息。
+其中 $\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$。
 
 #### 3. 位置编码（Positional Encoding）
 
@@ -80,9 +104,9 @@ MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
 
 对每个位置的特征进行非线性变换：
 
-```
-FFN(x) = max(0, xW_1 + b_1) W_2 + b_2
-```
+$$\text{FFN}(x) = \max(0, xW_1 + b_1)W_2 + b_2$$
+
+现代变体常用 SwiGLU 激活函数替代 ReLU：$\text{SwiGLU}(x) = \text{Swish}(xW_1) \otimes (xW_2)$。
 
 #### 5. 层归一化与残差连接
 
@@ -91,12 +115,12 @@ FFN(x) = max(0, xW_1 + b_1) W_2 + b_2
 
 ### 位置编码对比
 
-| 编码方式 | 外推能力 | 计算效率 | 主流应用 |
-|---------|---------|---------|---------|
-| 正弦编码 | 差 | 高 | 原始 Transformer |
-| RoPE | 中 | 高 | Llama、Qwen |
-| ALiBi | 强 | 高 | MPT、BLOOM |
-| 学习型编码 | 差 | 中 | T5 |
+| 编码方式   | 外推能力 | 计算效率 | 主流应用         |
+| ---------- | -------- | -------- | ---------------- |
+| 正弦编码   | 差       | 高       | 原始 Transformer |
+| RoPE       | 中       | 高       | Llama、Qwen      |
+| ALiBi      | 强       | 高       | MPT、BLOOM       |
+| 学习型编码 | 差       | 中       | T5               |
 
 ## 主流变体架构
 
@@ -123,6 +147,15 @@ FFN(x) = max(0, xW_1 + b_1) W_2 + b_2
 - **T5**（Google）：统一文本到文本框架
 - **BART**（Meta）：去噪自编码器预训练
 
+### 架构变体对比
+
+| 架构 | 注意力方向 | 代表模型 | 适用场景 | 优缺点 |
+|------|------------|----------|----------|--------|
+| Encoder-only | 双向 | BERT、RoBERTa | 分类、NER、检索 | 理解能力强，无法生成 |
+| Decoder-only | 单向（因果） | GPT、Llama、Qwen | 文本生成、对话 | 通用性强，训练高效 |
+| Encoder-Decoder | 双向 + 交叉 | T5、BART | 翻译、摘要 | 生成质量高，训练成本高 |
+| MoE | 单向 + 路由 | Mixtral、DeepSeek V3 | 大规模生成 | 参数大、计算小，路由复杂 |
+
 ### 混合专家架构（MoE）
 
 **混合专家**（Mixture of Experts，MoE）将 FFN 替换为多个专家网络，每次只激活部分专家，实现"大模型参数、小模型计算"：
@@ -146,12 +179,12 @@ past_key_values = model(inputs, past_key_values=past_key_values)
 
 常见优化技术：
 
-| 技术 | 原理 | 收益 |
-|------|------|------|
-| **FlashAttention** | 优化注意力计算的 IO 效率 | 速度提升 2-4 倍，显存减少 |
-| **PagedAttention** | 类似虚拟内存的 KV Cache 管理 | 吞吐量提升 20 倍+ |
-| **量化**（Quantization） | 降低权重精度 | 显存减少 2-4 倍 |
-| **投机采样**（Speculative Decoding） | 小模型草稿 + 大模型验证 | 加速 2-3 倍 |
+| 技术                                 | 原理                         | 收益                      |
+| ------------------------------------ | ---------------------------- | ------------------------- |
+| **FlashAttention**                   | 优化注意力计算的 IO 效率     | 速度提升 2-4 倍，显存减少 |
+| **PagedAttention**                   | 类似虚拟内存的 KV Cache 管理 | 吞吐量提升 20 倍+         |
+| **量化**（Quantization）             | 降低权重精度                 | 显存减少 2-4 倍           |
+| **投机采样**（Speculative Decoding） | 小模型草稿 + 大模型验证      | 加速 2-3 倍               |
 
 ### 训练优化
 

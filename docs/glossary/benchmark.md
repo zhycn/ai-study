@@ -1,9 +1,11 @@
 ---
-title: 基准测试
+title: 基准测试 (Benchmark)
 description: Benchmark，评估模型能力的标准测试
 ---
 
-# 基准测试
+# 基准测试 (Benchmark)
+
+给 AI 模型"考试打分"的标准化试卷。通过统一的测试题目和评分标准，可以客观地比较不同模型谁更聪明、谁更擅长数学、谁写作更好。就像高考一样，让大家有个公平的比较标准。
 
 ## 概述
 
@@ -27,39 +29,39 @@ description: Benchmark，评估模型能力的标准测试
 
 ### 综合能力基准
 
-| 基准 | 全称 | 任务类型 | 题目数 | 评估方式 |
-|------|------|----------|--------|----------|
-| **MMLU** | Massive Multitask Language Understanding | 57 个学科的多选题 | 14,042 | 准确率 |
-| **AGIEval** | AGI Evaluation | 标准化考试（SAT、LSAT 等） | 4,548 | 准确率 |
-| **C-Eval** | Chinese Evaluation | 中文多学科测试 | 13,487 | 准确率 |
-| **CMMLU** | Chinese MMLU | 中文版 MMLU | 11,814 | 准确率 |
+| 基准        | 全称                                     | 任务类型                   | 题目数 | 评估方式 |
+| ----------- | ---------------------------------------- | -------------------------- | ------ | -------- |
+| **MMLU**    | Massive Multitask Language Understanding | 57 个学科的多选题          | 14,042 | 准确率   |
+| **AGIEval** | AGI Evaluation                           | 标准化考试（SAT、LSAT 等） | 4,548  | 准确率   |
+| **C-Eval**  | Chinese Evaluation                       | 中文多学科测试             | 13,487 | 准确率   |
+| **CMMLU**   | Chinese MMLU                             | 中文版 MMLU                | 11,814 | 准确率   |
 
 ### 推理能力基准
 
-| 基准 | 全称 | 任务类型 | 题目数 | 评估方式 |
-|------|------|----------|--------|----------|
-| **GSM8K** | Grade School Math 8K | 小学数学应用题 | 8,792 | 精确匹配 |
-| **MATH** | Mathematics Aptitude Test | 高中到大学数学 | 12,500 | 精确匹配 |
-| **BBH** | Big-Bench Hard | 23 个困难推理任务 | 6,511 | 准确率 |
-| **ARC** | AI2 Reasoning Challenge | 科学推理题 | 7,787 | 准确率 |
+| 基准      | 全称                      | 任务类型          | 题目数 | 评估方式 |
+| --------- | ------------------------- | ----------------- | ------ | -------- |
+| **GSM8K** | Grade School Math 8K      | 小学数学应用题    | 8,792  | 精确匹配 |
+| **MATH**  | Mathematics Aptitude Test | 高中到大学数学    | 12,500 | 精确匹配 |
+| **BBH**   | Big-Bench Hard            | 23 个困难推理任务 | 6,511  | 准确率   |
+| **ARC**   | AI2 Reasoning Challenge   | 科学推理题        | 7,787  | 准确率   |
 
 ### 代码能力基准
 
-| 基准 | 全称 | 任务类型 | 题目数 | 评估方式 |
-|------|------|----------|--------|----------|
-| **HumanEval** | Human Evaluation | Python 函数补全 | 164 | pass@1 |
-| **MBPP** | Mostly Basic Python Problems | Python 编程题 | 974 | pass@1 |
-| **LiveCodeBench** | Live Code Benchmark | 实时编程竞赛题 | 持续更新 | pass@1 |
-| **SWE-bench** | Software Engineering Bench | 真实 GitHub Issue | 2,294 | Issue 解决率 |
+| 基准              | 全称                         | 任务类型          | 题目数   | 评估方式     |
+| ----------------- | ---------------------------- | ----------------- | -------- | ------------ |
+| **HumanEval**     | Human Evaluation             | Python 函数补全   | 164      | pass@1       |
+| **MBPP**          | Mostly Basic Python Problems | Python 编程题     | 974      | pass@1       |
+| **LiveCodeBench** | Live Code Benchmark          | 实时编程竞赛题    | 持续更新 | pass@1       |
+| **SWE-bench**     | Software Engineering Bench   | 真实 GitHub Issue | 2,294    | Issue 解决率 |
 
 ### 安全与对齐基准
 
-| 基准 | 全称 | 任务类型 | 评估方式 |
-|------|------|----------|----------|
-| **TruthfulQA** | Truthful Question Answering | 检测模型是否生成虚假信息 | 准确率 × 信息量 |
-| **RealToxicityPrompts** | Real Toxicity Prompts | 测量生成内容的毒性 | 毒性分数 |
-| **BBQ** | Bias Benchmark for QA | 检测社会偏见 | 偏见分数 |
-| **XSTest** | eXplanation Safety Test | 测试安全拒绝行为 | 假阳性/假阴性率 |
+| 基准                    | 全称                        | 任务类型                 | 评估方式        |
+| ----------------------- | --------------------------- | ------------------------ | --------------- |
+| **TruthfulQA**          | Truthful Question Answering | 检测模型是否生成虚假信息 | 准确率 × 信息量 |
+| **RealToxicityPrompts** | Real Toxicity Prompts       | 测量生成内容的毒性       | 毒性分数        |
+| **BBQ**                 | Bias Benchmark for QA       | 检测社会偏见             | 偏见分数        |
+| **XSTest**              | eXplanation Safety Test     | 测试安全拒绝行为         | 假阳性/假阴性率 |
 
 ## 评估指标
 
@@ -252,7 +254,7 @@ def setup_benchmark_evaluation():
 
 模型可能在预训练时已经见过测试数据：
 
-```
+```text
 问题: 测试集中的题目出现在训练数据中
 后果: 模型"记住"了答案，而非真正学会了解决问题
 检测: 使用新收集的、模型训练后产生的数据
@@ -262,7 +264,7 @@ def setup_benchmark_evaluation():
 
 不同评估方法可能导致不同结论：
 
-```
+```text
 同一模型:
 - 严格精确匹配: 75%
 - 宽松匹配(允许同义词): 82%
@@ -274,7 +276,7 @@ def setup_benchmark_evaluation():
 
 基准测试无法覆盖所有实际使用场景：
 
-```
+```text
 基准测试覆盖:
 ✓ 知识问答
 ✓ 数学推理
