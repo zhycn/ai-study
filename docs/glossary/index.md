@@ -9,14 +9,14 @@ description: AI 领域基础概念词条集
 
 ## 基础概念
 
-| 词条                                   | 简介                                                          |
-| -------------------------------------- | ------------------------------------------------------------- |
-| [AI](/glossary/ai)                     | 人工智能（Artificial Intelligence），让机器模拟人类智能的技术 |
-| [机器学习](/glossary/machine-learning) | Machine Learning，让计算机从数据中自动学习的技术              |
-| [深度学习](/glossary/deep-learning)    | Deep Learning，基于深层神经网络的机器学习方法                 |
-| [神经网络](/glossary/neural-network)   | Neural Network，模拟人脑神经元结构的计算模型                  |
-| [生成式 AI](/glossary/generative-ai)   | Generative AI，能够生成新内容的 AI 技术                       |
-| [Data-Centric AI](/glossary/data-centric-ai) | 以数据为中心的 AI 开发范式                          |
+| 词条                                         | 简介                                                          |
+| -------------------------------------------- | ------------------------------------------------------------- |
+| [AI](/glossary/ai)                           | 人工智能（Artificial Intelligence），让机器模拟人类智能的技术 |
+| [机器学习](/glossary/machine-learning)       | Machine Learning，让计算机从数据中自动学习的技术              |
+| [深度学习](/glossary/deep-learning)          | Deep Learning，基于深层神经网络的机器学习方法                 |
+| [神经网络](/glossary/neural-network)         | Neural Network，模拟人脑神经元结构的计算模型                  |
+| [生成式 AI](/glossary/generative-ai)         | Generative AI，能够生成新内容的 AI 技术                       |
+| [Data-Centric AI](/glossary/data-centric-ai) | 以数据为中心的 AI 开发范式                                    |
 
 ## 模型与架构
 
@@ -47,9 +47,9 @@ description: AI 领域基础概念词条集
 | [RAG](/glossary/rag)                       | Retrieval-Augmented Generation，检索增强生成     |
 | [Agent](/glossary/agent)                   | AI Agent，AI 智能体                              |
 | [MCP](/glossary/mcp)                       | Model Context Protocol，模型上下文协议           |
-| [模型微调](/glossary/fine-tuning)              | Fine-tuning，模型微调                            |
+| [模型微调](/glossary/fine-tuning)          | Fine-tuning，模型微调                            |
 | [函数调用](/glossary/function-calling)     | Function Calling，让模型调用外部工具的能力       |
-| [AI 工作流](/glossary/workflow)               | AI Workflows，AI 任务的自动化流程编排            |
+| [AI 工作流](/glossary/workflow)            | AI Workflows，AI 任务的自动化流程编排            |
 
 ## 关键概念
 
@@ -64,7 +64,7 @@ description: AI 领域基础概念词条集
 | [思维链](/glossary/chain-of-thought)   | Chain of Thought (CoT)，引导模型逐步推理的技术  |
 | [对齐](/glossary/alignment)            | Alignment，让 AI 行为符合人类价值观             |
 | [基准测试](/glossary/benchmark)        | Benchmark，评估模型能力的标准测试               |
-| [长上下文](/glossary/long-context)     | Long Context，扩展模型上下文窗口至百万级 Token    |
+| [长上下文](/glossary/long-context)     | Long Context，扩展模型上下文窗口至百万级 Token  |
 
 ## 工具与基础设施
 
@@ -75,24 +75,24 @@ description: AI 领域基础概念词条集
 | [GPU](/glossary/gpu)                    | Graphics Processing Unit，图形处理器，AI 训练的核心硬件 |
 | [TPU](/glossary/tpu)                    | Tensor Processing Unit，张量处理器，Google 专用 AI 芯片 |
 | [API](/glossary/api)                    | Application Programming Interface，应用程序编程接口     |
-| [Edge AI](/glossary/edge-ai)            | 端侧 AI，在设备本地运行 AI 模型                    |
-| [AI Infra](/glossary/ai-infra)          | AI 基础设施，支撑 AI 训练与推理的全栈技术            |
+| [Edge AI](/glossary/edge-ai)            | 端侧 AI，在设备本地运行 AI 模型                         |
+| [AI Infra](/glossary/ai-infra)          | AI 基础设施，支撑 AI 训练与推理的全栈技术               |
 
 ## Agent 生态
 
-| 词条                                        | 简介                                               |
-| ------------------------------------------- | -------------------------------------------------- |
-| [多 Agent 系统](/glossary/multi-agent)      | Multi-Agent System，多个 AI Agent 协作完成复杂任务 |
-| [Agent 编排](/glossary/agent-orchestration) | Agent Orchestration，协调多个 Agent 的工作流       |
-| [工具使用](/glossary/tool-use)              | Tool Use，Agent 调用外部工具的能力                 |
-| [规划](/glossary/planning)                  | Planning，Agent 分解任务、制定执行策略的能力       |
-| [记忆](/glossary/memory)                    | Memory，Agent 的短期/长期记忆机制                  |
-| [Skills](/glossary/skills)                  | Agent 可执行的技能集合                             |
-| [Commands](/glossary/commands)              | Agent 的命令系统                                   |
-| [人机协作](/glossary/human-in-the-loop)     | Human-in-the-loop，人类参与决策的 Agent 模式       |
-| [自主 Agent](/glossary/autonomous-agent)    | Autonomous Agent，能独立完成任务的 Agent           |
-| [Agentic Workflow](/glossary/agentic-workflow) | 基于 Agent 自主决策的动态工作流              |
-| [Computer Use](/glossary/computer-use)      | AI Agent 直接操作计算机界面的能力                |
+| 词条                                           | 简介                                               |
+| ---------------------------------------------- | -------------------------------------------------- |
+| [多 Agent 系统](/glossary/multi-agent)         | Multi-Agent System，多个 AI Agent 协作完成复杂任务 |
+| [Agent 编排](/glossary/agent-orchestration)    | Agent Orchestration，协调多个 Agent 的工作流       |
+| [工具使用](/glossary/tool-use)                 | Tool Use，Agent 调用外部工具的能力                 |
+| [规划](/glossary/planning)                     | Planning，Agent 分解任务、制定执行策略的能力       |
+| [记忆](/glossary/memory)                       | Memory，Agent 的短期/长期记忆机制                  |
+| [Skills](/glossary/skills)                     | Agent 可执行的技能集合                             |
+| [Commands](/glossary/commands)                 | Agent 的命令系统                                   |
+| [人机协作](/glossary/human-in-the-loop)        | Human-in-the-loop，人类参与决策的 Agent 模式       |
+| [自主 Agent](/glossary/autonomous-agent)       | Autonomous Agent，能独立完成任务的 Agent           |
+| [Agentic Workflow](/glossary/agentic-workflow) | 基于 Agent 自主决策的动态工作流                    |
+| [Computer Use](/glossary/computer-use)         | AI Agent 直接操作计算机界面的能力                  |
 
 ## 工程与实践
 
@@ -109,39 +109,39 @@ description: AI 领域基础概念词条集
 
 ## 安全与伦理
 
-| 词条                                     | 简介                                       |
-| ---------------------------------------- | ------------------------------------------ |
-| [AI 安全](/glossary/ai-safety)           | AI Safety，确保 AI 系统安全可靠            |
-| [提示词注入](/glossary/prompt-injection) | Prompt Injection，通过恶意输入操控模型行为 |
-| [数据隐私](/glossary/data-privacy)       | Data Privacy，保护用户数据不被泄露         |
-| [偏见](/glossary/bias)                   | Bias，模型训练数据中的不公平倾向           |
-| [内容审核](/glossary/content-moderation) | Content Moderation，过滤有害输出           |
-| [红队测试](/glossary/red-teaming)        | Red Teaming，主动攻击测试 AI 系统漏洞      |
-| [可解释性](/glossary/explainability)     | Explainability，理解模型决策过程           |
-| [版权](/glossary/copyright)              | Copyright，AI 生成内容的版权归属           |
-| [RLVR](/glossary/rlvr)                  | Reinforcement Learning with Verifiable Rewards，可验证奖励的强化学习 |
-| [Constitutional AI](/glossary/constitutional-ai) | 基于宪法规则的 AI 对齐方法                     |
+| 词条                                             | 简介                                                                 |
+| ------------------------------------------------ | -------------------------------------------------------------------- |
+| [AI 安全](/glossary/ai-safety)                   | AI Safety，确保 AI 系统安全可靠                                      |
+| [提示词注入](/glossary/prompt-injection)         | Prompt Injection，通过恶意输入操控模型行为                           |
+| [数据隐私](/glossary/data-privacy)               | Data Privacy，保护用户数据不被泄露                                   |
+| [偏见](/glossary/bias)                           | Bias，模型训练数据中的不公平倾向                                     |
+| [内容审核](/glossary/content-moderation)         | Content Moderation，过滤有害输出                                     |
+| [红队测试](/glossary/red-teaming)                | Red Teaming，主动攻击测试 AI 系统漏洞                                |
+| [可解释性](/glossary/explainability)             | Explainability，理解模型决策过程                                     |
+| [版权](/glossary/copyright)                      | Copyright，AI 生成内容的版权归属                                     |
+| [RLVR](/glossary/rlvr)                           | Reinforcement Learning with Verifiable Rewards，可验证奖励的强化学习 |
+| [Constitutional AI](/glossary/constitutional-ai) | 基于宪法规则的 AI 对齐方法                                           |
 
 ## 行业与应用
 
-| 词条                                        | 简介                                       |
-| ------------------------------------------- | ------------------------------------------ |
-| [对话系统](/glossary/conversational-ai)     | Conversational AI，聊天机器人和对话式 AI   |
-| [代码生成](/glossary/code-generation)       | Code Generation，AI 辅助编程               |
-| [图像生成](/glossary/image-generation)      | Image Generation，AI 生成图像的技术        |
-| [语音合成](/glossary/text-to-speech)        | Text-to-Speech (TTS)，文本转语音           |
-| [语音识别](/glossary/speech-recognition)    | Speech Recognition，语音转文本             |
-| [AI 搜索](/glossary/ai-search)              | AI Search，AI 增强的搜索引擎               |
-| [推荐系统](/glossary/recommendation-system) | Recommendation System，AI 驱动的个性化推荐 |
-| [数据分析](/glossary/data-analysis)         | Data Analysis，AI 辅助数据分析             |
+| 词条                                         | 简介                                       |
+| -------------------------------------------- | ------------------------------------------ |
+| [对话系统](/glossary/conversational-ai)      | Conversational AI，聊天机器人和对话式 AI   |
+| [代码生成](/glossary/code-generation)        | Code Generation，AI 辅助编程               |
+| [图像生成](/glossary/image-generation)       | Image Generation，AI 生成图像的技术        |
+| [语音合成](/glossary/text-to-speech)         | Text-to-Speech (TTS)，文本转语音           |
+| [语音识别](/glossary/speech-recognition)     | Speech Recognition，语音转文本             |
+| [AI 搜索](/glossary/ai-search)               | AI Search，AI 增强的搜索引擎               |
+| [推荐系统](/glossary/recommendation-system)  | Recommendation System，AI 驱动的个性化推荐 |
+| [数据分析](/glossary/data-analysis)          | Data Analysis，AI 辅助数据分析             |
 | [AI Coding Agent](/glossary/ai-coding-agent) | AI 编程智能体，自主完成编程任务的 Agent    |
-| [具身智能](/glossary/embodied-ai)           | Embodied AI，AI 与机器人结合的物理智能     |
+| [具身智能](/glossary/embodied-ai)            | Embodied AI，AI 与机器人结合的物理智能     |
 
 ## 模型优化
 
-| 词条                           | 简介                                             |
-| ------------------------------ | ------------------------------------------------ |
-| [量化](/glossary/quantization) | Quantization，降低模型精度以减少体积和加速推理   |
-| [知识蒸馏](/glossary/distillation) | Knowledge Distillation，将大模型知识迁移到小模型 |
-| [剪枝](/glossary/pruning)      | Pruning，移除模型中不重要的参数以减小体积        |
+| 词条                                       | 简介                                                           |
+| ------------------------------------------ | -------------------------------------------------------------- |
+| [量化](/glossary/quantization)             | Quantization，降低模型精度以减少体积和加速推理                 |
+| [知识蒸馏](/glossary/distillation)         | Knowledge Distillation，将大模型知识迁移到小模型               |
+| [剪枝](/glossary/pruning)                  | Pruning，移除模型中不重要的参数以减小体积                      |
 | [推测解码](/glossary/speculative-decoding) | Speculative Decoding，用小模型草稿加速大模型推理的无损加速技术 |

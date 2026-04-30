@@ -53,13 +53,13 @@ description: Long Context，扩展模型上下文窗口至百万级 Token
 
 ### 位置编码与外推
 
-| 位置编码方案 | 外推能力 | 长上下文支持 | 代表模型 |
-|-------------|----------|-------------|----------|
-| **正弦编码** | 差 | 不支持 | 原始 Transformer |
-| **RoPE** | 中等 | 需插值扩展 | Llama 2（4K） |
-| **RoPE + NTK 插值** | 好 | 支持 32K+ | Llama 2 扩展版 |
-| **RoPE + YaRN** | 优秀 | 支持 128K+ | Llama 3 |
-| **ALiBi** | 优秀 | 天然支持长上下文 | MPT、BLOOM |
+| 位置编码方案        | 外推能力 | 长上下文支持     | 代表模型         |
+| ------------------- | -------- | ---------------- | ---------------- |
+| **正弦编码**        | 差       | 不支持           | 原始 Transformer |
+| **RoPE**            | 中等     | 需插值扩展       | Llama 2（4K）    |
+| **RoPE + NTK 插值** | 好       | 支持 32K+        | Llama 2 扩展版   |
+| **RoPE + YaRN**     | 优秀     | 支持 128K+       | Llama 3          |
+| **ALiBi**           | 优秀     | 天然支持长上下文 | MPT、BLOOM       |
 
 ```python
 # NTK 插值扩展 RoPE 上下文
@@ -196,13 +196,13 @@ def needle_in_haystack_test(model, haystack_length, needle_positions):
 
 ### 长上下文评估基准
 
-| 基准 | 测试内容 | 最大长度 | 特点 |
-|------|----------|----------|------|
-| **Needle In A Haystack** | 信息检索 | 1M+ Token | 简单直观，测试定位能力 |
-| **RULER** | 多跳推理、聚合 | 128K Token | 综合评估多种长上下文任务 |
-| **LongBench** | 6 类任务 | 15K-64K Token | 多语言、多任务 |
-| **InfiniteBench** | 10 类任务 | 2M Token | 超长上下文测试 |
-| **NeedleBench** | 多针检索 | 1M+ Token | 测试多信息点聚合能力 |
+| 基准                     | 测试内容       | 最大长度      | 特点                     |
+| ------------------------ | -------------- | ------------- | ------------------------ |
+| **Needle In A Haystack** | 信息检索       | 1M+ Token     | 简单直观，测试定位能力   |
+| **RULER**                | 多跳推理、聚合 | 128K Token    | 综合评估多种长上下文任务 |
+| **LongBench**            | 6 类任务       | 15K-64K Token | 多语言、多任务           |
+| **InfiniteBench**        | 10 类任务      | 2M Token      | 超长上下文测试           |
+| **NeedleBench**          | 多针检索       | 1M+ Token     | 测试多信息点聚合能力     |
 
 ### 评估代码示例
 

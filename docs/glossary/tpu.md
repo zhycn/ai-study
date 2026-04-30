@@ -213,11 +213,12 @@ params = jax.pmap(lambda x: x)(params)  # 复制参数到所有设备
 :::
 
 :::warning 注意事项
+
 - TPU 不支持某些自定义算子，需确认框架兼容性
 - PyTorch 对 TPU 的支持通过 XLA，可能有性能损耗
 - TPU 仅在 Google Cloud 可用，存在供应商锁定风险
 - 调试工具不如 GPU 生态完善
-:::
+  :::
 
 ## 与其他概念的关系
 

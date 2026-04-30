@@ -102,11 +102,11 @@ def speculative_decode(target_model, draft_model, context, k=5):
         token = draft_model.generate(current_context)
         draft_tokens.append(token)
         current_context = current_context + [token]
-    
+
     # 验证阶段：目标模型并行验证
     target_probs = target_model.compute_probs(context, draft_tokens)
     draft_probs = draft_model.compute_probs(context, draft_tokens)
-    
+
     # 接受-拒绝
     accepted_tokens = []
     for i, (d_tok, t_prob, d_prob) in enumerate(zip(draft_tokens, target_probs, draft_probs)):
@@ -118,7 +118,7 @@ def speculative_decode(target_model, draft_model, context, k=5):
             new_token = sample_from(target_probs[i])
             accepted_tokens.append(new_token)
             break  # 拒绝后停止验证后续 Token
-    
+
     return accepted_tokens
 ```
 
@@ -137,6 +137,7 @@ def speculative_decode(target_model, draft_model, context, k=5):
 ```
 
 Medusa 的优势：
+
 - 无需额外加载草稿模型，节省显存
 - 解码头与主干网络共享计算，效率更高
 - 支持动态调整草稿长度
@@ -154,6 +155,7 @@ Medusa 的优势：
 核心思想：早期层已经捕获了足够的语义信息来生成合理的草稿，而完整层负责精确验证。
 
 自我推测解码的特点：
+
 - 零额外模型，显存开销不变
 - 草稿质量通常低于独立草稿模型
 - 适合显存受限的部署场景
@@ -176,6 +178,7 @@ draft_tokens = prediction_head(extrapolated_states)
 ```
 
 EAGLE 相比基础推测解码的优势：
+
 - 草稿质量更高，接受率提升 10-15%
 - 预测头参数量极小（通常 < 10M）
 - 训练成本低，只需少量数据
@@ -184,20 +187,21 @@ EAGLE 相比基础推测解码的优势：
 
 不同推测解码方案在加速效果、实现复杂度和资源开销上各有侧重：
 
-| 方案 | 草稿来源 | 额外显存 | 接受率 | 加速比 | 实现难度 |
-|------|----------|----------|--------|--------|----------|
-| 基础推测解码 | 独立小模型 | 中（需加载草稿模型） | 60-80% | 2-2.5x | 低 |
-| Medusa | 多解码头 | 低（仅头部参数） | 50-70% | 1.8-2.2x | 中 |
-| 自我推测 | 目标模型早期层 | 无 | 40-60% | 1.5-1.8x | 中 |
-| EAGLE | 特征外推 | 极低 | 70-85% | 2.5-3x | 高 |
-| Lookahead | n-gram 缓存 | 极低 | 30-50% | 1.3-1.5x | 低 |
+| 方案         | 草稿来源       | 额外显存             | 接受率 | 加速比   | 实现难度 |
+| ------------ | -------------- | -------------------- | ------ | -------- | -------- |
+| 基础推测解码 | 独立小模型     | 中（需加载草稿模型） | 60-80% | 2-2.5x   | 低       |
+| Medusa       | 多解码头       | 低（仅头部参数）     | 50-70% | 1.8-2.2x | 中       |
+| 自我推测     | 目标模型早期层 | 无                   | 40-60% | 1.5-1.8x | 中       |
+| EAGLE        | 特征外推       | 极低                 | 70-85% | 2.5-3x   | 高       |
+| Lookahead    | n-gram 缓存    | 极低                 | 30-50% | 1.3-1.5x | 低       |
 
 :::tip 选择建议
+
 - **追求最高加速**：选择 EAGLE，接受率最高
 - **显存紧张**：选择自我推测解码，无需额外模型
 - **快速部署**：选择基础推测解码，实现最简单
 - **不想训练**：选择 Lookahead（基于 n-gram 缓存，无需训练）
-:::
+  :::
 
 ## 工程实践
 
@@ -219,6 +223,7 @@ outputs = llm.generate(["Hello, my name is"], sampling_params)
 ```
 
 vLLM 推测解码的关键配置：
+
 - **speculative_model**：草稿模型路径，应与目标模型词表一致
 - **num_speculative_tokens**：每次草稿生成的 Token 数，通常 3-8
 - **speculative_disable_by_threshold**：当 prompt 长度超过阈值时禁用推测解码
@@ -239,12 +244,12 @@ text-generation-launcher \
 
 选择合适的草稿模型对加速效果至关重要：
 
-| 目标模型 | 推荐草稿模型 | 词表匹配 | 接受率预期 |
-|----------|-------------|----------|------------|
-| Llama-2-70B | Llama-2-7B | 完全匹配 | 70-80% |
-| Llama-2-70B | TinyLlama-1.1B | 完全匹配 | 60-70% |
-| Llama-3-70B | Llama-3-8B | 完全匹配 | 75-85% |
-| Mistral-7B | TinyLlama-1.1B | 部分匹配 | 50-60% |
+| 目标模型    | 推荐草稿模型   | 词表匹配 | 接受率预期 |
+| ----------- | -------------- | -------- | ---------- |
+| Llama-2-70B | Llama-2-7B     | 完全匹配 | 70-80%     |
+| Llama-2-70B | TinyLlama-1.1B | 完全匹配 | 60-70%     |
+| Llama-3-70B | Llama-3-8B     | 完全匹配 | 75-85%     |
+| Mistral-7B  | TinyLlama-1.1B | 部分匹配 | 50-60%     |
 
 :::warning 注意
 草稿模型与目标模型的词表必须兼容。如果词表不同，需要额外的 Token 映射层，会引入额外开销并降低接受率。
@@ -276,13 +281,13 @@ def batch_speculative_decode(batch_requests):
     # 按接受率历史对请求分组
     high_accept = [r for r in batch_requests if r.history_accept_rate > 0.7]
     low_accept = [r for r in batch_requests if r.history_accept_rate <= 0.7]
-    
+
     # 高接受率请求使用更长的草稿
     for req in high_accept:
         req.speculative_tokens = 8
     for req in low_accept:
         req.speculative_tokens = 3
-    
+
     return execute_batch(batch_requests)
 ```
 

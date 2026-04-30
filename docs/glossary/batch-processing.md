@@ -238,12 +238,12 @@ for output in outputs:
 
 ### 第二步：选择批处理服务
 
-| 需求 | 推荐方案 |
-| ---- | -------- |
-| 使用 OpenAI API | OpenAI Batch API（50% 折扣） |
-| 本地部署模型 | vLLM 批量推理 |
-| 需要任务队列 | Celery + Redis |
-| 云原生方案 | AWS Batch、Google Cloud Batch |
+| 需求            | 推荐方案                      |
+| --------------- | ----------------------------- |
+| 使用 OpenAI API | OpenAI Batch API（50% 折扣）  |
+| 本地部署模型    | vLLM 批量推理                 |
+| 需要任务队列    | Celery + Redis                |
+| 云原生方案      | AWS Batch、Google Cloud Batch |
 
 ### 第三步：准备批处理输入
 
@@ -297,6 +297,7 @@ batch = client.batches.create(
 - **批处理**：离线分析、大批量任务、可以接受延迟的场景
 
 路由决策参考：
+
 ```python
 def route_request(request):
     if request.is_interactive:
@@ -328,6 +329,7 @@ def route_request(request):
 ### Q5：批处理如何与流式输出结合？
 
 批处理和流式输出是两种不同的模式：
+
 - 批处理：离线、高吞吐、延迟完成
 - 流式输出：实时、低延迟、逐字返回
 

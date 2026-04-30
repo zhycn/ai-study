@@ -399,14 +399,17 @@ description: 审查代码质量
 # 代码审查 Skill
 
 ## 何时使用
+
 - 用户请求审查代码
 - 提交代码前自动审查
 
 ## 输入
+
 - code: 需要审查的代码
 - language: 编程语言
 
 ## 输出
+
 - issues: 发现的问题
 - suggestions: 改进建议
 ```
@@ -419,12 +422,12 @@ description: 审查代码质量
 
 ## 主流框架对比
 
-| 框架/平台 | Skill 形式 | 特点 | 适用场景 |
-|-----------|-----------|------|---------|
-| **Claude Code Skills** | 目录+SKILL.md | 文档驱动、易扩展 | 开发助手 |
-| **LangChain Tools** | Python 类/装饰器 | 统一接口、丰富生态 | 通用 Agent |
-| **OpenAI Assistant Tools** | API 定义 | 云端托管、免运维 | OpenAI 生态 |
-| **CrewAI Tools** | Python 类 | 角色绑定、易用 | 多 Agent 协作 |
+| 框架/平台                  | Skill 形式       | 特点               | 适用场景      |
+| -------------------------- | ---------------- | ------------------ | ------------- |
+| **Claude Code Skills**     | 目录+SKILL.md    | 文档驱动、易扩展   | 开发助手      |
+| **LangChain Tools**        | Python 类/装饰器 | 统一接口、丰富生态 | 通用 Agent    |
+| **OpenAI Assistant Tools** | API 定义         | 云端托管、免运维   | OpenAI 生态   |
+| **CrewAI Tools**           | Python 类        | 角色绑定、易用     | 多 Agent 协作 |
 
 ## 最佳实践
 
@@ -634,11 +637,12 @@ class PermissionControlledSkill(Skill):
 - 提供**默认值**和**示例**
 
 :::warning 常见陷阱
+
 - **职责不清**：一个 Skill 做太多事情
 - **缺乏测试**：修改后引入回归 bug
 - **文档缺失**：其他开发者不知道如何使用
 - **版本混乱**：不兼容的变更未做好版本管理
-:::
+  :::
 
 ## 与其他概念的关系
 

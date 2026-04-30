@@ -58,11 +58,11 @@ Edge AI 涉及多个技术层次的协同优化：
 将模型参数从 32 位浮点数（FP32）转换为更低精度：
 
 | 精度 | 大小 | 速度 | 精度损失 | 适用场景 |
-|------|------|------|---------|---------|
-| FP32 | 4x | 基准 | 无 | 云端训练 |
-| FP16 | 2x | 2x | 极小 | GPU 推理 |
-| INT8 | 1x | 4x | 小 | 边缘推理 |
-| INT4 | 0.5x | 6x | 中等 | 极致压缩 |
+| ---- | ---- | ---- | -------- | -------- |
+| FP32 | 4x   | 基准 | 无       | 云端训练 |
+| FP16 | 2x   | 2x   | 极小     | GPU 推理 |
+| INT8 | 1x   | 4x   | 小       | 边缘推理 |
+| INT4 | 0.5x | 6x   | 中等     | 极致压缩 |
 
 ```python
 # TensorFlow Lite 量化示例
@@ -113,12 +113,12 @@ pruned_model = tfmot.sparsity.keras.prune_low_magnitude(model, **pruning_params)
 def distillation_loss(y_true, y_pred, teacher_pred, temperature=3.0, alpha=0.5):
     # 学生模型与真实标签的交叉熵
     student_loss = tf.keras.losses.categorical_crossentropy(y_true, y_pred)
-    
+
     # 学生输出与教师输出的 KL 散度
     teacher_pred_soft = tf.nn.softmax(teacher_pred / temperature)
     student_pred_soft = tf.nn.softmax(y_pred / temperature)
     distillation_loss = tf.keras.losses.kld(teacher_pred_soft, student_pred_soft)
-    
+
     return alpha * student_loss + (1 - alpha) * distillation_loss * (temperature ** 2)
 ```
 
@@ -132,38 +132,38 @@ def distillation_loss(y_true, y_pred, teacher_pred, temperature=3.0, alpha=0.5):
 
 ### 硬件加速
 
-| 硬件类型 | 特点 | 代表产品 |
-|---------|------|---------|
-| **NPU**（Neural Processing Unit） | 专用 AI 加速芯片，能效比高 | Apple Neural Engine、华为 NPU |
-| **GPU** | 通用并行计算，生态成熟 | NVIDIA Jetson、Mali GPU |
-| **DSP**（Digital Signal Processor） | 低功耗，适合音频/图像预处理 | Hexagon DSP、Ceva DSP |
-| **FPGA** | 可编程，灵活性强 | Xilinx Alveo、Intel Agilex |
-| **ASIC** | 定制化，性能最优 | Google Edge TPU、Kendryte K210 |
+| 硬件类型                            | 特点                        | 代表产品                       |
+| ----------------------------------- | --------------------------- | ------------------------------ |
+| **NPU**（Neural Processing Unit）   | 专用 AI 加速芯片，能效比高  | Apple Neural Engine、华为 NPU  |
+| **GPU**                             | 通用并行计算，生态成熟      | NVIDIA Jetson、Mali GPU        |
+| **DSP**（Digital Signal Processor） | 低功耗，适合音频/图像预处理 | Hexagon DSP、Ceva DSP          |
+| **FPGA**                            | 可编程，灵活性强            | Xilinx Alveo、Intel Agilex     |
+| **ASIC**                            | 定制化，性能最优            | Google Edge TPU、Kendryte K210 |
 
 ## 主流方案对比
 
 ### 推理框架对比
 
-| 框架 | 支持平台 | 特点 | 适用场景 |
-|------|---------|------|---------|
-| **TensorFlow Lite** | Android/iOS/Linux | Google 出品，生态完善，工具链完整 | 移动端通用推理 |
-| **ONNX Runtime** | 全平台 | 微软出品，支持多框架模型转换 | 跨平台部署 |
-| **NCNN** | Android/iOS/Linux | 腾讯开源，无第三方依赖，性能优秀 | 移动端高性能推理 |
-| **MNN** | Android/iOS/Linux | 阿里开源，轻量高效 | 移动端/嵌入式 |
-| **Core ML** | iOS/macOS | Apple 原生，深度集成系统 | Apple 生态 |
-| **MediaPipe** | 全平台 | Google 出品，内置视觉/音频流水线 | 多媒体 AI 应用 |
-| **OpenVINO** | x86/ARM | Intel 出品，优化 Intel 硬件 | PC/边缘服务器 |
+| 框架                | 支持平台          | 特点                              | 适用场景         |
+| ------------------- | ----------------- | --------------------------------- | ---------------- |
+| **TensorFlow Lite** | Android/iOS/Linux | Google 出品，生态完善，工具链完整 | 移动端通用推理   |
+| **ONNX Runtime**    | 全平台            | 微软出品，支持多框架模型转换      | 跨平台部署       |
+| **NCNN**            | Android/iOS/Linux | 腾讯开源，无第三方依赖，性能优秀  | 移动端高性能推理 |
+| **MNN**             | Android/iOS/Linux | 阿里开源，轻量高效                | 移动端/嵌入式    |
+| **Core ML**         | iOS/macOS         | Apple 原生，深度集成系统          | Apple 生态       |
+| **MediaPipe**       | 全平台            | Google 出品，内置视觉/音频流水线  | 多媒体 AI 应用   |
+| **OpenVINO**        | x86/ARM           | Intel 出品，优化 Intel 硬件       | PC/边缘服务器    |
 
 ### 边缘硬件平台对比
 
-| 平台 | 算力 | 功耗 | 价格 | 适用场景 |
-|------|------|------|------|---------|
-| **Raspberry Pi 5** | 低 | 5-10W | $80 | 入门级 IoT |
-| **NVIDIA Jetson Orin Nano** | 中 | 7-15W | $249 | 机器人、视觉 |
-| **NVIDIA Jetson Orin NX** | 高 | 10-25W | $599 | 工业检测、自动驾驶 |
-| **Rockchip RK3588** | 中高 | 5-15W | $50 | 智能摄像头、NVR |
-| **Apple M 系列** | 极高 | 10-30W | 集成于设备 | 移动端高端推理 |
-| **Google Edge TPU** | 中 | 2W | $75 | 专用视觉推理 |
+| 平台                        | 算力 | 功耗   | 价格       | 适用场景           |
+| --------------------------- | ---- | ------ | ---------- | ------------------ |
+| **Raspberry Pi 5**          | 低   | 5-10W  | $80        | 入门级 IoT         |
+| **NVIDIA Jetson Orin Nano** | 中   | 7-15W  | $249       | 机器人、视觉       |
+| **NVIDIA Jetson Orin NX**   | 高   | 10-25W | $599       | 工业检测、自动驾驶 |
+| **Rockchip RK3588**         | 中高 | 5-15W  | $50        | 智能摄像头、NVR    |
+| **Apple M 系列**            | 极高 | 10-30W | 集成于设备 | 移动端高端推理     |
+| **Google Edge TPU**         | 中   | 2W     | $75        | 专用视觉推理       |
 
 :::info 选型建议
 移动端开发优先选择 TensorFlow Lite 或 Core ML（iOS）。跨平台部署推荐 ONNX Runtime。追求极致性能可考虑 NCNN。硬件方面，入门选树莓派，工业级选 Jetson，量产考虑国产芯片如 RK3588。
@@ -173,25 +173,25 @@ def distillation_loss(y_true, y_pred, teacher_pred, temperature=3.0, alpha=0.5):
 
 ### 按场景选型
 
-| 场景 | 推荐方案 | 理由 |
-|------|---------|------|
-| 手机图像识别 | Core ML（iOS）/ TFLite（Android） | 系统级集成，性能最优 |
-| 智能摄像头 | RK3588 + NCNN | 成本低，功耗小，性能足够 |
-| 工业检测 | Jetson Orin + TensorRT | 算力强，支持高精度模型 |
-| 语音助手 | DSP + 轻量级 ASR 模型 | 低功耗，实时响应 |
-| 自动驾驶 | 多芯片方案（GPU + NPU） | 高算力，高可靠性 |
-| IoT 传感器 | Edge TPU / K210 | 超低功耗，专用加速 |
+| 场景         | 推荐方案                          | 理由                     |
+| ------------ | --------------------------------- | ------------------------ |
+| 手机图像识别 | Core ML（iOS）/ TFLite（Android） | 系统级集成，性能最优     |
+| 智能摄像头   | RK3588 + NCNN                     | 成本低，功耗小，性能足够 |
+| 工业检测     | Jetson Orin + TensorRT            | 算力强，支持高精度模型   |
+| 语音助手     | DSP + 轻量级 ASR 模型             | 低功耗，实时响应         |
+| 自动驾驶     | 多芯片方案（GPU + NPU）           | 高算力，高可靠性         |
+| IoT 传感器   | Edge TPU / K210                   | 超低功耗，专用加速       |
 
 ### 模型选择矩阵
 
-| 任务类型 | 云端模型 | 边缘模型 |
-|---------|---------|---------|
-| 图像分类 | ResNet-152 | MobileNetV3、EfficientNet-Lite |
-| 目标检测 | Faster R-CNN | YOLOv8n、SSD-MobileNet |
-| 语义分割 | DeepLabV3+ | DeepLabV3-MobileNet、BiSeNet |
+| 任务类型 | 云端模型      | 边缘模型                       |
+| -------- | ------------- | ------------------------------ |
+| 图像分类 | ResNet-152    | MobileNetV3、EfficientNet-Lite |
+| 目标检测 | Faster R-CNN  | YOLOv8n、SSD-MobileNet         |
+| 语义分割 | DeepLabV3+    | DeepLabV3-MobileNet、BiSeNet   |
 | 语音识别 | Whisper-large | Whisper-tiny、Paraformer-small |
-| 文本分类 | BERT-large | DistilBERT、TinyBERT |
-| 推荐系统 | 深度排序模型 | 轻量级双塔模型 |
+| 文本分类 | BERT-large    | DistilBERT、TinyBERT           |
+| 推荐系统 | 深度排序模型  | 轻量级双塔模型                 |
 
 ## 工程实践
 
@@ -277,21 +277,22 @@ print(f'FPS: {1000/avg_latency:.1f}')
 
 ### 常见问题排查
 
-| 问题 | 原因 | 解决方案 |
-|------|------|---------|
-| 推理延迟过高 | 模型过大或未量化 | 使用量化模型，选择轻量架构 |
-| 内存溢出 | 模型超出设备内存 | 进一步压缩模型，使用内存映射 |
-| 精度下降明显 | 量化策略不当 | 使用量化感知训练（QAT） |
-| 模型不兼容 | 算子不支持 | 替换不支持的算子，或自定义实现 |
-| 发热严重 | 持续高负载运行 | 优化推理频率，使用低功耗模式 |
-| 模型更新失败 | OTA 传输中断 | 实现断点续传和校验机制 |
+| 问题         | 原因             | 解决方案                       |
+| ------------ | ---------------- | ------------------------------ |
+| 推理延迟过高 | 模型过大或未量化 | 使用量化模型，选择轻量架构     |
+| 内存溢出     | 模型超出设备内存 | 进一步压缩模型，使用内存映射   |
+| 精度下降明显 | 量化策略不当     | 使用量化感知训练（QAT）        |
+| 模型不兼容   | 算子不支持       | 替换不支持的算子，或自定义实现 |
+| 发热严重     | 持续高负载运行   | 优化推理频率，使用低功耗模式   |
+| 模型更新失败 | OTA 传输中断     | 实现断点续传和校验机制         |
 
 :::warning 注意事项
+
 - 量化后必须在真实数据上验证精度
 - 边缘设备的环境温度会影响性能和稳定性
 - 模型更新需要考虑带宽限制，使用差分更新
 - 不同设备的硬件加速能力差异很大，需分别测试
-:::
+  :::
 
 ## 与其他概念的关系
 

@@ -237,6 +237,7 @@ MCP 社区提供了多个官方 Server 实现：
 **Q2：MCP Server 可以部署在远程服务器吗？**
 
 可以。MCP 支持多种传输层：
+
 - **stdio**：适合本地进程通信
 - **HTTP + SSE**：适合远程服务
 - **WebSocket**：适合双向实时通信
@@ -258,6 +259,7 @@ MCP Server 可以访问本地资源和执行命令，安全配置至关重要。
 **Q4：MCP 的性能开销大吗？**
 
 MCP 基于 JSON-RPC 2.0，通信开销很小。主要性能瓶颈通常在：
+
 - 工具本身的执行时间（如 API 调用、数据库查询）
 - 网络延迟（远程 Server 场景）
 
@@ -267,23 +269,23 @@ MCP 基于 JSON-RPC 2.0，通信开销很小。主要性能瓶颈通常在：
 
 MCP 社区提供了多个官方 Server：
 
-| Server | 功能 | 安装方式 |
-|--------|------|---------|
-| `server-filesystem` | 文件系统访问 | `npx @modelcontextprotocol/server-filesystem` |
-| `server-git` | Git 仓库操作 | `npx @modelcontextprotocol/server-git` |
-| `server-github` | GitHub API | `npx @modelcontextprotocol/server-github` |
-| `server-postgres` | PostgreSQL 查询 | `npx @modelcontextprotocol/server-postgres` |
-| `server-puppeteer` | 浏览器自动化 | `npx @modelcontextprotocol/server-puppeteer` |
+| Server              | 功能            | 安装方式                                      |
+| ------------------- | --------------- | --------------------------------------------- |
+| `server-filesystem` | 文件系统访问    | `npx @modelcontextprotocol/server-filesystem` |
+| `server-git`        | Git 仓库操作    | `npx @modelcontextprotocol/server-git`        |
+| `server-github`     | GitHub API      | `npx @modelcontextprotocol/server-github`     |
+| `server-postgres`   | PostgreSQL 查询 | `npx @modelcontextprotocol/server-postgres`   |
+| `server-puppeteer`  | 浏览器自动化    | `npx @modelcontextprotocol/server-puppeteer`  |
 
 ### 常见陷阱
 
-| 陷阱 | 表现 | 解决方案 |
-|------|------|---------|
-| 权限过大 | Server 可访问敏感文件 | 严格限制路径范围 |
-| 工具描述模糊 | 模型调用错误的工具 | 提供清晰、具体的工具描述 |
-| 错误处理缺失 | 工具失败导致 Agent 崩溃 | 完善错误返回机制 |
-| 版本不兼容 | SDK 版本与 Server 不匹配 | 锁定依赖版本 |
-| 资源泄漏 | 长时间运行后内存增长 | 定期重启 Server 进程 |
+| 陷阱         | 表现                     | 解决方案                 |
+| ------------ | ------------------------ | ------------------------ |
+| 权限过大     | Server 可访问敏感文件    | 严格限制路径范围         |
+| 工具描述模糊 | 模型调用错误的工具       | 提供清晰、具体的工具描述 |
+| 错误处理缺失 | 工具失败导致 Agent 崩溃  | 完善错误返回机制         |
+| 版本不兼容   | SDK 版本与 Server 不匹配 | 锁定依赖版本             |
+| 资源泄漏     | 长时间运行后内存增长     | 定期重启 Server 进程     |
 
 ## 与其他概念的关系
 

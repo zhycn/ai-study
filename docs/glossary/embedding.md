@@ -182,13 +182,13 @@ for doc, cluster in zip(documents, clusters):
 
 不同场景应选择合适的 Embedding 模型：
 
-| 模型                         | 维度  | 最大输入 | 适用场景           |
-| ---------------------------- | ----- | -------- | ------------------ |
-| text-embedding-3-small       | 1536  | 8191     | 通用语义搜索       |
-| text-embedding-3-large       | 3072  | 8191     | 高精度语义匹配     |
-| bge-large-zh                 | 1024  | 512      | 中文场景优化       |
-| m3e                          | 1024  | 512      | 中文多任务         |
-| nomic-embed-text             | 768   | 8192     | 开源长文本         |
+| 模型                   | 维度 | 最大输入 | 适用场景       |
+| ---------------------- | ---- | -------- | -------------- |
+| text-embedding-3-small | 1536 | 8191     | 通用语义搜索   |
+| text-embedding-3-large | 3072 | 8191     | 高精度语义匹配 |
+| bge-large-zh           | 1024 | 512      | 中文场景优化   |
+| m3e                    | 1024 | 512      | 中文多任务     |
+| nomic-embed-text       | 768  | 8192     | 开源长文本     |
 
 ```python
 # 根据场景选择 Embedding 模型

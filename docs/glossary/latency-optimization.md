@@ -60,11 +60,11 @@ ttft_histogram = Histogram("ttft_seconds", "Time to first token", buckets=[0.1, 
 
 根据业务场景设定目标：
 
-| 场景 | TTFT 目标 | 端到端目标 |
-| ---- | --------- | ---------- |
-| 实时对话 | < 500ms | < 3s |
-| 内容生成 | < 1s | < 10s |
-| 离线分析 | < 5s | 无严格要求 |
+| 场景     | TTFT 目标 | 端到端目标 |
+| -------- | --------- | ---------- |
+| 实时对话 | < 500ms   | < 3s       |
+| 内容生成 | < 1s      | < 10s      |
+| 离线分析 | < 5s      | 无严格要求 |
 
 ### 第三步：实施流式输出
 
@@ -128,6 +128,7 @@ async def async_pipeline(user_input):
 ### Q1：如何定位延迟瓶颈？
 
 使用分布式追踪（如 OpenTelemetry）记录各环节耗时：
+
 - 网络传输时间
 - 检索时间（RAG 场景）
 - 模型推理时间（TTFT + 生成时间）
@@ -142,6 +143,7 @@ async def async_pipeline(user_input):
 ### Q3：更快的模型一定更贵吗？
 
 通常如此，但不绝对：
+
 - GPT-4o-mini 比 GPT-4 更快且更便宜
 - Claude Haiku 比 Claude Sonnet 更快且更便宜
 
@@ -157,6 +159,7 @@ async def async_pipeline(user_input):
 ### Q5：延迟优化和成本优化如何平衡？
 
 两者存在权衡关系：
+
 - 更快的模型通常更贵
 - 缓存同时改善延迟和成本（最佳选择）
 - 流式输出改善延迟但不影响成本

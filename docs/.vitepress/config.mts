@@ -249,8 +249,12 @@ export default withPwa(
             collapsed: false,
             items: [
               { text: '概览', link: '/prompt/' },
-              { text: '基础技巧', link: '/prompt/basics' },
-              { text: '高级技巧', link: '/prompt/advanced' }
+              { text: '基础篇', link: '/prompt/fundamentals' },
+              { text: '技巧篇', link: '/prompt/techniques' },
+              { text: '进阶篇', link: '/prompt/advanced' },
+              { text: '工程篇', link: '/prompt/engineering' },
+              { text: '安全篇', link: '/prompt/security' },
+              { text: '模式库', link: '/prompt/patterns' }
             ]
           }
         ],

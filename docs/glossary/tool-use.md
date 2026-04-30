@@ -431,12 +431,12 @@ async def execute_tool_with_retry(tool: Tool, input_data: dict, max_retries: int
 
 ## 主流框架对比
 
-| 框架/协议 | 类型 | 特点 | 适用场景 |
-|-----------|------|------|---------|
-| **OpenAI Function Calling** | API 原生 | 简单易用、广泛支持 | OpenAI 生态 |
-| **LangChain Tools** | 框架 | 丰富内置工具、统一接口 | 快速原型 |
-| **MCP** | 开放协议 | 标准化、跨平台 | 通用工具集成 |
-| **Anthropic Tool Use** | API 原生 | Claude 专用 | Anthropic 生态 |
+| 框架/协议                   | 类型     | 特点                   | 适用场景       |
+| --------------------------- | -------- | ---------------------- | -------------- |
+| **OpenAI Function Calling** | API 原生 | 简单易用、广泛支持     | OpenAI 生态    |
+| **LangChain Tools**         | 框架     | 丰富内置工具、统一接口 | 快速原型       |
+| **MCP**                     | 开放协议 | 标准化、跨平台         | 通用工具集成   |
+| **Anthropic Tool Use**      | API 原生 | Claude 专用            | Anthropic 生态 |
 
 ## 最佳实践
 
@@ -613,11 +613,12 @@ class ToolCache:
 - **提供示例**：在描述中加入使用示例
 
 :::warning 常见陷阱
+
 - **描述模糊**：LLM 无法理解何时使用该工具
 - **缺乏验证**：工具返回错误结果未被检测
 - **忽视安全**：代码执行工具未做沙箱隔离
 - **过度调用**：简单问题也调用工具增加成本
-:::
+  :::
 
 ## 与其他概念的关系
 

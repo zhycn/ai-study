@@ -65,13 +65,14 @@ $$L(N, D, C) \approx \left(\frac{N_c}{N}\right)^{\alpha} + \left(\frac{D_c}{D}\r
 
 现代 LLM 大多采用 Decoder-only 变体，相比原始 Encoder-Decoder 结构更简洁高效：
 
-| 架构类型 | 代表模型 | 擅长任务 | 特点 |
-|----------|----------|----------|------|
-| Decoder-only | GPT、Llama、Qwen | 文本生成、对话 | 自回归，单向注意力 |
-| Encoder-only | BERT、RoBERTa | 分类、NER | 双向编码，无生成能力 |
-| Encoder-Decoder | T5、BART | 翻译、摘要 | 序列到序列，训练成本高 |
+| 架构类型        | 代表模型         | 擅长任务       | 特点                   |
+| --------------- | ---------------- | -------------- | ---------------------- |
+| Decoder-only    | GPT、Llama、Qwen | 文本生成、对话 | 自回归，单向注意力     |
+| Encoder-only    | BERT、RoBERTa    | 分类、NER      | 双向编码，无生成能力   |
+| Encoder-Decoder | T5、BART         | 翻译、摘要     | 序列到序列，训练成本高 |
 
 Decoder-only 架构成为主流的原因：
+
 1. **训练简单**：只需预测下一个 Token，无需额外目标
 2. **推理高效**：自回归生成天然适合流式输出
 3. **扩展性强**：易于扩展到万亿参数规模
@@ -107,13 +108,13 @@ LLM 的训练通常分为三个阶段：
 
 ### 主流模型对比
 
-| 模型 | 参数量 | 上下文 | 架构 | 特点 |
-|------|--------|--------|------|------|
-| GPT-4o | ~200B | 128K | Decoder-only | 多模态，速度快 |
-| Claude 3.5 Sonnet | ~175B | 200K | Decoder-only | 安全性强，代码优 |
-| Llama 3.1 405B | 405B | 128K | Decoder-only | 开源标杆 |
-| Qwen 2.5 72B | 72B | 256K | Decoder-only | 中文能力强 |
-| DeepSeek V3 | 671B(MoE) | 128K | Decoder-only + MoE | 激活 37B，性价比高 |
+| 模型              | 参数量    | 上下文 | 架构               | 特点               |
+| ----------------- | --------- | ------ | ------------------ | ------------------ |
+| GPT-4o            | ~200B     | 128K   | Decoder-only       | 多模态，速度快     |
+| Claude 3.5 Sonnet | ~175B     | 200K   | Decoder-only       | 安全性强，代码优   |
+| Llama 3.1 405B    | 405B      | 128K   | Decoder-only       | 开源标杆           |
+| Qwen 2.5 72B      | 72B       | 256K   | Decoder-only       | 中文能力强         |
+| DeepSeek V3       | 671B(MoE) | 128K   | Decoder-only + MoE | 激活 37B，性价比高 |
 
 ### 闭源模型
 
@@ -163,7 +164,7 @@ LLM 的上下文窗口（Context Window）限制了单次交互能处理的 Toke
 3. 使用分隔符区分不同部分
 4. 指定输出格式和约束条件
 5. 对关键步骤要求模型"逐步思考"
-:::
+   :::
 
 ### 评估与测试
 

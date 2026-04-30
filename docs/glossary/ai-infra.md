@@ -98,46 +98,46 @@ AI Infra 不是单一工具，而是一个生态系统。选择合适的 AI Infr
 
 ### 训练平台
 
-| 方案 | 类型 | 特点 | 适用场景 |
-|------|------|------|---------|
-| **KubeFlow** | 开源 | 基于 K8s，生态完善，学习曲线陡 | 企业级训练平台 |
-| **Ray** | 开源 | 分布式计算框架，灵活性强 | 分布式训练、超参搜索 |
-| **Slurm** | 开源 | HPC 标准，适合大规模集群 | 超算中心、科研机构 |
-| **AWS SageMaker** | 云服务 | 全托管，功能全面，成本高 | 企业快速上手 |
-| **Google Vertex AI** | 云服务 | 与 GCP 深度集成，AutoML 强 | Google 生态用户 |
-| **Azure ML** | 云服务 | 与 Azure 生态集成，企业友好 | Microsoft 生态用户 |
+| 方案                 | 类型   | 特点                           | 适用场景             |
+| -------------------- | ------ | ------------------------------ | -------------------- |
+| **KubeFlow**         | 开源   | 基于 K8s，生态完善，学习曲线陡 | 企业级训练平台       |
+| **Ray**              | 开源   | 分布式计算框架，灵活性强       | 分布式训练、超参搜索 |
+| **Slurm**            | 开源   | HPC 标准，适合大规模集群       | 超算中心、科研机构   |
+| **AWS SageMaker**    | 云服务 | 全托管，功能全面，成本高       | 企业快速上手         |
+| **Google Vertex AI** | 云服务 | 与 GCP 深度集成，AutoML 强     | Google 生态用户      |
+| **Azure ML**         | 云服务 | 与 Azure 生态集成，企业友好    | Microsoft 生态用户   |
 
 ### 模型服务
 
-| 方案 | 特点 | 适用场景 |
-|------|------|---------|
-| **vLLM** | 高吞吐 LLM 推理，PagedAttention 优化 | 大语言模型服务 |
-| **Triton Inference Server** | NVIDIA 出品，支持多框架，GPU 优化 | 通用模型服务 |
-| **BentoML** | 开发者友好，支持多模型编排 | 应用级模型服务 |
-| **Seldon Core** | K8s 原生，企业级功能完善 | K8s 环境部署 |
-| **TorchServe** | PyTorch 官方，简单易用 | PyTorch 模型部署 |
-| **TensorFlow Serving** | TF 官方，生产级稳定 | TensorFlow 模型部署 |
+| 方案                        | 特点                                 | 适用场景            |
+| --------------------------- | ------------------------------------ | ------------------- |
+| **vLLM**                    | 高吞吐 LLM 推理，PagedAttention 优化 | 大语言模型服务      |
+| **Triton Inference Server** | NVIDIA 出品，支持多框架，GPU 优化    | 通用模型服务        |
+| **BentoML**                 | 开发者友好，支持多模型编排           | 应用级模型服务      |
+| **Seldon Core**             | K8s 原生，企业级功能完善             | K8s 环境部署        |
+| **TorchServe**              | PyTorch 官方，简单易用               | PyTorch 模型部署    |
+| **TensorFlow Serving**      | TF 官方，生产级稳定                  | TensorFlow 模型部署 |
 
 ### MLOps 平台
 
-| 方案 | 核心功能 | 特点 |
-|------|---------|------|
-| **MLflow** | 实验追踪、模型注册、项目打包 | 轻量级，生态广泛 |
-| **Weights & Biases** | 实验追踪、可视化、协作 | 界面友好，适合团队 |
-| **Kubeflow Pipelines** | 流水线编排、实验管理 | K8s 原生，适合大规模 |
-| **DVC** | 数据版本控制、流水线 | 类 Git 体验，数据管理 |
-| **Feast** | 特征存储 | 统一特征管理 |
-| **Evidently AI** | 模型监控、漂移检测 | 开源，可视化好 |
+| 方案                   | 核心功能                     | 特点                  |
+| ---------------------- | ---------------------------- | --------------------- |
+| **MLflow**             | 实验追踪、模型注册、项目打包 | 轻量级，生态广泛      |
+| **Weights & Biases**   | 实验追踪、可视化、协作       | 界面友好，适合团队    |
+| **Kubeflow Pipelines** | 流水线编排、实验管理         | K8s 原生，适合大规模  |
+| **DVC**                | 数据版本控制、流水线         | 类 Git 体验，数据管理 |
+| **Feast**              | 特征存储                     | 统一特征管理          |
+| **Evidently AI**       | 模型监控、漂移检测           | 开源，可视化好        |
 
 ### 计算资源方案
 
-| 方案 | 类型 | 优势 | 劣势 |
-|------|------|------|------|
-| **自建 GPU 集群** | 本地 | 长期成本低，数据可控 | 初始投入大，运维复杂 |
-| **公有云 GPU** | 云端 | 弹性伸缩，按需付费 | 长期使用成本高 |
-| **混合云** | 混合 | 灵活平衡成本和性能 | 架构复杂 |
-| **GPU 云服务** | 云端 | 专为 AI 优化，性价比高 | 选择较少 |
-| **Spot 实例** | 云端 | 成本降低 60-90% | 可能被中断 |
+| 方案              | 类型 | 优势                   | 劣势                 |
+| ----------------- | ---- | ---------------------- | -------------------- |
+| **自建 GPU 集群** | 本地 | 长期成本低，数据可控   | 初始投入大，运维复杂 |
+| **公有云 GPU**    | 云端 | 弹性伸缩，按需付费     | 长期使用成本高       |
+| **混合云**        | 混合 | 灵活平衡成本和性能     | 架构复杂             |
+| **GPU 云服务**    | 云端 | 专为 AI 优化，性价比高 | 选择较少             |
+| **Spot 实例**     | 云端 | 成本降低 60-90%        | 可能被中断           |
 
 :::info 选型建议
 初创团队推荐云服务（SageMaker/Vertex AI）快速验证。成熟团队建议自建 K8s + KubeFlow 或 Ray 集群，长期成本更低。LLM 服务优先选择 vLLM，通用推理选择 Triton。
@@ -147,22 +147,22 @@ AI Infra 不是单一工具，而是一个生态系统。选择合适的 AI Infr
 
 ### 按团队规模选型
 
-| 团队规模 | 推荐方案 | 理由 |
-|---------|---------|------|
-| 1-3 人 | 云服务 + MLflow | 最小运维负担，快速上手 |
-| 3-10 人 | K8s + KubeFlow + MLflow | 平衡灵活性和复杂度 |
-| 10-50 人 | 自建集群 + 完整 MLOps | 需要标准化流程 |
-| 50+ 人 | 自研平台 + 开源组件 | 需要定制化能力 |
+| 团队规模 | 推荐方案                | 理由                   |
+| -------- | ----------------------- | ---------------------- |
+| 1-3 人   | 云服务 + MLflow         | 最小运维负担，快速上手 |
+| 3-10 人  | K8s + KubeFlow + MLflow | 平衡灵活性和复杂度     |
+| 10-50 人 | 自建集群 + 完整 MLOps   | 需要标准化流程         |
+| 50+ 人   | 自研平台 + 开源组件     | 需要定制化能力         |
 
 ### 按业务场景选型
 
-| 场景 | 核心需求 | 推荐技术栈 |
-|------|---------|-----------|
+| 场景       | 核心需求               | 推荐技术栈                       |
+| ---------- | ---------------------- | -------------------------------- |
 | 大模型训练 | 大规模 GPU、分布式训练 | K8s + Slurm + DeepSpeed/Megatron |
-| 推荐系统 | 低延迟推理、特征服务 | Triton + Feast + Redis |
-| 计算机视觉 | GPU 推理、批处理 | Triton + K8s + S3 |
-| NLP 服务 | 高吞吐 LLM 推理 | vLLM + K8s + API Gateway |
-| 实时决策 | 毫秒级延迟、高可用 | 边缘部署 + 负载均衡 |
+| 推荐系统   | 低延迟推理、特征服务   | Triton + Feast + Redis           |
+| 计算机视觉 | GPU 推理、批处理       | Triton + K8s + S3                |
+| NLP 服务   | 高吞吐 LLM 推理        | vLLM + K8s + API Gateway         |
+| 实时决策   | 毫秒级延迟、高可用     | 边缘部署 + 负载均衡              |
 
 ## 工程实践
 
@@ -175,11 +175,11 @@ kind: Node
 metadata:
   labels:
     accelerator: nvidia-tesla-v100
-    nvidia.com/gpu.present: "true"
+    nvidia.com/gpu.present: 'true'
 spec:
   taints:
     - key: nvidia.com/gpu
-      value: "true"
+      value: 'true'
       effect: NoSchedule
 ---
 # GPU 训练任务
@@ -193,10 +193,10 @@ spec:
       containers:
         - name: trainer
           image: pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
-          command: ["python", "train.py"]
+          command: ['python', 'train.py']
           resources:
             limits:
-              nvidia.com/gpu: 4  # 使用 4 张 GPU
+              nvidia.com/gpu: 4 # 使用 4 张 GPU
           env:
             - name: NCCL_DEBUG
               value: INFO
@@ -219,17 +219,17 @@ with mlflow.start_run():
     mlflow.log_param("learning_rate", 0.001)
     mlflow.log_param("batch_size", 32)
     mlflow.log_param("epochs", 100)
-    
+
     # 训练模型
     model = train_model()
-    
+
     # 记录指标
     mlflow.log_metric("train_loss", train_loss)
     mlflow.log_metric("val_accuracy", val_accuracy)
-    
+
     # 记录模型
     mlflow.pytorch.log_model(model, "model")
-    
+
     # 记录 artifacts
     mlflow.log_artifact("confusion_matrix.png")
 ```
@@ -308,23 +308,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Run data validation
         run: python validate_data.py
-        
+
       - name: Run unit tests
         run: pytest tests/
-        
+
       - name: Train model
         run: python train.py --config configs/prod.yaml
-        
+
       - name: Evaluate model
         run: python evaluate.py --threshold 0.85
-        
+
       - name: Register model
         if: success()
         run: mlflow models register --model-uri runs:/...
-        
+
       - name: Deploy to staging
         if: success()
         run: kubectl apply -f k8s/staging/
