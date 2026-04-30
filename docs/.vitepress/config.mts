@@ -47,7 +47,7 @@ export default withPwa(
       }
     },
     head: [
-      ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
+      ['link', { rel: 'icon', href: '/ai-study/favicon.svg', type: 'image/svg+xml' }],
       ['meta', { name: 'theme-color', content: '#6366f1' }],
       ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
       ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black' }],
@@ -75,6 +75,7 @@ export default withPwa(
       ['meta', { name: 'twitter:card', content: 'summary_large_image' }]
     ],
     themeConfig: {
+      logo: '/favicon.svg',
       nav: [
         { text: '首页', link: '/' },
         { text: '词条', link: '/glossary/' },
@@ -82,8 +83,7 @@ export default withPwa(
         { text: 'RAG', link: '/rag/' },
         { text: 'Agent', link: '/agent/' },
         { text: '微调', link: '/finetuning/' },
-        { text: '资源', link: '/resources/' },
-        { text: 'GitHub', link: 'https://github.com/zhycn/ai-study' }
+        { text: '资源', link: '/resources/' }
       ],
       sidebar: {
         '/glossary/': [
