@@ -263,7 +263,7 @@ class AutomatedRedTeamer:
 
 ## 主流框架
 
-### Garak
+### [Garak](https://github.com/leondz/garak)
 
 专为 LLM 设计的脆弱性扫描框架：
 
@@ -281,7 +281,7 @@ garak --model_type openai --model_name gpt-4 --probes promptinject
 garak --model_type openai --model_name gpt-4 --report_format html
 ```
 
-### PyRIT（Python Red Teaming Framework）
+### [PyRIT](https://github.com/Azure/PyRIT)（Python Red Teaming Framework）
 
 Microsoft 开源的红队测试框架：
 
@@ -313,13 +313,13 @@ result = await orchestrator.run_attack_async(
 
 ### 其他工具
 
-| 工具                | 开发者    | 特点                               |
-| ------------------- | --------- | ---------------------------------- |
-| **Garak**           | leondz    | LLM 脆弱性扫描器，支持多种攻击类型 |
-| **PyRIT**           | Microsoft | 全面的红队测试框架                 |
-| **Promptfoo**       | 社区      | 提示词测试和评估平台               |
-| **LLM Red Teaming** | IBM       | 企业级红队测试工具                 |
-| **Rebuff**          | Lakera    | 提示词注入检测和防护               |
+| 工具                                         | 开发者    | 特点                               |
+| -------------------------------------------- | --------- | ---------------------------------- |
+| **[Garak](https://github.com/leondz/garak)** | leondz    | LLM 脆弱性扫描器，支持多种攻击类型 |
+| **[PyRIT](https://github.com/Azure/PyRIT)**  | Microsoft | 全面的红队测试框架                 |
+| **Promptfoo**                                | 社区      | 提示词测试和评估平台               |
+| **LLM Red Teaming**                          | IBM       | 企业级红队测试工具                 |
+| **Rebuff**                                   | Lakera    | 提示词注入检测和防护               |
 
 ## 工程实践
 
@@ -368,7 +368,7 @@ Phase 5: 持续改进
 ## 概述
 
 - 测试日期: 2024-01-15
-- 测试目标: GPT-4 API
+- 测试目标: [GPT-4](https://openai.com/gpt-4) API
 - 测试范围: 提示词注入、越狱、数据泄露、偏见
 - 测试方法: 自动化扫描 + 人工测试
 
@@ -454,7 +454,7 @@ NIST 框架将红队测试作为核心实践：
 
 - **Bug Bounty 程序**：奖励社区发现 AI 安全漏洞
 - **跨组织协作**：行业联合红队测试活动
-- **开源工具**：社区驱动的红队测试框架（如 Garak、PyRIT）
+- **开源工具**：社区驱动的红队测试框架（如 [Garak](https://github.com/leondz/garak)、[PyRIT](https://github.com/Azure/PyRIT)）
 
 ### 多模态红队测试
 

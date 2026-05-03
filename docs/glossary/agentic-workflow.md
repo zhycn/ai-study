@@ -519,15 +519,15 @@ def evaluate_workflow(app, test_cases: list[dict]) -> dict:
 
 ## 主流框架对比
 
-| 框架                  | 核心机制              | 适用场景                            | 学习曲线 | 自主决策能力         |
-| --------------------- | --------------------- | ----------------------------------- | -------- | -------------------- |
-| **LangGraph**         | 状态图 + 条件边       | 需要精细控制流程的 Agentic Workflow | 中等     | 高（节点内自主决策） |
-| **CrewAI**            | 角色驱动 + 任务链     | 多 Agent 协作的内容创作             | 低       | 中（任务级自主）     |
-| **AutoGen**           | 对话驱动              | 代码生成、数据分析                  | 中等     | 高（对话中自主规划） |
-| **OpenAI Agents SDK** | Handoffs + Guardrails | 轻量级 Agent 应用                   | 低       | 中（交接点自主）     |
-| **DSPy**              | 声明式编程 + 优化     | 需要自动优化提示词的 Workflow       | 较高     | 中（编译时优化）     |
+| 框架                                                                      | 核心机制              | 适用场景                            | 学习曲线 | 自主决策能力         |
+| ------------------------------------------------------------------------- | --------------------- | ----------------------------------- | -------- | -------------------- |
+| **[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)** | 状态图 + 条件边       | 需要精细控制流程的 Agentic Workflow | 中等     | 高（节点内自主决策） |
+| **[CrewAI](https://docs.crewai.com/)**                                    | 角色驱动 + 任务链     | 多 Agent 协作的内容创作             | 低       | 中（任务级自主）     |
+| **[AutoGen](https://microsoft.github.io/autogen/)**                       | 对话驱动              | 代码生成、数据分析                  | 中等     | 高（对话中自主规划） |
+| **OpenAI Agents SDK**                                                     | Handoffs + Guardrails | 轻量级 Agent 应用                   | 低       | 中（交接点自主）     |
+| **[DSPy](https://dspy.ai/)**                                              | 声明式编程 + 优化     | 需要自动优化提示词的 Workflow       | 较高     | 中（编译时优化）     |
 
-### LangGraph Agentic Workflow 示例
+### [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) Agentic Workflow 示例
 
 ```python
 from langgraph.graph import StateGraph, END
@@ -760,7 +760,7 @@ class WorkflowTracer:
 ## 延伸阅读
 
 - [Agentic Workflow 概念论文](https://arxiv.org/abs/2402.01030) - 关于 Agent 自主工作流的学术讨论
-- [LangGraph 文档](https://langchain-ai.github.io/langgraph/) - 构建 Agentic Workflow 的主流框架
+- [LangGraph 文档](https://docs.langchain.com/oss/python/langgraph/overview) - 构建 Agentic Workflow 的主流框架
 - [Anthropic Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) - 构建高效 Agent 的最佳实践
 - [Agent](/glossary/agent)
 - [工作流](/glossary/workflow)

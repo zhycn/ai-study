@@ -169,7 +169,7 @@ class ContextCompressor:
 
 ## 长上下文评估
 
-### Needle In A Haystack（大海捞针）
+### [Needle In A Haystack](https://github.com/gkamradt/LLMTest_NeedleInAHaystack)（大海捞针）
 
 最经典的长上下文能力测试：在长文本中隐藏一个关键信息（"针"），测试模型能否在不同位置找到它：
 
@@ -196,13 +196,13 @@ def needle_in_haystack_test(model, haystack_length, needle_positions):
 
 ### 长上下文评估基准
 
-| 基准                     | 测试内容       | 最大长度      | 特点                     |
-| ------------------------ | -------------- | ------------- | ------------------------ |
-| **Needle In A Haystack** | 信息检索       | 1M+ Token     | 简单直观，测试定位能力   |
-| **RULER**                | 多跳推理、聚合 | 128K Token    | 综合评估多种长上下文任务 |
-| **LongBench**            | 6 类任务       | 15K-64K Token | 多语言、多任务           |
-| **InfiniteBench**        | 10 类任务      | 2M Token      | 超长上下文测试           |
-| **NeedleBench**          | 多针检索       | 1M+ Token     | 测试多信息点聚合能力     |
+| 基准                                                                              | 测试内容       | 最大长度      | 特点                     |
+| --------------------------------------------------------------------------------- | -------------- | ------------- | ------------------------ |
+| **[Needle In A Haystack](https://github.com/gkamradt/LLMTest_NeedleInAHaystack)** | 信息检索       | 1M+ Token     | 简单直观，测试定位能力   |
+| **RULER**                                                                         | 多跳推理、聚合 | 128K Token    | 综合评估多种长上下文任务 |
+| **LongBench**                                                                     | 6 类任务       | 15K-64K Token | 多语言、多任务           |
+| **InfiniteBench**                                                                 | 10 类任务      | 2M Token      | 超长上下文测试           |
+| **NeedleBench**                                                                   | 多针检索       | 1M+ Token     | 测试多信息点聚合能力     |
 
 ### 评估代码示例
 

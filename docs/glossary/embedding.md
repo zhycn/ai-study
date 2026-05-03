@@ -272,7 +272,7 @@ class EmbeddingCache:
 ```
 
 ::: tip
-对于大规模生产系统，建议使用专业的向量数据库（如 Milvus、Pinecone、Weaviate）而非内存存储。它们提供分布式索引、持久化和高级检索功能。
+对于大规模生产系统，建议使用专业的向量数据库（如 [Milvus](https://milvus.io/)、[Pinecone](https://www.pinecone.io/)、[Weaviate](https://weaviate.io/)）而非内存存储。它们提供分布式索引、持久化和高级检索功能。
 :::
 
 ## 与其他概念的关系

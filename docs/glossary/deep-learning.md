@@ -29,14 +29,14 @@ description: Deep Learning，基于深层神经网络的机器学习方法
 
 ### 按网络架构
 
-| 架构类型                  | 代表模型                 | 适用场景             | 特点               |
-| ------------------------- | ------------------------ | -------------------- | ------------------ |
-| **全连接网络**（FCN）     | MLP                      | 结构化数据、简单分类 | 基础架构，参数多   |
-| **卷积神经网络**（CNN）   | ResNet、EfficientNet     | 图像、视频           | 局部感知、参数共享 |
-| **循环神经网络**（RNN）   | LSTM、GRU                | 序列数据、时间序列   | 记忆功能、难并行   |
-| **Transformer**           | BERT、GPT、ViT           | NLP、CV、多模态      | 全局依赖、高度并行 |
-| **图神经网络**（GNN）     | GCN、GAT                 | 社交网络、分子结构   | 处理图结构数据     |
-| **扩散模型**（Diffusion） | Stable Diffusion、DALL-E | 图像/视频生成        | 生成质量高、速度慢 |
+| 架构类型                  | 代表模型                                                                                                | 适用场景             | 特点               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- | ------------------ |
+| **全连接网络**（FCN）     | MLP                                                                                                     | 结构化数据、简单分类 | 基础架构，参数多   |
+| **卷积神经网络**（CNN）   | ResNet、EfficientNet                                                                                    | 图像、视频           | 局部感知、参数共享 |
+| **循环神经网络**（RNN）   | LSTM、GRU                                                                                               | 序列数据、时间序列   | 记忆功能、难并行   |
+| **Transformer**           | BERT、GPT、ViT                                                                                          | NLP、CV、多模态      | 全局依赖、高度并行 |
+| **图神经网络**（GNN）     | GCN、GAT                                                                                                | 社交网络、分子结构   | 处理图结构数据     |
+| **扩散模型**（Diffusion） | [Stable Diffusion](https://stability.ai/stable-diffusion)、[DALL-E](https://openai.com/index/dall-e-3/) | 图像/视频生成        | 生成质量高、速度慢 |
 
 ### 按学习方式
 
@@ -131,7 +131,7 @@ class MLP(nn.Module):
 通过逐步去噪过程生成数据的新范式。
 
 - **核心思想**：前向加噪 + 反向去噪
-- **代表模型**：DDPM、Stable Diffusion、DALL-E
+- **代表模型**：[DDPM](https://arxiv.org/abs/2006.11239)、[Stable Diffusion](https://stability.ai/stable-diffusion)、[DALL-E](https://openai.com/index/dall-e-3/)
 - **应用场景**：图像生成、视频生成、音频生成
 
 ## 关键要素
@@ -161,7 +161,7 @@ class MLP(nn.Module):
 
 ## 主流框架与实现
 
-### PyTorch
+### [PyTorch](https://pytorch.org/)
 
 当前最流行的深度学习框架，以动态计算图和 Pythonic 设计著称。
 
@@ -193,8 +193,8 @@ for epoch in range(num_epochs):
 
 ### 其他框架
 
-- **TensorFlow / Keras**：Google 开发，适合大规模部署
-- **JAX**：高性能数值计算，适合研究
+- **[TensorFlow](https://www.tensorflow.org/) / [Keras](https://keras.io/)**：Google 开发，适合大规模部署
+- **[JAX](https://jax.readthedocs.io/)**：高性能数值计算，适合研究
 - **PaddlePaddle**：百度开发，中文生态友好
 
 ## 工程实践
@@ -221,7 +221,7 @@ for epoch in range(num_epochs):
 
 - **模型导出**：ONNX、TorchScript、TensorRT
 - **推理优化**：量化（Quantization）、剪枝（Pruning）、知识蒸馏（Distillation）
-- **服务框架**：TorchServe、TensorFlow Serving、vLLM
+- **服务框架**：[TorchServe](https://pytorch.org/serve/)、[TensorFlow Serving](https://www.tensorflow.org/tfx/guide/serving)、[vLLM](https://github.com/vllm-project/vllm)
 
 ## 与其他概念的关系
 

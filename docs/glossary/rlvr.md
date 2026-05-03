@@ -318,12 +318,12 @@ RLVR 训练出的模型虽然在可验证任务上表现优异，但在开放性
 
 ### 行业标准
 
-| 标准/框架         | 相关内容                               |
-| ----------------- | -------------------------------------- |
-| **MLCommons**     | 模型推理能力基准测试（包含数学、代码） |
-| **BIG-bench**     | 包含可验证推理任务的基准               |
-| **OpenCompass**   | 综合模型评估平台，支持可验证任务       |
-| **LiveCodeBench** | 实时代码能力评估基准                   |
+| 标准/框架                                             | 相关内容                               |
+| ----------------------------------------------------- | -------------------------------------- |
+| [**MLCommons**](https://mlcommons.org/)               | 模型推理能力基准测试（包含数学、代码） |
+| [**BIG-bench**](https://github.com/google/BIG-bench)  | 包含可验证推理任务的基准               |
+| [**OpenCompass**](https://opencompass.org.cn/)        | 综合模型评估平台，支持可验证任务       |
+| [**LiveCodeBench**](https://livecodebench.github.io/) | 实时代码能力评估基准                   |
 
 ## 未来趋势
 
@@ -396,7 +396,7 @@ DeepSeek-R1-Zero 的发现引发了对 SFT 必要性的重新思考：
 - [对齐](/glossary/alignment) — RLHF 与 RLVR 的对比
 - [思维链](/glossary/chain-of-thought) — RLVR 训练出的推理能力
 - [Agent](/glossary/agent) — 工具调用与可验证奖励
-- [DeepSeek-R1 论文](https://github.com/deepseek-ai/DeepSeek-R1) — RLVR 的里程碑工作
+- [DeepSeek-R1](https://github.com/deepseek-ai/DeepSeek-R1) — RLVR 的里程碑工作
 - [GRPO 算法详解](https://arxiv.org/abs/2402.03300) — Group Relative Policy Optimization
 - [Process Reward Model](https://arxiv.org/abs/2312.08935) — 过程奖励模型
 - [Let's Verify Step by Step](https://arxiv.org/abs/2309.11495) — 逐步验证方法

@@ -218,7 +218,7 @@ class TeachingWorkflow:
 
 ### LangGraph Human-in-the-loop
 
-[LangGraph](https://langchain-ai.github.io/langgraph/) 提供了内置的 HITL 支持，通过**中断（Interrupt）** 机制实现。
+[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 提供了内置的 HITL 支持，通过**中断（Interrupt）** 机制实现。
 
 ```python
 from langgraph.graph import StateGraph, END
@@ -670,5 +670,5 @@ class ReviewUI:
 - [Agent](/glossary/agent)
 - [自主 Agent](/glossary/autonomous-agent)
 - [AI 安全](/glossary/ai-safety)
-- [LangGraph HITL 文档](https://langchain-ai.github.io/langgraph/concepts/human_in_the_loop/)
+- [LangGraph HITL 文档](https://docs.langchain.com/oss/python/langgraph/overviewconcepts/human_in_the_loop/)
 - [Human-in-the-loop Machine Learning 论文](https://arxiv.org/abs/2009.05157)

@@ -219,7 +219,7 @@ class MLP(nn.Module):
 
 ## 主流框架与实现
 
-### PyTorch
+### [PyTorch](https://pytorch.org/)
 
 ```python
 import torch.nn as nn
@@ -251,8 +251,8 @@ class CustomNet(nn.Module):
 
 ### 其他框架
 
-- **TensorFlow / Keras**：`tf.keras.Sequential` 快速构建
-- **JAX**：函数式编程风格，高性能
+- **[TensorFlow](https://www.tensorflow.org/) / [Keras](https://keras.io/)**：`tf.keras.Sequential` 快速构建
+- **[JAX](https://jax.readthedocs.io/)**：函数式编程风格，高性能
 - **PaddlePaddle**：`paddle.nn.Layer` 定义网络
 
 ## 工程实践

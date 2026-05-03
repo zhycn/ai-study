@@ -47,12 +47,12 @@ description: Benchmark，评估模型能力的标准测试
 
 ### 代码能力基准
 
-| 基准              | 全称                         | 任务类型          | 题目数   | 评估方式     |
-| ----------------- | ---------------------------- | ----------------- | -------- | ------------ |
-| **HumanEval**     | Human Evaluation             | Python 函数补全   | 164      | pass@1       |
-| **MBPP**          | Mostly Basic Python Problems | Python 编程题     | 974      | pass@1       |
-| **LiveCodeBench** | Live Code Benchmark          | 实时编程竞赛题    | 持续更新 | pass@1       |
-| **SWE-bench**     | Software Engineering Bench   | 真实 GitHub Issue | 2,294    | Issue 解决率 |
+| 基准                                                  | 全称                         | 任务类型          | 题目数   | 评估方式     |
+| ----------------------------------------------------- | ---------------------------- | ----------------- | -------- | ------------ |
+| **HumanEval**                                         | Human Evaluation             | Python 函数补全   | 164      | pass@1       |
+| **MBPP**                                              | Mostly Basic Python Problems | Python 编程题     | 974      | pass@1       |
+| **[LiveCodeBench](https://livecodebench.github.io/)** | Live Code Benchmark          | 实时编程竞赛题    | 持续更新 | pass@1       |
+| **[SWE-bench](https://www.swebench.com/)**            | Software Engineering Bench   | 真实 GitHub Issue | 2,294    | Issue 解决率 |
 
 ### 安全与对齐基准
 

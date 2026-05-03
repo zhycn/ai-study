@@ -200,7 +200,7 @@ def fact_check(response, knowledge_base):
 ### 自动化评估工具
 
 ```python
-# 使用 RAGAS 评估幻觉
+# 使用 [RAGAS](https://docs.ragas.io/) 评估幻觉
 from ragas.metrics import faithfulness
 from ragas import evaluate
 

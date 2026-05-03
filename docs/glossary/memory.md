@@ -220,7 +220,7 @@ class EpisodicMemory:
 
 ## 主流框架与实现
 
-### LangChain Memory
+### [LangChain Memory](https://python.langchain.com/docs/modules/memory/)
 
 [LangChain](https://python.langchain.com/) 提供了多种记忆实现。
 
@@ -377,12 +377,12 @@ def get_relevant_memories(user_input: str, context: dict) -> str:
 
 ## 主流框架对比
 
-| 框架                 | 特点                 | 适用场景   | 成本  |
-| -------------------- | -------------------- | ---------- | ----- |
-| **LangChain Memory** | 多种实现、易集成     | 快速原型   | 低    |
-| **Mem0**             | 自动提取、用户画像   | 个性化应用 | 中    |
-| **Zep**              | 生产级、自动摘要     | 企业应用   | 中-高 |
-| **Letta**            | 结构化记忆、主动管理 | 复杂 Agent | 中    |
+| 框架                                                                      | 特点                 | 适用场景   | 成本  |
+| ------------------------------------------------------------------------- | -------------------- | ---------- | ----- |
+| **[LangChain Memory](https://python.langchain.com/docs/modules/memory/)** | 多种实现、易集成     | 快速原型   | 低    |
+| **Mem0**                                                                  | 自动提取、用户画像   | 个性化应用 | 中    |
+| **Zep**                                                                   | 生产级、自动摘要     | 企业应用   | 中-高 |
+| **Letta**                                                                 | 结构化记忆、主动管理 | 复杂 Agent | 中    |
 
 ## 最佳实践
 

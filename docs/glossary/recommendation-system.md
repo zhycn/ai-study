@@ -324,7 +324,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 在线服务架构：
 用户请求 → 特征服务 → 召回服务 → 排序服务 → 重排服务 → 返回结果
               ↓          ↓          ↓          ↓
-         Redis 缓存   FAISS     TensorFlow   业务规则
+         [Redis](https://redis.io/) 缓存   [FAISS](https://github.com/facebookresearch/faiss)     [TensorFlow](https://www.tensorflow.org/)   业务规则
                       向量库    Serving
 
 A/B 测试流程：
@@ -337,14 +337,14 @@ A/B 测试流程：
 
 ## 主流框架对比
 
-| 框架         | 类型     | 核心能力            | 优点                          | 适用场景           |
-| ------------ | -------- | ------------------- | ----------------------------- | ------------------ |
-| TensorFlow   | 开源框架 | 深度学习推荐模型    | 生态完善，TF Serving 部署方便 | 工业级推荐系统     |
-| PyTorch      | 开源框架 | 灵活建模            | 研究友好，调试方便            | 算法研究和原型开发 |
-| DeepRec      | 开源框架 | 阿里推荐模型集合    | 包含 DIN/DIEN 等工业模型      | 中文电商场景       |
-| FuxiCTR      | 开源框架 | CTR 预测模型集合    | 模型齐全，基准测试完善        | 学术研究           |
-| Merlin       | 开源框架 | NVIDIA 推荐系统套件 | GPU 加速，端到端优化          | 大规模 GPU 部署    |
-| 召回层 FAISS | 开源库   | 向量相似度检索      | 高性能，支持十亿级向量        | 向量召回           |
+| 框架                                                      | 类型     | 核心能力            | 优点                          | 适用场景           |
+| --------------------------------------------------------- | -------- | ------------------- | ----------------------------- | ------------------ |
+| [TensorFlow](https://www.tensorflow.org/)                 | 开源框架 | 深度学习推荐模型    | 生态完善，TF Serving 部署方便 | 工业级推荐系统     |
+| PyTorch                                                   | 开源框架 | 灵活建模            | 研究友好，调试方便            | 算法研究和原型开发 |
+| DeepRec                                                   | 开源框架 | 阿里推荐模型集合    | 包含 DIN/DIEN 等工业模型      | 中文电商场景       |
+| FuxiCTR                                                   | 开源框架 | CTR 预测模型集合    | 模型齐全，基准测试完善        | 学术研究           |
+| Merlin                                                    | 开源框架 | NVIDIA 推荐系统套件 | GPU 加速，端到端优化          | 大规模 GPU 部署    |
+| 召回层 [FAISS](https://github.com/facebookresearch/faiss) | 开源库   | 向量相似度检索      | 高性能，支持十亿级向量        | 向量召回           |
 
 ## 工程实践
 
@@ -376,9 +376,9 @@ A/B 测试流程：
 
 技术栈:
 - 流式计算: Flink、Spark Streaming
-- 特征存储: Feast、Tecton
-- 在线推理: TensorFlow Serving、Triton
-- 缓存: Redis、Memcached
+- 特征存储: [Feast](https://feast.dev/)、[Tecton](https://www.tecton.ai/)
+- 在线推理: [TensorFlow Serving](https://www.tensorflow.org/tfx/guide/serving)、[Triton](https://github.com/triton-inference-server/server)
+- 缓存: [Redis](https://redis.io/)、[Memcached](https://memcached.org/)
 ```
 
 ### A/B 测试
@@ -421,9 +421,9 @@ A/B 测试流程：
 
 **Q4：推荐系统延迟过高如何优化？**
 
-- 召回层使用 FAISS 等高性能向量检索库
+- 召回层使用 [FAISS](https://github.com/facebookresearch/faiss) 等高性能向量检索库
 - 排序模型使用 TensorRT 编译加速
-- 预计算用户推荐结果，缓存到 Redis
+- 预计算用户推荐结果，缓存到 [Redis](https://redis.io/)
 - 异步加载非关键特征
 
 **Q5：如何评估推荐系统的长期效果？**

@@ -175,23 +175,23 @@ Agent: "华东地区电子产品 ¥189,234 (41.4%)，服装 ¥123,456 (27.0%)...
 
 ### 商业产品
 
-| 产品                       | 厂商        | 特点               |
-| -------------------------- | ----------- | ------------------ |
-| Microsoft Copilot in Excel | Microsoft   | Excel 内置 AI 分析 |
-| Tableau AI (Einstein)      | Salesforce  | BI 平台集成 AI     |
-| ThoughtSpot Sage           | ThoughtSpot | 自然语言搜索式分析 |
-| Power BI Copilot           | Microsoft   | Power BI AI 助手   |
-| Looker Studio AI           | Google      | Google 生态集成    |
+| 产品                                                                                               | 厂商        | 特点               |
+| -------------------------------------------------------------------------------------------------- | ----------- | ------------------ |
+| [Microsoft Copilot in Excel](https://www.microsoft.com/en-us/microsoft-365/excel/copilot-in-excel) | Microsoft   | Excel 内置 AI 分析 |
+| Tableau AI (Einstein)                                                                              | Salesforce  | BI 平台集成 AI     |
+| ThoughtSpot Sage                                                                                   | ThoughtSpot | 自然语言搜索式分析 |
+| [Power BI Copilot](https://powerbi.microsoft.com/)                                                 | Microsoft   | Power BI AI 助手   |
+| Looker Studio AI                                                                                   | Google      | Google 生态集成    |
 
 ### 开源工具
 
-| 工具                  | 特点                               |
-| --------------------- | ---------------------------------- |
-| PandasAI              | 用自然语言查询 Pandas DataFrame    |
-| LangChain SQL Agent   | 基于 LangChain 的 SQL Agent        |
-| LlamaIndex Data Agent | 数据分析和查询 Agent               |
-| PyGWalker             | 将 DataFrame 转为 Tableau 风格界面 |
-| GPT-SQL               | Text-to-SQL 开源实现               |
+| 工具                                                 | 特点                               |
+| ---------------------------------------------------- | ---------------------------------- |
+| [PandasAI](https://docs.pandas-ai.com/)              | 用自然语言查询 Pandas DataFrame    |
+| LangChain SQL Agent                                  | 基于 LangChain 的 SQL Agent        |
+| [LlamaIndex Data Agent](https://docs.llamaindex.ai/) | 数据分析和查询 Agent               |
+| PyGWalker                                            | 将 DataFrame 转为 Tableau 风格界面 |
+| GPT-SQL                                              | Text-to-SQL 开源实现               |
 
 ### 代码示例：PandasAI
 
@@ -432,7 +432,7 @@ SQL:"""
 
 AI 层:
 - LLM: GPT-4o、Claude、通义千问、Code Llama
-- 框架: LangChain、LlamaIndex、DSPy
+- 框架: [LangChain](https://python.langchain.com/)、[LlamaIndex](https://docs.llamaindex.ai/)、[DSPy](https://dspy.ai/)
 
 可视化层:
 - BI 工具: Tableau、Power BI、Superset
@@ -440,7 +440,7 @@ AI 层:
 
 部署:
 - 应用: Streamlit、Gradio、FastAPI
-- 容器: Docker + Kubernetes
+- 容器: [Docker](https://www.docker.com/) + [Kubernetes](https://kubernetes.io/)
 ```
 
 ## 常见问题与避坑

@@ -28,7 +28,7 @@ description: Open Source Model，开放权重和架构的 AI 模型
 - **可定制化**：可根据特定领域数据进行微调（Fine-Tuning），打造专属模型
 - **成本优化**：避免 API 调用费用，大规模使用时成本显著低于闭源方案
 - **透明可审查**：模型行为可审计，有助于发现偏见、安全漏洞和合规问题
-- **社区生态**：活跃的开源社区推动工具链（vLLM、Ollama、LM Studio）和模型快速迭代
+- **社区生态**：活跃的开源社区推动工具链（[vLLM](https://github.com/vllm-project/vllm)、[Ollama](https://ollama.com/)、[LM Studio](https://lmstudio.ai/)）和模型快速迭代
 - **技术民主化**：降低 AI 使用门槛，使中小企业和开发者也能享受前沿 AI 能力
 
 ## 核心原理
@@ -83,13 +83,13 @@ description: Open Source Model，开放权重和架构的 AI 模型
 
 ### 开源训练框架
 
-| 框架              | 特点                        | 适用场景     |
-| ----------------- | --------------------------- | ------------ |
-| **LLaMA-Factory** | 支持 100+ 模型，WebUI 界面  | 快速微调     |
-| **Axolotl**       | 配置驱动，支持多种对齐方法  | 生产级训练   |
-| **Unsloth**       | 优化显存，训练速度提升 2 倍 | 资源受限环境 |
-| **DeepSpeed**     | 分布式训练，ZeRO 优化       | 大规模训练   |
-| **Megatron-LM**   | NVIDIA 分布式训练框架       | 超大规模训练 |
+| 框架                                                               | 特点                        | 适用场景     |
+| ------------------------------------------------------------------ | --------------------------- | ------------ |
+| **[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)**      | 支持 100+ 模型，WebUI 界面  | 快速微调     |
+| **[Axolotl](https://github.com/OpenAccess-AI-Collective/axolotl)** | 配置驱动，支持多种对齐方法  | 生产级训练   |
+| **[Unsloth](https://github.com/unslothai/unsloth)**                | 优化显存，训练速度提升 2 倍 | 资源受限环境 |
+| **[DeepSpeed](https://github.com/microsoft/DeepSpeed)**            | 分布式训练，ZeRO 优化       | 大规模训练   |
+| **[Megatron-LM](https://github.com/NVIDIA/Megatron-LM)**           | NVIDIA 分布式训练框架       | 超大规模训练 |
 
 ## 主流开源模型
 
@@ -112,7 +112,7 @@ Meta 的 Llama 系列是开源 LLM 的标杆：
 - **Llama 4**（规划中）：多模态 + MoE 架构
 
 :::tip Llama 生态
-Llama 拥有最完善的开源生态：量化格式（GGUF）、推理框架（llama.cpp）、微调工具（LLaMA-Factory）、评测基准（LM Evaluation Harness）等工具链齐全。
+Llama 拥有最完善的开源生态：量化格式（[GGUF](https://github.com/ggerganov/ggml/blob/master/docs/gguf.md)）、推理框架（[llama.cpp](https://github.com/ggerganov/llama.cpp)）、微调工具（[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)）、评测基准（LM Evaluation Harness）等工具链齐全。
 :::
 
 ### Qwen 系列（阿里）
@@ -163,15 +163,15 @@ Llama 拥有最完善的开源生态：量化格式（GGUF）、推理框架（l
 ### 本地部署
 
 ```bash
-# 使用 Ollama 快速部署
+# 使用 [Ollama](https://ollama.com/) 快速部署
 ollama run llama3.1:8b
 
-# 使用 vLLM 高性能服务
+# 使用 [vLLM](https://github.com/vllm-project/vllm) 高性能服务
 vllm serve Qwen/Qwen2.5-7B-Instruct \
   --tensor-parallel-size 2 \
   --max-model-len 8192
 
-# 使用 llama.cpp 量化推理
+# 使用 [llama.cpp](https://github.com/ggerganov/llama.cpp) 量化推理
 ./llama-cli -m qwen2.5-7b.Q4_K_M.gguf -p "你好"
 ```
 
@@ -189,7 +189,7 @@ vllm serve Qwen/Qwen2.5-7B-Instruct \
 ### 微调实践
 
 ```yaml
-# Axolotl 配置示例
+# [Axolotl](https://github.com/OpenAccess-AI-Collective/axolotl) 配置示例
 base_model: Qwen/Qwen2.5-7B-Instruct
 model_type: AutoModelForCausalLM
 tokenizer_type: AutoTokenizer

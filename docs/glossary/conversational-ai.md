@@ -87,7 +87,7 @@ result = interpreter.parse("明天北京天气怎么样？")
 
 ### 开发框架
 
-**LangChain / LangGraph**
+**[LangChain](https://python.langchain.com/) / [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)**
 
 基于 LLM 的对话应用开发框架，提供完整的工具链：
 
@@ -145,12 +145,12 @@ for event in app.stream({"messages": messages}):
 
 **阶段 2：技术选型**
 
-| 场景类型       | 推荐方案                   | 理由                         |
-| -------------- | -------------------------- | ---------------------------- |
-| 开放域闲聊     | LLM + 提示词工程           | 无需预定义意图，灵活度高     |
-| 任务型对话     | LLM + 函数调用 + RAG       | 可连接业务系统，执行具体操作 |
-| 企业知识库问答 | LLM + RAG + 向量数据库     | 答案准确可控，知识可更新     |
-| 多 Agent 协作  | LangGraph + 多个专用 Agent | 复杂任务分解，各模块独立优化 |
+| 场景类型       | 推荐方案                                                                               | 理由                         |
+| -------------- | -------------------------------------------------------------------------------------- | ---------------------------- |
+| 开放域闲聊     | LLM + 提示词工程                                                                       | 无需预定义意图，灵活度高     |
+| 任务型对话     | LLM + 函数调用 + RAG                                                                   | 可连接业务系统，执行具体操作 |
+| 企业知识库问答 | LLM + RAG + 向量数据库                                                                 | 答案准确可控，知识可更新     |
+| 多 Agent 协作  | [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) + 多个专用 Agent | 复杂任务分解，各模块独立优化 |
 
 **阶段 3：构建对话流**
 
@@ -251,13 +251,13 @@ def retrieve_knowledge(query: str) -> str:
 
 ## 主流框架对比
 
-| 框架                    | 类型     | 适用场景         | 优点                              | 缺点                     |
-| ----------------------- | -------- | ---------------- | --------------------------------- | ------------------------ |
-| LangChain/LangGraph     | 开源框架 | LLM 应用开发     | 生态丰富，组件齐全，社区活跃      | 抽象层厚，调试复杂       |
-| Rasa                    | 开源框架 | 任务型对话系统   | NLU 能力强，支持多语言，部署灵活  | 学习曲线陡，LLM 集成较弱 |
-| Microsoft Bot Framework | 商业平台 | 企业级多渠道部署 | 与 Azure 生态深度集成，支持多渠道 | 绑定微软生态，成本较高   |
-| Dialogflow              | 商业平台 | 快速原型开发     | Google 技术支持，NLU 效果好       | 定制能力有限，数据在云端 |
-| 百度 UNIT               | 商业平台 | 中文场景         | 中文 NLU 优化，国内部署           | 生态相对封闭             |
+| 框架                                                                                                             | 类型     | 适用场景         | 优点                              | 缺点                     |
+| ---------------------------------------------------------------------------------------------------------------- | -------- | ---------------- | --------------------------------- | ------------------------ |
+| [LangChain](https://python.langchain.com/)/[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) | 开源框架 | LLM 应用开发     | 生态丰富，组件齐全，社区活跃      | 抽象层厚，调试复杂       |
+| Rasa                                                                                                             | 开源框架 | 任务型对话系统   | NLU 能力强，支持多语言，部署灵活  | 学习曲线陡，LLM 集成较弱 |
+| Microsoft Bot Framework                                                                                          | 商业平台 | 企业级多渠道部署 | 与 Azure 生态深度集成，支持多渠道 | 绑定微软生态，成本较高   |
+| Dialogflow                                                                                                       | 商业平台 | 快速原型开发     | Google 技术支持，NLU 效果好       | 定制能力有限，数据在云端 |
+| 百度 UNIT                                                                                                        | 商业平台 | 中文场景         | 中文 NLU 优化，国内部署           | 生态相对封闭             |
 
 ## 工程实践
 
@@ -292,7 +292,7 @@ def retrieve_knowledge(query: str) -> str:
 **Q2：如何处理多轮对话中的上下文丢失？**
 
 - 在提示词中显式传递对话历史（通常保留最近 5-10 轮）
-- 使用 LangGraph 等框架维护对话状态
+- 使用 [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 等框架维护对话状态
 - 对关键信息（如用户 ID、订单号）进行槽位填充并持久化
 
 **Q3：对话系统响应太慢如何优化？**
@@ -337,7 +337,7 @@ def retrieve_knowledge(query: str) -> str:
 ## 延伸阅读
 
 - [Rasa 官方文档](https://rasa.com/docs/)
-- [LangGraph 对话 Agent 教程](https://langchain-ai.github.io/langgraph/)
+- [LangGraph 对话 Agent 教程](https://docs.langchain.com/oss/python/langgraph/overview)
 - [Conversational AI: A Survey](https://arxiv.org/abs/2304.04263)
 - [大语言模型](/glossary/llm)
 - [RAG](/glossary/rag)

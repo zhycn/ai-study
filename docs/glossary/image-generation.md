@@ -11,7 +11,7 @@ description: Image Generation，AI 生成图像的技术
 
 图像生成（Image Generation）是指使用 AI 技术根据文本描述、参考图像或其他条件生成全新图像的技术。它是生成式 AI（Generative AI）最直观、最受关注的应用领域之一。
 
-从 DALL-E 的横空出世到 Stable Diffusion 的开源普及，再到 Midjourney 的艺术级输出，图像生成技术在短短几年内实现了从"能看"到"好用"的跨越。当前最先进的图像生成模型已经能够生成照片级真实感（Photorealistic）的图像，精确理解复杂的空间关系和物理规律。
+从 [DALL-E](https://openai.com/index/dall-e-3/) 的横空出世到 [Stable Diffusion](https://stability.ai/stable-diffusion) 的开源普及，再到 [Midjourney](https://www.midjourney.com/) 的艺术级输出，图像生成技术在短短几年内实现了从"能看"到"好用"的跨越。当前最先进的图像生成模型已经能够生成照片级真实感（Photorealistic）的图像，精确理解复杂的空间关系和物理规律。
 
 图像生成的核心挑战在于：将高维的语义信息（文本描述）映射到同样高维的像素空间，同时保证生成结果的视觉质量和语义一致性。
 
@@ -93,7 +93,7 @@ GAN 由 Goodfellow 等于 2014 年提出，包含两个相互对抗的网络：
 
 将图像视为像素或 token 序列，逐个生成：
 
-- **DALL-E**：将图像离散化为 token 序列，用 Transformer 自回归生成
+- **[DALL-E](https://openai.com/index/dall-e-3/)**：将图像离散化为 token 序列，用 Transformer 自回归生成
 - **Parti**：Google 的自回归图像生成模型
 - **Emu**：Meta 的统一多模态自回归模型
 
@@ -104,27 +104,27 @@ GAN 由 Goodfellow 等于 2014 年提出，包含两个相互对抗的网络：
 流匹配是扩散模型的改进方案，通过直接学习数据分布之间的最优传输路径，减少生成步数：
 
 - **SD3（Stable Diffusion 3）**：采用 Rectified Flow 技术
-- **FLUX**：Black-Forest Labs 的开源模型，基于流匹配
+- **[FLUX](https://blackforestlabs.ai/)**：[Black-Forest Labs](https://blackforestlabs.ai/) 的开源模型，基于流匹配
 
 ## 主流模型与产品
 
 ### 闭源模型
 
-| 模型          | 厂商       | 特点                            |
-| ------------- | ---------- | ------------------------------- |
-| DALL-E 3      | OpenAI     | 文本理解能力强，与 GPT 生态集成 |
-| Midjourney v6 | Midjourney | 艺术风格出色，社区活跃          |
-| Imagen 3      | Google     | 照片级真实感，细节丰富          |
-| Ideogram 2.0  | Ideogram   | 文字渲染能力强                  |
+| 模型                                           | 厂商                                      | 特点                            |
+| ---------------------------------------------- | ----------------------------------------- | ------------------------------- |
+| [DALL-E 3](https://openai.com/index/dall-e-3/) | OpenAI                                    | 文本理解能力强，与 GPT 生态集成 |
+| [Midjourney v6](https://www.midjourney.com/)   | [Midjourney](https://www.midjourney.com/) | 艺术风格出色，社区活跃          |
+| Imagen 3                                       | Google                                    | 照片级真实感，细节丰富          |
+| Ideogram 2.0                                   | Ideogram                                  | 文字渲染能力强                  |
 
 ### 开源模型
 
-| 模型                | 厂商               | 参数量 | 特点                     |
-| ------------------- | ------------------ | ------ | ------------------------ |
-| Stable Diffusion XL | Stability AI       | 2.6B   | 生态最完善的开源模型     |
-| FLUX.1              | Black-Forest Labs  | 12B    | 当前开源最强，指令遵循好 |
-| SD3 Medium          | Stability AI       | 2B     | 流匹配架构               |
-| PixArt-Σ            | 上海人工智能实验室 | 0.6B   | 轻量高效                 |
+| 模型                                                         | 厂商                                             | 参数量 | 特点                     |
+| ------------------------------------------------------------ | ------------------------------------------------ | ------ | ------------------------ |
+| [Stable Diffusion XL](https://stability.ai/stable-diffusion) | [Stability AI](https://stability.ai/)            | 2.6B   | 生态最完善的开源模型     |
+| [FLUX.1](https://blackforestlabs.ai/)                        | [Black-Forest Labs](https://blackforestlabs.ai/) | 12B    | 当前开源最强，指令遵循好 |
+| SD3 Medium                                                   | Stability AI                                     | 2B     | 流匹配架构               |
+| PixArt-Σ                                                     | 上海人工智能实验室                               | 0.6B   | 轻量高效                 |
 
 ### 国内模型
 

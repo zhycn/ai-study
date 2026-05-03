@@ -93,50 +93,50 @@ def dot_product(a, b):
 
 ### 专用向量数据库
 
-| 方案         | 语言   | 特点                            | 适用场景           |
-| ------------ | ------ | ------------------------------- | ------------------ |
-| **Milvus**   | Go/C++ | CNCF 项目，功能全面，支持分布式 | 大规模生产环境     |
-| **Qdrant**   | Rust   | 高性能，支持过滤和 payload 存储 | 需要复杂过滤的场景 |
-| **Weaviate** | Go     | 内置向量化，支持 GraphQL        | 快速原型开发       |
-| **Chroma**   | Python | 轻量级，Python 原生             | 本地开发和小项目   |
-| **Pinecone** | -      | 全托管 Serverless，开箱即用     | 不想运维的团队     |
+| 方案                                     | 语言   | 特点                            | 适用场景           |
+| ---------------------------------------- | ------ | ------------------------------- | ------------------ |
+| **[Milvus](https://milvus.io/)**         | Go/C++ | CNCF 项目，功能全面，支持分布式 | 大规模生产环境     |
+| **[Qdrant](https://qdrant.tech/)**       | Rust   | 高性能，支持过滤和 payload 存储 | 需要复杂过滤的场景 |
+| **[Weaviate](https://weaviate.io/)**     | Go     | 内置向量化，支持 GraphQL        | 快速原型开发       |
+| **[Chroma](https://www.trychroma.com/)** | Python | 轻量级，Python 原生             | 本地开发和小项目   |
+| **[Pinecone](https://www.pinecone.io/)** | -      | 全托管 Serverless，开箱即用     | 不想运维的团队     |
 
 ### 传统数据库扩展
 
-| 方案              | 基础数据库 | 特点                               | 适用场景         |
-| ----------------- | ---------- | ---------------------------------- | ---------------- |
-| **pgvector**      | PostgreSQL | PG 生态，SQL + 向量混合查询        | 已有 PG 基础设施 |
-| **Elasticsearch** | ES         | dense_vector 类型，全文搜索 + 向量 | 已有 ES 集群     |
-| **Redis Vector**  | Redis      | 内存级性能，简单场景               | 缓存 + 向量检索  |
+| 方案                                                       | 基础数据库 | 特点                               | 适用场景         |
+| ---------------------------------------------------------- | ---------- | ---------------------------------- | ---------------- |
+| **[pgvector](https://github.com/pgvector/pgvector)**       | PostgreSQL | PG 生态，SQL + 向量混合查询        | 已有 PG 基础设施 |
+| **[Elasticsearch](https://www.elastic.co/elasticsearch/)** | ES         | dense_vector 类型，全文搜索 + 向量 | 已有 ES 集群     |
+| **Redis Vector**                                           | Redis      | 内存级性能，简单场景               | 缓存 + 向量检索  |
 
 ### 底层索引库
 
-| 方案        | 维护方 | 特点                     | 定位           |
-| ----------- | ------ | ------------------------ | -------------- |
-| **Faiss**   | Meta   | 底层索引库，非完整数据库 | 被其他项目集成 |
-| **HNSWLIB** | -      | HNSW 算法的 C++ 实现     | 嵌入式场景     |
+| 方案                                                   | 维护方 | 特点                     | 定位           |
+| ------------------------------------------------------ | ------ | ------------------------ | -------------- |
+| **[Faiss](https://github.com/facebookresearch/faiss)** | Meta   | 底层索引库，非完整数据库 | 被其他项目集成 |
+| **HNSWLIB**                                            | -      | HNSW 算法的 C++ 实现     | 嵌入式场景     |
 
 ## 选型建议
 
 ### 按场景选型
 
-| 场景          | 推荐方案               | 理由                         |
-| ------------- | ---------------------- | ---------------------------- |
-| 快速验证/原型 | Chroma、Pinecone       | 零配置，开箱即用             |
-| 小规模生产    | pgvector、Qdrant       | 运维简单，性能足够           |
-| 大规模生产    | Milvus、Qdrant         | 分布式架构，水平扩展         |
-| 已有 PG 生态  | pgvector               | 减少运维复杂度，SQL 混合查询 |
-| 全托管需求    | Pinecone、Milvus Cloud | 无需自建，按需付费           |
+| 场景          | 推荐方案                                                                         | 理由                         |
+| ------------- | -------------------------------------------------------------------------------- | ---------------------------- |
+| 快速验证/原型 | [Chroma](https://www.trychroma.com/)、[Pinecone](https://www.pinecone.io/)       | 零配置，开箱即用             |
+| 小规模生产    | [pgvector](https://github.com/pgvector/pgvector)、[Qdrant](https://qdrant.tech/) | 运维简单，性能足够           |
+| 大规模生产    | [Milvus](https://milvus.io/)、[Qdrant](https://qdrant.tech/)                     | 分布式架构，水平扩展         |
+| 已有 PG 生态  | [pgvector](https://github.com/pgvector/pgvector)                                 | 减少运维复杂度，SQL 混合查询 |
+| 全托管需求    | [Pinecone](https://www.pinecone.io/)、[Milvus](https://milvus.io/) Cloud         | 无需自建，按需付费           |
 
 ### 关键决策因素
 
 - **数据规模**：百万级以下选轻量方案，亿级以上选分布式方案
-- **团队技能**：熟悉 PG 优先 pgvector，熟悉 Go 考虑 Milvus
+- **团队技能**：熟悉 PG 优先 [pgvector](https://github.com/pgvector/pgvector)，熟悉 Go 考虑 [Milvus](https://milvus.io/)
 - **运维能力**：无运维团队选托管服务，有团队可自建开源方案
-- **查询复杂度**：需要复杂过滤选 Qdrant，纯向量搜索选 Pinecone
+- **查询复杂度**：需要复杂过滤选 [Qdrant](https://qdrant.tech/)，纯向量搜索选 [Pinecone](https://www.pinecone.io/)
 
 :::tip 选型原则
-不要过度设计。项目初期用 Chroma 或 pgvector 快速验证，确认向量检索是核心需求后再迁移到 Milvus 等重型方案。
+不要过度设计。项目初期用 [Chroma](https://www.trychroma.com/) 或 [pgvector](https://github.com/pgvector/pgvector) 快速验证，确认向量检索是核心需求后再迁移到 [Milvus](https://milvus.io/) 等重型方案。
 :::
 
 ## 工程实践
@@ -144,11 +144,11 @@ def dot_product(a, b):
 ### 基础使用示例
 
 ```python
-from qdrant_client import QdrantClient
+from qdrant_client import [Qdrant](https://qdrant.tech/)Client
 from qdrant_client.models import Distance, VectorParams, PointStruct
 
 # 初始化客户端
-client = QdrantClient(url="http://localhost:6333")
+client = [Qdrant](https://qdrant.tech/)Client(url="http://localhost:6333")
 
 # 创建集合
 client.create_collection(
@@ -232,5 +232,5 @@ results = client.search(
 - [Embedding](/glossary/embedding) — 文本向量化表示
 - [知识图谱](/glossary/knowledge-graph) — 结构化知识表示
 - [Agent](/glossary/agent) — AI 智能体
-- [Milvus 官方文档](https://milvus.io/docs)
+- [[Milvus](https://milvus.io/) 官方文档](https://milvus.io/docs)
 - [HNSW 论文](https://arxiv.org/abs/1603.09320)

@@ -1,168 +1,169 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.15"/>
-      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.10"/>
-      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.08"/>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:0.08" />
+      <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:0.06" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:0.04" />
     </linearGradient>
-    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
-    </linearGradient>
-    <linearGradient id="ringGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.8"/>
-      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.3"/>
-    </linearGradient>
-    <linearGradient id="ringGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.6"/>
-      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.2"/>
-    </linearGradient>
-    <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#8b5cf6"/>
-    </linearGradient>
-    <linearGradient id="lineGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8b5cf6"/>
-      <stop offset="100%" stop-color="#a78bfa"/>
-    </linearGradient>
+
+    <!-- Node gradients - multiple colors -->
+    <radialGradient id="n1" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </radialGradient>
+    <radialGradient id="n2" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </radialGradient>
+    <radialGradient id="n3" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#f472b6"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </radialGradient>
+    <radialGradient id="n4" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#34d399"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </radialGradient>
+    <radialGradient id="n5" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#fbbf24"/>
+      <stop offset="100%" style="stop-color:#f59e0b"/>
+    </radialGradient>
+    <radialGradient id="n6" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#f87171"/>
+      <stop offset="100%" style="stop-color:#ef4444"/>
+    </radialGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft glow -->
     <filter id="softGlow">
-      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
       <feMerge>
-        <feMergeNode in="blur"/>
+        <feMergeNode in="coloredBlur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
-    <filter id="strongGlow">
-      <feGaussianBlur stdDeviation="15" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+
+    <!-- Connection gradient -->
+    <linearGradient id="conn1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0.6"/>
+    </linearGradient>
+    <linearGradient id="conn2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#f472b6;stop-opacity:0.6"/>
+    </linearGradient>
+    <linearGradient id="conn3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#34d399;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0.6"/>
+    </linearGradient>
   </defs>
 
   <!-- Background -->
-  <rect width="400" height="400" fill="url(#bgGrad)" rx="24"/>
+  <rect width="400" height="400" fill="url(#bg)"/>
 
-  <!-- Subtle grid pattern -->
-  <g stroke="#6366f1" stroke-opacity="0.06" stroke-width="0.5">
-    <line x1="0" y1="50" x2="400" y2="50"/>
-    <line x1="0" y1="100" x2="400" y2="100"/>
-    <line x1="0" y1="150" x2="400" y2="150"/>
-    <line x1="0" y1="200" x2="400" y2="200"/>
-    <line x1="0" y1="250" x2="400" y2="250"/>
-    <line x1="0" y1="300" x2="400" y2="300"/>
-    <line x1="0" y1="350" x2="400" y2="350"/>
-    <line x1="50" y1="0" x2="50" y2="400"/>
-    <line x1="100" y1="0" x2="100" y2="400"/>
-    <line x1="150" y1="0" x2="150" y2="400"/>
-    <line x1="200" y1="0" x2="200" y2="400"/>
-    <line x1="250" y1="0" x2="250" y2="400"/>
-    <line x1="300" y1="0" x2="300" y2="400"/>
-    <line x1="350" y1="0" x2="350" y2="400"/>
+  <!-- Decorative circles -->
+  <circle cx="200" cy="200" r="160" fill="none" stroke="#6366f1" stroke-width="0.5" opacity="0.2"/>
+  <circle cx="200" cy="200" r="120" fill="none" stroke="#8b5cf6" stroke-width="0.5" opacity="0.15"/>
+  <circle cx="200" cy="200" r="80" fill="none" stroke="#ec4899" stroke-width="0.5" opacity="0.1"/>
+
+  <!-- Central glow -->
+  <circle cx="200" cy="200" r="60" fill="#6366f1" opacity="0.08" filter="url(#softGlow)"/>
+
+  <!-- Neural network connections -->
+  <g stroke-width="1.5" opacity="0.4">
+    <!-- Layer 1 to Layer 2 -->
+    <line x1="100" y1="120" x2="180" y2="80" stroke="url(#conn1)"/>
+    <line x1="100" y1="120" x2="180" y2="140" stroke="url(#conn1)"/>
+    <line x1="100" y1="120" x2="180" y2="200" stroke="url(#conn1)"/>
+    <line x1="100" y1="180" x2="180" y2="80" stroke="url(#conn1)"/>
+    <line x1="100" y1="180" x2="180" y2="140" stroke="url(#conn1)"/>
+    <line x1="100" y1="180" x2="180" y2="200" stroke="url(#conn1)"/>
+    <line x1="100" y1="240" x2="180" y2="80" stroke="url(#conn1)"/>
+    <line x1="100" y1="240" x2="180" y2="140" stroke="url(#conn1)"/>
+    <line x1="100" y1="240" x2="180" y2="200" stroke="url(#conn1)"/>
+    <line x1="100" y1="300" x2="180" y2="80" stroke="url(#conn1)"/>
+    <line x1="100" y1="300" x2="180" y2="140" stroke="url(#conn1)"/>
+    <line x1="100" y1="300" x2="180" y2="200" stroke="url(#conn1)"/>
+
+    <!-- Layer 2 to Layer 3 -->
+    <line x1="180" y1="80" x2="260" y2="100" stroke="url(#conn2)"/>
+    <line x1="180" y1="80" x2="260" y2="160" stroke="url(#conn2)"/>
+    <line x1="180" y1="140" x2="260" y2="100" stroke="url(#conn2)"/>
+    <line x1="180" y1="140" x2="260" y2="160" stroke="url(#conn2)"/>
+    <line x1="180" y1="200" x2="260" y2="100" stroke="url(#conn2)"/>
+    <line x1="180" y1="200" x2="260" y2="160" stroke="url(#conn2)"/>
+    <line x1="180" y1="260" x2="260" y2="100" stroke="url(#conn2)"/>
+    <line x1="180" y1="260" x2="260" y2="160" stroke="url(#conn2)"/>
+
+    <!-- Layer 3 to Layer 4 -->
+    <line x1="260" y1="100" x2="320" y2="140" stroke="url(#conn3)"/>
+    <line x1="260" y1="100" x2="320" y2="200" stroke="url(#conn3)"/>
+    <line x1="260" y1="160" x2="320" y2="140" stroke="url(#conn3)"/>
+    <line x1="260" y1="160" x2="320" y2="200" stroke="url(#conn3)"/>
+
+    <!-- Layer 4 to Output -->
+    <line x1="320" y1="140" x2="350" y2="180" stroke="url(#conn1)"/>
+    <line x1="320" y1="200" x2="350" y2="180" stroke="url(#conn1)"/>
   </g>
 
-  <!-- Orbital rings -->
-  <ellipse cx="200" cy="200" rx="160" ry="60" fill="none" stroke="url(#ringGrad1)" stroke-width="1.5" transform="rotate(-20 200 200)" opacity="0.6"/>
-  <ellipse cx="200" cy="200" rx="140" ry="50" fill="none" stroke="url(#ringGrad2)" stroke-width="1" transform="rotate(30 200 200)" opacity="0.5"/>
-  <ellipse cx="200" cy="200" rx="120" ry="40" fill="none" stroke="url(#ringGrad1)" stroke-width="0.8" transform="rotate(-45 200 200)" opacity="0.4"/>
-
-  <!-- Central core glow -->
-  <circle cx="200" cy="200" r="60" fill="#6366f1" opacity="0.08" filter="url(#strongGlow)"/>
-  <circle cx="200" cy="200" r="40" fill="#6366f1" opacity="0.12" filter="url(#softGlow)"/>
-
-  <!-- Neural network - centered and balanced -->
-  <!-- Connections -->
-  <g stroke-width="2" opacity="0.7">
-    <!-- Left cluster to center -->
-    <line x1="100" y1="120" x2="170" y2="170" stroke="url(#lineGrad1)"/>
-    <line x1="100" y1="200" x2="170" y2="190" stroke="url(#lineGrad1)"/>
-    <line x1="100" y1="280" x2="170" y2="210" stroke="url(#lineGrad1)"/>
-    <line x1="130" y1="150" x2="170" y2="180" stroke="url(#lineGrad1)"/>
-    <line x1="130" y1="250" x2="170" y2="200" stroke="url(#lineGrad1)"/>
-
-    <!-- Center cluster connections -->
-    <line x1="170" y1="170" x2="230" y2="160" stroke="url(#lineGrad2)"/>
-    <line x1="170" y1="190" x2="230" y2="190" stroke="url(#lineGrad2)"/>
-    <line x1="170" y1="210" x2="230" y2="220" stroke="url(#lineGrad2)"/>
-    <line x1="170" y1="180" x2="230" y2="175" stroke="url(#lineGrad2)"/>
-    <line x1="170" y1="200" x2="230" y2="205" stroke="url(#lineGrad2)"/>
-
-    <!-- Right cluster connections -->
-    <line x1="230" y1="160" x2="300" y2="140" stroke="url(#lineGrad1)"/>
-    <line x1="230" y1="190" x2="300" y2="200" stroke="url(#lineGrad1)"/>
-    <line x1="230" y1="220" x2="300" y2="260" stroke="url(#lineGrad1)"/>
-    <line x1="230" y1="175" x2="280" y2="170" stroke="url(#lineGrad1)"/>
-    <line x1="230" y1="205" x2="280" y2="230" stroke="url(#lineGrad1)"/>
-
-    <!-- Cross connections -->
-    <line x1="100" y1="120" x2="130" y2="150" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="100" y1="200" x2="130" y2="150" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="100" y1="200" x2="130" y2="250" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="100" y1="280" x2="130" y2="250" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="300" y1="140" x2="280" y2="170" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="300" y1="200" x2="280" y2="170" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="300" y1="200" x2="280" y2="230" stroke="url(#lineGrad2)" stroke-width="1.5"/>
-    <line x1="300" y1="260" x2="280" y2="230" stroke="url(#lineGrad2)" stroke-width="1.5"/>
+  <!-- Nodes - Layer 1 (Input) -->
+  <g filter="url(#glow)">
+    <circle cx="100" cy="120" r="10" fill="url(#n1)"/>
+    <circle cx="100" cy="180" r="10" fill="url(#n4)"/>
+    <circle cx="100" cy="240" r="10" fill="url(#n5)"/>
+    <circle cx="100" cy="300" r="10" fill="url(#n6)"/>
   </g>
 
-  <!-- Nodes - Left cluster -->
-  <g filter="url(#softGlow)">
-    <circle cx="100" cy="120" r="12" fill="url(#coreGrad)"/>
-    <circle cx="100" cy="200" r="14" fill="url(#coreGrad)"/>
-    <circle cx="100" cy="280" r="12" fill="url(#coreGrad)"/>
-    <circle cx="130" cy="150" r="10" fill="#8b5cf6"/>
-    <circle cx="130" cy="250" r="10" fill="#8b5cf6"/>
+  <!-- Nodes - Layer 2 (Hidden) -->
+  <g filter="url(#glow)">
+    <circle cx="180" cy="80" r="12" fill="url(#n2)"/>
+    <circle cx="180" cy="140" r="12" fill="url(#n3)"/>
+    <circle cx="180" cy="200" r="12" fill="url(#n1)"/>
+    <circle cx="180" cy="260" r="12" fill="url(#n4)"/>
   </g>
 
-  <!-- Nodes - Center cluster -->
-  <g filter="url(#softGlow)">
-    <circle cx="170" cy="170" r="11" fill="#8b5cf6"/>
-    <circle cx="170" cy="190" r="13" fill="url(#coreGrad)"/>
-    <circle cx="170" cy="210" r="11" fill="#8b5cf6"/>
-    <circle cx="170" cy="180" r="9" fill="#a78bfa"/>
-    <circle cx="170" cy="200" r="9" fill="#a78bfa"/>
+  <!-- Nodes - Layer 3 (Hidden) -->
+  <g filter="url(#glow)">
+    <circle cx="260" cy="100" r="11" fill="url(#n3)"/>
+    <circle cx="260" cy="160" r="11" fill="url(#n2)"/>
   </g>
 
-  <!-- Nodes - Right cluster -->
-  <g filter="url(#softGlow)">
-    <circle cx="230" cy="160" r="11" fill="#8b5cf6"/>
-    <circle cx="230" cy="190" r="14" fill="url(#coreGrad)"/>
-    <circle cx="230" cy="220" r="11" fill="#8b5cf6"/>
-    <circle cx="230" cy="175" r="9" fill="#a78bfa"/>
-    <circle cx="230" cy="205" r="9" fill="#a78bfa"/>
+  <!-- Nodes - Layer 4 (Hidden) -->
+  <g filter="url(#glow)">
+    <circle cx="320" cy="140" r="10" fill="url(#n5)"/>
+    <circle cx="320" cy="200" r="10" fill="url(#n6)"/>
   </g>
 
-  <!-- Nodes - Output cluster -->
-  <g filter="url(#softGlow)">
-    <circle cx="300" cy="140" r="12" fill="#ec4899"/>
-    <circle cx="300" cy="200" r="15" fill="url(#coreGrad)"/>
-    <circle cx="300" cy="260" r="12" fill="#ec4899"/>
-    <circle cx="280" cy="170" r="10" fill="#f472b6"/>
-    <circle cx="280" cy="230" r="10" fill="#f472b6"/>
+  <!-- Output Node -->
+  <g filter="url(#glow)">
+    <circle cx="350" cy="180" r="14" fill="url(#n1)"/>
+    <circle cx="350" cy="180" r="8" fill="#fff" opacity="0.3"/>
   </g>
-
-  <!-- Central AI core -->
-  <circle cx="200" cy="200" r="28" fill="url(#coreGrad)" filter="url(#strongGlow)"/>
-  <circle cx="200" cy="200" r="22" fill="#4f46e5"/>
-  <text x="200" y="208" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="20" fill="#fff">AI</text>
 
   <!-- Floating particles -->
-  <circle cx="60" cy="80" r="4" fill="#6366f1" opacity="0.6"/>
-  <circle cx="340" cy="90" r="3" fill="#8b5cf6" opacity="0.5"/>
-  <circle cx="80" cy="340" r="3.5" fill="#6366f1" opacity="0.5"/>
-  <circle cx="350" cy="320" r="4" fill="#ec4899" opacity="0.4"/>
-  <circle cx="180" cy="50" r="3" fill="#a78bfa" opacity="0.5"/>
-  <circle cx="250" cy="360" r="3" fill="#8b5cf6" opacity="0.4"/>
-  <circle cx="50" cy="200" r="2.5" fill="#6366f1" opacity="0.4"/>
-  <circle cx="370" cy="200" r="2.5" fill="#ec4899" opacity="0.3"/>
-  <circle cx="150" cy="370" r="2" fill="#a78bfa" opacity="0.3"/>
-  <circle cx="280" cy="40" r="2" fill="#6366f1" opacity="0.4"/>
+  <circle cx="140" cy="60" r="4" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="220" cy="50" r="3" fill="#a78bfa" opacity="0.5"/>
+  <circle cx="300" cy="70" r="3.5" fill="#f472b6" opacity="0.5"/>
+  <circle cx="80" cy="340" r="3" fill="#34d399" opacity="0.6"/>
+  <circle cx="160" cy="350" r="4" fill="#fbbf24" opacity="0.5"/>
+  <circle cx="280" cy="330" r="3" fill="#f87171" opacity="0.5"/>
+  <circle cx="340" cy="280" r="3.5" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="60" cy="200" r="2.5" fill="#a78bfa" opacity="0.4"/>
+  <circle cx="380" cy="120" r="2" fill="#f472b6" opacity="0.5"/>
 
-  <!-- Small decorative dots along connections -->
-  <circle cx="135" cy="145" r="2" fill="#6366f1" opacity="0.5"/>
-  <circle cx="200" cy="180" r="2" fill="#8b5cf6" opacity="0.6"/>
-  <circle cx="265" cy="180" r="2" fill="#ec4899" opacity="0.5"/>
-  <circle cx="150" cy="230" r="1.5" fill="#a78bfa" opacity="0.4"/>
-  <circle cx="250" cy="240" r="1.5" fill="#8b5cf6" opacity="0.4"/>
+  <!-- Sparkle effects -->
+  <path d="M 150 90 L 152 95 L 157 97 L 152 99 L 150 104 L 148 99 L 143 97 L 148 95 Z" fill="#fbbf24" opacity="0.7"/>
+  <path d="M 280 280 L 282 285 L 287 287 L 282 289 L 280 294 L 278 289 L 273 287 L 278 285 Z" fill="#34d399" opacity="0.7"/>
+  <path d="M 200 320 L 202 325 L 207 327 L 202 329 L 200 334 L 198 329 L 193 327 L 198 325 Z" fill="#f472b6" opacity="0.7"/>
+
+  <!-- AI Text watermark -->
+  <text x="200" y="215" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="56" fill="#6366f1" opacity="0.08">AI</text>
 </svg>

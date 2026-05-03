@@ -179,7 +179,7 @@ description: Machine Learning，让计算机从数据中自动学习的技术
 ### MLOps 最佳实践
 
 - **版本控制**：使用 DVC 等工具管理数据和模型版本
-- **实验追踪**：使用 MLflow、Weights & Biases 记录实验
+- **实验追踪**：使用 [MLflow](https://mlflow.org/)、[Weights & Biases](https://wandb.ai/) 记录实验
 - **自动化流水线**：构建可复现的训练和部署流水线
 - **模型监控**：持续监控模型性能，检测数据漂移和概念漂移
 

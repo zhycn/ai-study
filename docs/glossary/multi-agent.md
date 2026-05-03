@@ -158,7 +158,7 @@ async def collaborative_task(blackboard: Blackboard):
 
 ### LangGraph
 
-[LangGraph](https://langchain-ai.github.io/langgraph/) 是 LangChain 团队推出的多 Agent 编排框架，基于**有向图（Directed Graph）** 模型。
+[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 是 LangChain 团队推出的多 Agent 编排框架，基于**有向图（Directed Graph）** 模型。
 
 核心概念：
 
@@ -361,7 +361,7 @@ researcher_config = AgentConfig(
 
 ### 步骤 4：实现编排逻辑
 
-使用框架（如 LangGraph）或自研编排器：
+使用框架（如 [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)）或自研编排器：
 
 ```python
 from langgraph.graph import StateGraph, END
@@ -418,13 +418,13 @@ class MultiAgentMonitor:
 
 ## 主流框架对比
 
-| 框架             | 核心模式      | 适用场景           | 学习曲线 | 生态                   |
-| ---------------- | ------------- | ------------------ | -------- | ---------------------- |
-| **LangGraph**    | 有向图/状态机 | 需要精细控制流程   | 中等     | 丰富（LangChain 生态） |
-| **CrewAI**       | 角色扮演      | 内容创作、调研     | 低       | 增长中                 |
-| **AutoGen**      | 对话驱动      | 代码生成、数据分析 | 中等     | 微软支持               |
-| **MetaGPT**      | 软件公司隐喻  | 软件开发全流程     | 较高     | 开源社区               |
-| **OpenAI Swarm** | 轻量级编排    | 简单多 Agent 场景  | 低       | OpenAI 生态            |
+| 框架                                                                      | 核心模式      | 适用场景           | 学习曲线 | 生态                   |
+| ------------------------------------------------------------------------- | ------------- | ------------------ | -------- | ---------------------- |
+| **[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)** | 有向图/状态机 | 需要精细控制流程   | 中等     | 丰富（LangChain 生态） |
+| **[CrewAI](https://docs.crewai.com/)**                                    | 角色扮演      | 内容创作、调研     | 低       | 增长中                 |
+| **[AutoGen](https://microsoft.github.io/autogen/)**                       | 对话驱动      | 代码生成、数据分析 | 中等     | 微软支持               |
+| **[MetaGPT](https://github.com/geekan/MetaGPT)**                          | 软件公司隐喻  | 软件开发全流程     | 较高     | 开源社区               |
+| **OpenAI Swarm**                                                          | 轻量级编排    | 简单多 Agent 场景  | 低       | OpenAI 生态            |
 
 ## 最佳实践
 
@@ -439,7 +439,7 @@ class MultiAgentMonitor:
 result = agent_b.execute(agent_a.execute(input_data))
 ```
 
-**消息队列** 通过消息中间件（如 Redis、RabbitMQ）异步通信。解耦但增加复杂度。
+**消息队列** 通过消息中间件（如 [Redis](https://redis.io/)、[RabbitMQ](https://www.rabbitmq.com/)）异步通信。解耦但增加复杂度。
 
 ```python
 # 消息队列模式
@@ -641,7 +641,7 @@ def vote_resolution(agents: list[Agent], question: str) -> str:
 ## 延伸阅读
 
 - [Agent 智能体专题](/agent/)
-- [LangGraph 官方文档](https://langchain-ai.github.io/langgraph/)
+- [LangGraph 官方文档](https://docs.langchain.com/oss/python/langgraph/overview)
 - [CrewAI 官方文档](https://docs.crewai.com/)
 - [AutoGen 官方文档](https://microsoft.github.io/autogen/)
 - [MetaGPT GitHub 仓库](https://github.com/geekan/MetaGPT)

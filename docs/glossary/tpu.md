@@ -84,9 +84,9 @@ TPU 的核心架构包含以下关键组件：
 
 ### 框架支持
 
-- **TensorFlow**：原生支持，最佳兼容性
-- **JAX**：Google 推荐的深度学习框架，TPU 优先
-- **PyTorch**：通过 `torch_xla` 支持 TPU
+- **[TensorFlow](https://www.tensorflow.org/)**：原生支持，最佳兼容性
+- **[JAX](https://jax.readthedocs.io/)**：Google 推荐的深度学习框架，TPU 优先
+- **[PyTorch](https://pytorch.org/)**：通过 `torch_xla` 支持 TPU
 
 ```python
 # 使用 JAX 在 TPU 上运行
@@ -167,7 +167,7 @@ def parallel_train_step(params, batch, opt_state):
 
 ### 性能优化策略
 
-- **XLA 编译**（Accelerated Linear Algebra）：JAX/TensorFlow 自动使用 XLA 优化计算图
+- **[XLA](https://www.tensorflow.org/xla) 编译**（Accelerated Linear Algebra）：JAX/TensorFlow 自动使用 XLA 优化计算图
 - **批量大小调优**：TPU 适合大 batch size，通常 256-4096
 - **混合精度**：使用 bfloat16 提升吞吐量
 - **数据预取**：保持 TPU 计算单元满载

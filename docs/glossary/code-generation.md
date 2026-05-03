@@ -85,7 +85,7 @@ suffix = """
 
 ### IDE 集成工具
 
-**GitHub Copilot**
+**[GitHub Copilot](https://github.com/features/copilot)**
 
 目前最流行的 AI 编程助手，基于 OpenAI Codex 和 GPT 系列模型：
 
@@ -121,7 +121,7 @@ def merge(left: list[int], right: list[int]) -> list[int]:
     return result
 ```
 
-**Cursor**
+**[Cursor](https://www.cursor.com/)**
 
 基于 AI 优先理念重构的代码编辑器：
 
@@ -129,7 +129,7 @@ def merge(left: list[int], right: list[int]) -> list[int]:
 - **Codebase 索引**：对整个代码库建立索引，支持上下文感知的生成
 - **Agent 模式**：自主规划并执行复杂任务
 
-**Claude Code**
+**[Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview)**
 
 Anthropic 推出的终端 AI 编程助手：
 
@@ -240,14 +240,14 @@ AI 代码生成使用规范：
 
 ## 主流框架对比
 
-| 工具/模型      | 类型     | 支持语言       | 核心优势                  | 适用场景           |
-| -------------- | -------- | -------------- | ------------------------- | ------------------ |
-| GitHub Copilot | 商业 IDE | 多语言         | 生态最成熟，IDE 集成好    | 日常开发辅助       |
-| Cursor         | 商业 IDE | 多语言         | 代码库感知，多文件编辑    | 项目级重构和开发   |
-| Claude Code    | 商业 CLI | 多语言         | 终端集成，长上下文推理    | 复杂任务和脚本编写 |
-| Code Llama     | 开源模型 | Python/Java 等 | 可本地部署，数据不出域    | 企业私有化部署     |
-| DeepSeek-Coder | 开源模型 | 多语言         | 中英文双语优化，性价比高  | 中文场景开发       |
-| StarCoder2     | 开源模型 | 80+ 编程语言   | Apache 2.0 许可，商业友好 | 商业产品集成       |
+| 工具/模型                                                                               | 类型     | 支持语言       | 核心优势                  | 适用场景           |
+| --------------------------------------------------------------------------------------- | -------- | -------------- | ------------------------- | ------------------ |
+| [GitHub Copilot](https://github.com/features/copilot)                                   | 商业 IDE | 多语言         | 生态最成熟，IDE 集成好    | 日常开发辅助       |
+| [Cursor](https://www.cursor.com/)                                                       | 商业 IDE | 多语言         | 代码库感知，多文件编辑    | 项目级重构和开发   |
+| [Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview) | 商业 CLI | 多语言         | 终端集成，长上下文推理    | 复杂任务和脚本编写 |
+| Code Llama                                                                              | 开源模型 | Python/Java 等 | 可本地部署，数据不出域    | 企业私有化部署     |
+| DeepSeek-Coder                                                                          | 开源模型 | 多语言         | 中英文双语优化，性价比高  | 中文场景开发       |
+| StarCoder2                                                                              | 开源模型 | 80+ 编程语言   | Apache 2.0 许可，商业友好 | 商业产品集成       |
 
 ## 工程实践
 

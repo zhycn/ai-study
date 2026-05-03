@@ -195,7 +195,7 @@ prediction = outputs.logits.argmax(dim=-1)  # 0: 负面, 1: 正面
 
 ## 主流框架与实现
 
-### Hugging Face Transformers
+### [Hugging Face Transformers](https://huggingface.co/docs/transformers/)
 
 当前最流行的 NLP 库，提供数千个预训练模型：
 

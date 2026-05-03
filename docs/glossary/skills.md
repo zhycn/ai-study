@@ -256,7 +256,7 @@ description: 搜索 API 文档并获取使用示例
 4. 返回结果
 ```
 
-### LangChain Tools as Skills
+### [LangChain Tools](https://python.langchain.com/docs/modules/agents/tools/) as Skills
 
 在 LangChain 中，Tool 和 Skill 的概念高度重合。
 
@@ -422,12 +422,12 @@ description: 审查代码质量
 
 ## 主流框架对比
 
-| 框架/平台                  | Skill 形式       | 特点               | 适用场景      |
-| -------------------------- | ---------------- | ------------------ | ------------- |
-| **Claude Code Skills**     | 目录+SKILL.md    | 文档驱动、易扩展   | 开发助手      |
-| **LangChain Tools**        | Python 类/装饰器 | 统一接口、丰富生态 | 通用 Agent    |
-| **OpenAI Assistant Tools** | API 定义         | 云端托管、免运维   | OpenAI 生态   |
-| **CrewAI Tools**           | Python 类        | 角色绑定、易用     | 多 Agent 协作 |
+| 框架/平台                                                                      | Skill 形式       | 特点               | 适用场景      |
+| ------------------------------------------------------------------------------ | ---------------- | ------------------ | ------------- |
+| **Claude Code Skills**                                                         | 目录+SKILL.md    | 文档驱动、易扩展   | 开发助手      |
+| **[LangChain Tools](https://python.langchain.com/docs/modules/agents/tools/)** | Python 类/装饰器 | 统一接口、丰富生态 | 通用 Agent    |
+| **OpenAI Assistant Tools**                                                     | API 定义         | 云端托管、免运维   | OpenAI 生态   |
+| **CrewAI Tools**                                                               | Python 类        | 角色绑定、易用     | 多 Agent 协作 |
 
 ## 最佳实践
 

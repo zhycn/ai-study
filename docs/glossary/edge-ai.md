@@ -144,15 +144,15 @@ def distillation_loss(y_true, y_pred, teacher_pred, temperature=3.0, alpha=0.5):
 
 ### 推理框架对比
 
-| 框架                | 支持平台          | 特点                              | 适用场景         |
-| ------------------- | ----------------- | --------------------------------- | ---------------- |
-| **TensorFlow Lite** | Android/iOS/Linux | Google 出品，生态完善，工具链完整 | 移动端通用推理   |
-| **ONNX Runtime**    | 全平台            | 微软出品，支持多框架模型转换      | 跨平台部署       |
-| **NCNN**            | Android/iOS/Linux | 腾讯开源，无第三方依赖，性能优秀  | 移动端高性能推理 |
-| **MNN**             | Android/iOS/Linux | 阿里开源，轻量高效                | 移动端/嵌入式    |
-| **Core ML**         | iOS/macOS         | Apple 原生，深度集成系统          | Apple 生态       |
-| **MediaPipe**       | 全平台            | Google 出品，内置视觉/音频流水线  | 多媒体 AI 应用   |
-| **OpenVINO**        | x86/ARM           | Intel 出品，优化 Intel 硬件       | PC/边缘服务器    |
+| 框架                                                            | 支持平台          | 特点                              | 适用场景         |
+| --------------------------------------------------------------- | ----------------- | --------------------------------- | ---------------- |
+| **[TensorFlow Lite](https://www.tensorflow.org/lite)**          | Android/iOS/Linux | Google 出品，生态完善，工具链完整 | 移动端通用推理   |
+| **[ONNX Runtime](https://onnxruntime.ai/)**                     | 全平台            | 微软出品，支持多框架模型转换      | 跨平台部署       |
+| **NCNN**                                                        | Android/iOS/Linux | 腾讯开源，无第三方依赖，性能优秀  | 移动端高性能推理 |
+| **MNN**                                                         | Android/iOS/Linux | 阿里开源，轻量高效                | 移动端/嵌入式    |
+| **[Core ML](https://developer.apple.com/documentation/coreml)** | iOS/macOS         | Apple 原生，深度集成系统          | Apple 生态       |
+| **[MediaPipe](https://developers.google.com/mediapipe)**        | 全平台            | Google 出品，内置视觉/音频流水线  | 多媒体 AI 应用   |
+| **OpenVINO**                                                    | x86/ARM           | Intel 出品，优化 Intel 硬件       | PC/边缘服务器    |
 
 ### 边缘硬件平台对比
 
@@ -166,21 +166,21 @@ def distillation_loss(y_true, y_pred, teacher_pred, temperature=3.0, alpha=0.5):
 | **Google Edge TPU**         | 中   | 2W     | $75        | 专用视觉推理       |
 
 :::info 选型建议
-移动端开发优先选择 TensorFlow Lite 或 Core ML（iOS）。跨平台部署推荐 ONNX Runtime。追求极致性能可考虑 NCNN。硬件方面，入门选树莓派，工业级选 Jetson，量产考虑国产芯片如 RK3588。
+移动端开发优先选择 [TensorFlow Lite](https://www.tensorflow.org/lite) 或 [Core ML](https://developer.apple.com/documentation/coreml)（iOS）。跨平台部署推荐 [ONNX Runtime](https://onnxruntime.ai/)。追求极致性能可考虑 NCNN。硬件方面，入门选树莓派，工业级选 Jetson，量产考虑国产芯片如 RK3588。
 :::
 
 ## 选型建议
 
 ### 按场景选型
 
-| 场景         | 推荐方案                          | 理由                     |
-| ------------ | --------------------------------- | ------------------------ |
-| 手机图像识别 | Core ML（iOS）/ TFLite（Android） | 系统级集成，性能最优     |
-| 智能摄像头   | RK3588 + NCNN                     | 成本低，功耗小，性能足够 |
-| 工业检测     | Jetson Orin + TensorRT            | 算力强，支持高精度模型   |
-| 语音助手     | DSP + 轻量级 ASR 模型             | 低功耗，实时响应         |
-| 自动驾驶     | 多芯片方案（GPU + NPU）           | 高算力，高可靠性         |
-| IoT 传感器   | Edge TPU / K210                   | 超低功耗，专用加速       |
+| 场景         | 推荐方案                                                                              | 理由                     |
+| ------------ | ------------------------------------------------------------------------------------- | ------------------------ |
+| 手机图像识别 | [Core ML](https://developer.apple.com/documentation/coreml)（iOS）/ TFLite（Android） | 系统级集成，性能最优     |
+| 智能摄像头   | RK3588 + NCNN                                                                         | 成本低，功耗小，性能足够 |
+| 工业检测     | Jetson Orin + TensorRT                                                                | 算力强，支持高精度模型   |
+| 语音助手     | DSP + 轻量级 ASR 模型                                                                 | 低功耗，实时响应         |
+| 自动驾驶     | 多芯片方案（GPU + NPU）                                                               | 高算力，高可靠性         |
+| IoT 传感器   | Edge TPU / K210                                                                       | 超低功耗，专用加速       |
 
 ### 模型选择矩阵
 

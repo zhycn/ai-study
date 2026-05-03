@@ -175,11 +175,11 @@ async def orchestrator_workflow():
 
 ### LangGraph
 
-[LangGraph](https://langchain-ai.github.io/langgraph/) 是当前最流行的 Agent 编排框架之一，基于**状态机**模型。
+[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 是当前最流行的 Agent 编排框架之一，基于**状态机**模型。
 
 核心特性：
 
-- **循环支持**：与 DAG 不同，LangGraph 支持循环，适合需要重试和反思的 Agent 场景
+- **循环支持**：与 DAG 不同，[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 支持循环，适合需要重试和反思的 Agent 场景
 - **持久化**：内置检查点（Checkpoint）机制，支持中断和恢复
 - **可视化**：可以生成执行图，便于调试
 
@@ -418,13 +418,13 @@ async def execute_with_retry(agent: Agent, task: str, max_retries: int = 3):
 
 ## 主流框架对比
 
-| 框架               | 类型       | 特点                     | 适用场景      |
-| ------------------ | ---------- | ------------------------ | ------------- |
-| **LangGraph**      | 状态机     | 支持循环、持久化、可视化 | AI Agent 编排 |
-| **Temporal**       | 工作流引擎 | 高可靠、自动重试、持久化 | 生产级工作流  |
-| **Step Functions** | Serverless | AWS 原生、无需运维       | 云原生架构    |
-| **Airflow**        | DAG 调度   | 成熟生态、丰富操作符     | 数据流水线    |
-| **Prefect**        | 现代工作流 | Python 原生、易用        | 数据工程      |
+| 框架                                                                      | 类型       | 特点                     | 适用场景      |
+| ------------------------------------------------------------------------- | ---------- | ------------------------ | ------------- |
+| **[LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)** | 状态机     | 支持循环、持久化、可视化 | AI Agent 编排 |
+| **Temporal**                                                              | 工作流引擎 | 高可靠、自动重试、持久化 | 生产级工作流  |
+| **Step Functions**                                                        | Serverless | AWS 原生、无需运维       | 云原生架构    |
+| **Airflow**                                                               | DAG 调度   | 成熟生态、丰富操作符     | 数据流水线    |
+| **Prefect**                                                               | 现代工作流 | Python 原生、易用        | 数据工程      |
 
 ## 最佳实践
 
@@ -606,7 +606,7 @@ class DynamicOrchestrator:
 
 ### Q3：循环依赖怎么处理？
 
-- 使用 LangGraph 的循环支持
+- 使用 [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 的循环支持
 - 设置**最大迭代次数**防止死循环
 - 添加**终止条件**检测
 
@@ -651,7 +651,7 @@ class DynamicOrchestrator:
 ## 延伸阅读
 
 - [多 Agent 系统](/glossary/multi-agent)
-- [LangGraph 官方文档](https://langchain-ai.github.io/langgraph/)
+- [LangGraph 官方文档](https://docs.langchain.com/oss/python/langgraph/overview)
 - [Temporal 官方文档](https://docs.temporal.io/)
 - [Agent Orchestration Patterns 论文](https://arxiv.org/abs/2402.01680)
 - [工作流](/glossary/workflow)

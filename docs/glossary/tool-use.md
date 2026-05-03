@@ -231,7 +231,7 @@ result = await chain.execute("分析某网站的访问量趋势")
 
 ## 主流框架与实现
 
-### LangChain Tools
+### [LangChain Tools](https://python.langchain.com/docs/modules/agents/tools/)
 
 [LangChain](https://python.langchain.com/) 提供了丰富的工具生态和统一的工具接口。
 
@@ -431,12 +431,12 @@ async def execute_tool_with_retry(tool: Tool, input_data: dict, max_retries: int
 
 ## 主流框架对比
 
-| 框架/协议                   | 类型     | 特点                   | 适用场景       |
-| --------------------------- | -------- | ---------------------- | -------------- |
-| **OpenAI Function Calling** | API 原生 | 简单易用、广泛支持     | OpenAI 生态    |
-| **LangChain Tools**         | 框架     | 丰富内置工具、统一接口 | 快速原型       |
-| **MCP**                     | 开放协议 | 标准化、跨平台         | 通用工具集成   |
-| **Anthropic Tool Use**      | API 原生 | Claude 专用            | Anthropic 生态 |
+| 框架/协议                                                                      | 类型     | 特点                   | 适用场景       |
+| ------------------------------------------------------------------------------ | -------- | ---------------------- | -------------- |
+| **OpenAI Function Calling**                                                    | API 原生 | 简单易用、广泛支持     | OpenAI 生态    |
+| **[LangChain Tools](https://python.langchain.com/docs/modules/agents/tools/)** | 框架     | 丰富内置工具、统一接口 | 快速原型       |
+| **MCP**                                                                        | 开放协议 | 标准化、跨平台         | 通用工具集成   |
+| **Anthropic Tool Use**                                                         | API 原生 | Claude 专用            | Anthropic 生态 |
 
 ## 最佳实践
 

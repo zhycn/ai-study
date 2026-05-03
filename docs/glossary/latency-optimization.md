@@ -169,12 +169,12 @@ async def async_pipeline(user_input):
 
 ### 推理加速框架
 
-| 框架             | 特点                   | 适用场景             |
-| ---------------- | ---------------------- | -------------------- |
-| **vLLM**         | PagedAttention，高吞吐 | 本地部署批量推理     |
-| **TensorRT-LLM** | NVIDIA GPU 优化        | NVIDIA GPU 推理      |
-| **TGI**          | HuggingFace 官方框架   | HuggingFace 模型部署 |
-| **Ollama**       | 轻量级，易用           | 本地开发和小规模部署 |
+| 框架                                                                | 特点                   | 适用场景             |
+| ------------------------------------------------------------------- | ---------------------- | -------------------- |
+| [**vLLM**](https://github.com/vllm-project/vllm)                    | PagedAttention，高吞吐 | 本地部署批量推理     |
+| [**TensorRT-LLM**](https://github.com/NVIDIA/TensorRT-LLM)          | NVIDIA GPU 优化        | NVIDIA GPU 推理      |
+| [**TGI**](https://github.com/huggingface/text-generation-inference) | HuggingFace 官方框架   | HuggingFace 模型部署 |
+| [**Ollama**](https://ollama.com/)                                   | 轻量级，易用           | 本地开发和小规模部署 |
 
 ### 网络优化
 

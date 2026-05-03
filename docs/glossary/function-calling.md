@@ -236,7 +236,7 @@ except Exception as e:
 - **日志记录**：记录每次函数调用的决策、参数和结果
 - **模型思维输出**：开启模型的 reasoning 输出，理解其调用决策
 - **模拟测试**：使用 mock 函数测试模型的调用逻辑
-- **可视化工具**：使用 LangSmith、Weights & Biases 等工具追踪调用链
+- **可视化工具**：使用 [LangSmith](https://smith.langchain.com/)、[Weights & Biases](https://wandb.ai/) 等工具追踪调用链
 
 ## 实施步骤
 
@@ -451,7 +451,7 @@ for case in test_cases:
 - **日志记录**：记录每次函数调用的决策、参数和结果
 - **模型思维输出**：开启 reasoning 输出，理解调用决策
 - **模拟测试**：使用 mock 函数测试调用逻辑
-- **可视化工具**：使用 LangSmith 等工具追踪调用链
+- **可视化工具**：使用 [LangSmith](https://smith.langchain.com/) 等工具追踪调用链
 
 ## 常见问题与避坑
 

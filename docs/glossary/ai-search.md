@@ -157,15 +157,15 @@ Anthropic 报告称 Claude 3 在代码相关任务上比 Claude 2 提升了 50%[
 
 ### AI 搜索引擎
 
-| 产品                | 厂商       | 特点                                 |
-| ------------------- | ---------- | ------------------------------------ |
-| Perplexity AI       | Perplexity | 最早的 AI 搜索引擎之一，引用标注完善 |
-| Google AI Overviews | Google     | 整合到 Google 搜索中的 AI 答案       |
-| Bing Copilot        | Microsoft  | 集成到 Edge 浏览器和 Bing 搜索       |
-| 天工 AI 搜索        | 昆仑万维   | 中文 AI 搜索                         |
-| 知乎直答            | 知乎       | 基于知乎社区内容的 AI 搜索           |
-| 秘塔 AI 搜索        | 秘塔科技   | 中文学术搜索                         |
-| Kimi 搜索           | 月之暗面   | 长文本理解能力强                     |
+| 产品                                      | 厂商       | 特点                                 |
+| ----------------------------------------- | ---------- | ------------------------------------ |
+| Perplexity AI                             | Perplexity | 最早的 AI 搜索引擎之一，引用标注完善 |
+| Google AI Overviews                       | Google     | 整合到 Google 搜索中的 AI 答案       |
+| [Bing Copilot](https://www.bing.com/chat) | Microsoft  | 集成到 Edge 浏览器和 Bing 搜索       |
+| 天工 AI 搜索                              | 昆仑万维   | 中文 AI 搜索                         |
+| 知乎直答                                  | 知乎       | 基于知乎社区内容的 AI 搜索           |
+| 秘塔 AI 搜索                              | 秘塔科技   | 中文学术搜索                         |
+| Kimi 搜索                                 | 月之暗面   | 长文本理解能力强                     |
 
 ### 技术栈
 
@@ -173,14 +173,14 @@ Anthropic 报告称 Claude 3 在代码相关任务上比 Claude 2 提升了 50%[
 检索层：
 - 搜索引擎 API：Tavily、SerpAPI、Bing Search API
 - 网页抓取：Jina Reader、Firecrawl、Crawl4AI
-- 向量数据库：Pinecone、Qdrant、Weaviate
+- 向量数据库：[Pinecone](https://www.pinecone.io/)、[Qdrant](https://qdrant.tech/)、[Weaviate](https://weaviate.io/)
 
 生成层：
 - LLM：GPT-4o、Claude、Gemini
-- 框架：LangChain、LlamaIndex
+- 框架：[LangChain](https://python.langchain.com/)、[LlamaIndex](https://docs.llamaindex.ai/)
 
 评估：
-- 答案质量：RAGAS、DeepEval
+- 答案质量：[RAGAS](https://docs.ragas.io/)、[DeepEval](https://docs.confident-ai.com/)
 - 引用准确性：人工评估 + 自动化检查
 ```
 
@@ -274,7 +274,7 @@ def extract_citations(answer: str, sources: list) -> list:
 1. 构建测试集：100+ 典型查询问题
 2. 人工评估答案质量：准确性、完整性、相关性（1-5 分）
 3. 自动化评估：
-   - 使用 RAGAS 框架评估检索质量
+   - 使用 [RAGAS](https://docs.ragas.io/) 框架评估检索质量
    - 使用 LLM-as-a-Judge 评估生成质量
 4. A/B 测试：对比不同检索策略和提示词的效果
 

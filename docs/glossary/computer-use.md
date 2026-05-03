@@ -574,15 +574,15 @@ def evaluate_computer_use(app, test_cases: list[dict]) -> dict:
 
 ## 主流框架对比
 
-| 框架/方案                  | 核心机制                      | 适用场景         | 优势               | 局限                 |
-| -------------------------- | ----------------------------- | ---------------- | ------------------ | -------------------- |
-| **Anthropic Computer Use** | 截图 + Claude 视觉 + 键鼠模拟 | 通用桌面操作     | 官方支持，文档完善 | 仅限 Linux，延迟较高 |
-| **OS-Copilot / FRIDAY**    | 多模态理解 + 操作规划         | 跨应用任务自动化 | 学术研究，开源     | 需要较多配置         |
-| **UI-TARS**                | 专用 GUI 理解模型 + 操作      | 界面操作         | 界面识别准确率高   | 模型较大，需要 GPU   |
-| **OmniParser**             | 屏幕解析 + 图标识别           | 界面元素定位     | 轻量级，速度快     | 仅支持元素定位       |
-| **SeeAct**                 | 视觉-语言模型 + 操作          | 网页操作         | 网页场景效果好     | 主要针对网页         |
+| 框架/方案                                                                                                   | 核心机制                      | 适用场景         | 优势               | 局限                 |
+| ----------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------- | ------------------ | -------------------- |
+| **[Anthropic Computer Use](https://www.anthropic.com/news/3-5-models-and-computer-use)**                    | 截图 + Claude 视觉 + 键鼠模拟 | 通用桌面操作     | 官方支持，文档完善 | 仅限 Linux，延迟较高 |
+| **[OS-Copilot](https://github.com/OS-Copilot/OS-Copilot) / [FRIDAY](https://github.com/OS-Copilot/FRIDAY)** | 多模态理解 + 操作规划         | 跨应用任务自动化 | 学术研究，开源     | 需要较多配置         |
+| **UI-TARS**                                                                                                 | 专用 GUI 理解模型 + 操作      | 界面操作         | 界面识别准确率高   | 模型较大，需要 GPU   |
+| **OmniParser**                                                                                              | 屏幕解析 + 图标识别           | 界面元素定位     | 轻量级，速度快     | 仅支持元素定位       |
+| **SeeAct**                                                                                                  | 视觉-语言模型 + 操作          | 网页操作         | 网页场景效果好     | 主要针对网页         |
 
-### Anthropic Computer Use 示例
+### [Anthropic Computer Use](https://www.anthropic.com/news/3-5-models-and-computer-use) 示例
 
 ```python
 # 使用 Anthropic Computer Use API

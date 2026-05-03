@@ -124,7 +124,7 @@ def speculative_decode(target_model, draft_model, context, k=5):
 
 ### 介导推测解码（Medusa）
 
-**Medusa** 是一种无草稿模型的推测解码方案，通过在目标模型头部添加多个**解码头（Decoding Heads）**实现并行草稿生成。
+[**Medusa**](https://github.com/FasterDecoding/Medusa) 是一种无草稿模型的推测解码方案，通过在目标模型头部添加多个**解码头（Decoding Heads）**实现并行草稿生成。
 
 每个解码头预测未来第 i 个位置的 Token，避免了加载额外模型：
 
@@ -162,7 +162,7 @@ Medusa 的优势：
 
 ### EAGLE 算法
 
-**EAGLE（Extrapolative Algorithm for Greater Language-model Efficiency）** 是一种高效的推测解码算法，通过特征外推（Feature Extrapolation）预测未来 Token：
+[**EAGLE**](https://github.com/SafeAILab/EAGLE)（Extrapolative Algorithm for Greater Language-model Efficiency）是一种高效的推测解码算法，通过特征外推（Feature Extrapolation）预测未来 Token：
 
 ```python
 # EAGLE 核心思想
@@ -228,7 +228,7 @@ vLLM 推测解码的关键配置：
 - **num_speculative_tokens**：每次草稿生成的 Token 数，通常 3-8
 - **speculative_disable_by_threshold**：当 prompt 长度超过阈值时禁用推测解码
 
-### TGI 中的推测解码
+### [TGI](https://github.com/huggingface/text-generation-inference) 中的推测解码
 
 [Hugging Face TGI](https://github.com/huggingface/text-generation-inference) 也支持推测解码：
 
@@ -244,12 +244,12 @@ text-generation-launcher \
 
 选择合适的草稿模型对加速效果至关重要：
 
-| 目标模型    | 推荐草稿模型   | 词表匹配 | 接受率预期 |
-| ----------- | -------------- | -------- | ---------- |
-| Llama-2-70B | Llama-2-7B     | 完全匹配 | 70-80%     |
-| Llama-2-70B | TinyLlama-1.1B | 完全匹配 | 60-70%     |
-| Llama-3-70B | Llama-3-8B     | 完全匹配 | 75-85%     |
-| Mistral-7B  | TinyLlama-1.1B | 部分匹配 | 50-60%     |
+| 目标模型    | 推荐草稿模型                                            | 词表匹配 | 接受率预期 |
+| ----------- | ------------------------------------------------------- | -------- | ---------- |
+| Llama-2-70B | Llama-2-7B                                              | 完全匹配 | 70-80%     |
+| Llama-2-70B | [TinyLlama](https://github.com/jzhang38/TinyLlama)-1.1B | 完全匹配 | 60-70%     |
+| Llama-3-70B | Llama-3-8B                                              | 完全匹配 | 75-85%     |
+| Mistral-7B  | [TinyLlama](https://github.com/jzhang38/TinyLlama)-1.1B | 部分匹配 | 50-60%     |
 
 :::warning 注意
 草稿模型与目标模型的词表必须兼容。如果词表不同，需要额外的 Token 映射层，会引入额外开销并降低接受率。

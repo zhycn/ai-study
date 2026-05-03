@@ -133,7 +133,7 @@ description: AI Workflows，AI 任务的自动化流程编排
 
 ## 主流框架
 
-### LangGraph
+### [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)
 
 LangChain 推出的基于图的工作流框架：
 
@@ -263,12 +263,12 @@ workflow:
 
 根据需求选择合适的框架：
 
-| 需求     | 推荐框架           | 优势                   |
-| -------- | ------------------ | ---------------------- |
-| 快速原型 | Dify / Coze        | 可视化编排，开箱即用   |
-| 代码控制 | LangGraph          | 灵活的图结构，支持循环 |
-| 生产级   | Temporal           | 持久化执行，容错机制   |
-| 云原生   | AWS Step Functions | 与 AWS 生态深度集成    |
+| 需求     | 推荐框架                                                              | 优势                   |
+| -------- | --------------------------------------------------------------------- | ---------------------- |
+| 快速原型 | Dify / Coze                                                           | 可视化编排，开箱即用   |
+| 代码控制 | [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) | 灵活的图结构，支持循环 |
+| 生产级   | Temporal                                                              | 持久化执行，容错机制   |
+| 云原生   | AWS Step Functions                                                    | 与 AWS 生态深度集成    |
 
 ### 步骤 3：实现工作流
 
@@ -453,7 +453,7 @@ def safe_summarize(state: ContentState) -> ContentState:
 
 **Q3：如何处理工作流中的状态管理？**
 
-- 使用框架提供的状态管理机制（如 LangGraph 的 StateGraph）
+- 使用框架提供的状态管理机制（如 [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) 的 StateGraph）
 - 状态对象应包含所有必要的中间结果
 - 避免在状态中存储大量数据，使用引用或 ID
 - 对于长时间运行的工作流，使用持久化存储
@@ -492,7 +492,7 @@ def safe_summarize(state: ContentState) -> ContentState:
 
 ## 延伸阅读
 
-- [LangGraph 文档](https://langchain-ai.github.io/langgraph/)
+- [LangGraph 文档](https://docs.langchain.com/oss/python/langgraph/overview)
 - [Dify 文档](https://docs.dify.ai/)
 - [Temporal 文档](https://docs.temporal.io/)
 - [AWS Step Functions](https://aws.amazon.com/step-functions/)

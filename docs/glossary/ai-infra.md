@@ -61,28 +61,28 @@ AI Infra 不是单一工具，而是一个生态系统。选择合适的 AI Infr
 
 **1. 计算资源管理**
 
-- **GPU 集群编排**：Kubernetes + GPU Operator 管理 GPU 资源
-- **任务调度**：Slurm、KubeFlow、Volcano 等调度训练任务
+- **GPU 集群编排**：[Kubernetes](https://kubernetes.io/) + GPU Operator 管理 GPU 资源
+- **任务调度**：Slurm、[KubeFlow](https://www.kubeflow.org/)、Volcano 等调度训练任务
 - **弹性扩缩容**：根据负载自动调整计算资源
 - **多租户隔离**：不同团队共享集群，资源隔离
 
 **2. 数据管理**
 
 - **数据版本控制**（Data Versioning）：DVC、LakeFS 管理数据集版本
-- **特征存储**（Feature Store）：Feast、Tecton 管理特征工程
+- **特征存储**（Feature Store）：[Feast](https://feast.dev/)、Tecton 管理特征工程
 - **数据流水线**：Airflow、Prefect 自动化数据处理
 - **数据质量监控**：Great Expectations、Deequ 验证数据质量
 
 **3. 实验管理**
 
-- **实验追踪**（Experiment Tracking）：MLflow、Weights & Biases 记录实验
-- **超参优化**（Hyperparameter Optimization）：Optuna、Ray Tune 自动调参
+- **实验追踪**（Experiment Tracking）：[MLflow](https://mlflow.org/)、[Weights & Biases](https://wandb.ai/) 记录实验
+- **超参优化**（Hyperparameter Optimization）：[Optuna](https://optuna.org/)、Ray Tune 自动调参
 - **模型注册**（Model Registry）：管理模型版本和生命周期
 - **模型评估**：自动化评估流水线，对比模型性能
 
 **4. 模型部署**
 
-- **模型服务**（Model Serving）：vLLM、Triton、BentoML 提供推理服务
+- **模型服务**（Model Serving）：[vLLM](https://github.com/vllm-project/vllm)、[Triton](https://github.com/triton-inference-server/server)、[BentoML](https://www.bentoml.com/) 提供推理服务
 - **API 网关**：管理请求路由、限流、认证
 - **A/B 测试**：灰度发布，对比新旧模型效果
 - **边缘部署**：将模型部署到边缘设备
@@ -98,36 +98,36 @@ AI Infra 不是单一工具，而是一个生态系统。选择合适的 AI Infr
 
 ### 训练平台
 
-| 方案                 | 类型   | 特点                           | 适用场景             |
-| -------------------- | ------ | ------------------------------ | -------------------- |
-| **KubeFlow**         | 开源   | 基于 K8s，生态完善，学习曲线陡 | 企业级训练平台       |
-| **Ray**              | 开源   | 分布式计算框架，灵活性强       | 分布式训练、超参搜索 |
-| **Slurm**            | 开源   | HPC 标准，适合大规模集群       | 超算中心、科研机构   |
-| **AWS SageMaker**    | 云服务 | 全托管，功能全面，成本高       | 企业快速上手         |
-| **Google Vertex AI** | 云服务 | 与 GCP 深度集成，AutoML 强     | Google 生态用户      |
-| **Azure ML**         | 云服务 | 与 Azure 生态集成，企业友好    | Microsoft 生态用户   |
+| 方案                                      | 类型   | 特点                           | 适用场景             |
+| ----------------------------------------- | ------ | ------------------------------ | -------------------- |
+| [**KubeFlow**](https://www.kubeflow.org/) | 开源   | 基于 K8s，生态完善，学习曲线陡 | 企业级训练平台       |
+| [**Ray**](https://www.ray.io/)            | 开源   | 分布式计算框架，灵活性强       | 分布式训练、超参搜索 |
+| **Slurm**                                 | 开源   | HPC 标准，适合大规模集群       | 超算中心、科研机构   |
+| **AWS SageMaker**                         | 云服务 | 全托管，功能全面，成本高       | 企业快速上手         |
+| **Google Vertex AI**                      | 云服务 | 与 GCP 深度集成，AutoML 强     | Google 生态用户      |
+| **Azure ML**                              | 云服务 | 与 Azure 生态集成，企业友好    | Microsoft 生态用户   |
 
 ### 模型服务
 
-| 方案                        | 特点                                 | 适用场景            |
-| --------------------------- | ------------------------------------ | ------------------- |
-| **vLLM**                    | 高吞吐 LLM 推理，PagedAttention 优化 | 大语言模型服务      |
-| **Triton Inference Server** | NVIDIA 出品，支持多框架，GPU 优化    | 通用模型服务        |
-| **BentoML**                 | 开发者友好，支持多模型编排           | 应用级模型服务      |
-| **Seldon Core**             | K8s 原生，企业级功能完善             | K8s 环境部署        |
-| **TorchServe**              | PyTorch 官方，简单易用               | PyTorch 模型部署    |
-| **TensorFlow Serving**      | TF 官方，生产级稳定                  | TensorFlow 模型部署 |
+| 方案                                                                             | 特点                                 | 适用场景            |
+| -------------------------------------------------------------------------------- | ------------------------------------ | ------------------- |
+| [**vLLM**](https://github.com/vllm-project/vllm)                                 | 高吞吐 LLM 推理，PagedAttention 优化 | 大语言模型服务      |
+| [**Triton Inference Server**](https://github.com/triton-inference-server/server) | NVIDIA 出品，支持多框架，GPU 优化    | 通用模型服务        |
+| [**BentoML**](https://www.bentoml.com/)                                          | 开发者友好，支持多模型编排           | 应用级模型服务      |
+| **Seldon Core**                                                                  | K8s 原生，企业级功能完善             | K8s 环境部署        |
+| [**TorchServe**](https://pytorch.org/serve/)                                     | PyTorch 官方，简单易用               | PyTorch 模型部署    |
+| [**TensorFlow Serving**](https://www.tensorflow.org/tfx/guide/serving)           | TF 官方，生产级稳定                  | TensorFlow 模型部署 |
 
 ### MLOps 平台
 
-| 方案                   | 核心功能                     | 特点                  |
-| ---------------------- | ---------------------------- | --------------------- |
-| **MLflow**             | 实验追踪、模型注册、项目打包 | 轻量级，生态广泛      |
-| **Weights & Biases**   | 实验追踪、可视化、协作       | 界面友好，适合团队    |
-| **Kubeflow Pipelines** | 流水线编排、实验管理         | K8s 原生，适合大规模  |
-| **DVC**                | 数据版本控制、流水线         | 类 Git 体验，数据管理 |
-| **Feast**              | 特征存储                     | 统一特征管理          |
-| **Evidently AI**       | 模型监控、漂移检测           | 开源，可视化好        |
+| 方案                                                | 核心功能                     | 特点                  |
+| --------------------------------------------------- | ---------------------------- | --------------------- |
+| [**MLflow**](https://mlflow.org/)                   | 实验追踪、模型注册、项目打包 | 轻量级，生态广泛      |
+| [**Weights & Biases**](https://wandb.ai/)           | 实验追踪、可视化、协作       | 界面友好，适合团队    |
+| [**Kubeflow Pipelines**](https://www.kubeflow.org/) | 流水线编排、实验管理         | K8s 原生，适合大规模  |
+| **DVC**                                             | 数据版本控制、流水线         | 类 Git 体验，数据管理 |
+| [**Feast**](https://feast.dev/)                     | 特征存储                     | 统一特征管理          |
+| **Evidently AI**                                    | 模型监控、漂移检测           | 开源，可视化好        |
 
 ### 计算资源方案
 
@@ -147,22 +147,22 @@ AI Infra 不是单一工具，而是一个生态系统。选择合适的 AI Infr
 
 ### 按团队规模选型
 
-| 团队规模 | 推荐方案                | 理由                   |
-| -------- | ----------------------- | ---------------------- |
-| 1-3 人   | 云服务 + MLflow         | 最小运维负担，快速上手 |
-| 3-10 人  | K8s + KubeFlow + MLflow | 平衡灵活性和复杂度     |
-| 10-50 人 | 自建集群 + 完整 MLOps   | 需要标准化流程         |
-| 50+ 人   | 自研平台 + 开源组件     | 需要定制化能力         |
+| 团队规模 | 推荐方案                                                                    | 理由                   |
+| -------- | --------------------------------------------------------------------------- | ---------------------- |
+| 1-3 人   | 云服务 + MLflow                                                             | 最小运维负担，快速上手 |
+| 3-10 人  | K8s + [KubeFlow](https://www.kubeflow.org/) + [MLflow](https://mlflow.org/) | 平衡灵活性和复杂度     |
+| 10-50 人 | 自建集群 + 完整 MLOps                                                       | 需要标准化流程         |
+| 50+ 人   | 自研平台 + 开源组件                                                         | 需要定制化能力         |
 
 ### 按业务场景选型
 
-| 场景       | 核心需求               | 推荐技术栈                       |
-| ---------- | ---------------------- | -------------------------------- |
-| 大模型训练 | 大规模 GPU、分布式训练 | K8s + Slurm + DeepSpeed/Megatron |
-| 推荐系统   | 低延迟推理、特征服务   | Triton + Feast + Redis           |
-| 计算机视觉 | GPU 推理、批处理       | Triton + K8s + S3                |
-| NLP 服务   | 高吞吐 LLM 推理        | vLLM + K8s + API Gateway         |
-| 实时决策   | 毫秒级延迟、高可用     | 边缘部署 + 负载均衡              |
+| 场景       | 核心需求               | 推荐技术栈                                                                                        |
+| ---------- | ---------------------- | ------------------------------------------------------------------------------------------------- |
+| 大模型训练 | 大规模 GPU、分布式训练 | K8s + Slurm + DeepSpeed/Megatron                                                                  |
+| 推荐系统   | 低延迟推理、特征服务   | [Triton](https://github.com/triton-inference-server/server) + [Feast](https://feast.dev/) + Redis |
+| 计算机视觉 | GPU 推理、批处理       | [Triton](https://github.com/triton-inference-server/server) + K8s + S3                            |
+| NLP 服务   | 高吞吐 LLM 推理        | [vLLM](https://github.com/vllm-project/vllm) + K8s + API Gateway                                  |
+| 实时决策   | 毫秒级延迟、高可用     | 边缘部署 + 负载均衡                                                                               |
 
 ## 工程实践
 

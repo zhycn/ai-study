@@ -41,7 +41,7 @@ class ExactCache:
     """精确匹配缓存"""
 
     def __init__(self, store):
-        self.store = store  # Redis、Memcached 等
+        self.store = store  # [Redis](https://redis.io/)、[Memcached](https://memcached.org/) 等
 
     def _make_key(self, model, prompt, params):
         """生成缓存键"""

@@ -37,9 +37,9 @@ description: Generative AI，能够生成新内容的 AI 技术
 
 - **2020 年**：GPT-3（1750 亿参数）展现强大的**涌现能力**（Emergent Ability），无需微调即可完成多种任务
 - **2021 年**：DALL-E 发布，实现文本到图像生成；Diffusion Model 开始崭露头角
-- **2022 年**：Stable Diffusion 开源，图像生成进入大众时代；ChatGPT 发布，对话式 AI 引爆全球
-- **2023 年**：GPT-4 实现多模态能力；Midjourney、Claude、Gemini 等竞相发展
-- **2024 年**：Sora 等视频生成模型出现；开源模型（LLaMA、Mistral）快速追赶
+- **2022 年**：[Stable Diffusion](https://stability.ai/stable-diffusion) 开源，图像生成进入大众时代；ChatGPT 发布，对话式 AI 引爆全球
+- **2023 年**：GPT-4 实现多模态能力；[Midjourney](https://www.midjourney.com/)、Claude、Gemini 等竞相发展
+- **2024 年**：[Sora](https://openai.com/sora/) 等视频生成模型出现；开源模型（LLaMA、Mistral）快速追赶
 
 ### 当前趋势（2025 年-）
 
@@ -73,7 +73,7 @@ description: Generative AI，能够生成新内容的 AI 技术
 
 - **前向过程**：逐步向数据添加噪声，直到变为纯噪声
 - **反向过程**：学习从噪声中逐步恢复数据
-- **代表模型**：DDPM、Stable Diffusion、DALL-E、Midjourney
+- **代表模型**：DDPM、[Stable Diffusion](https://stability.ai/stable-diffusion)、[DALL-E](https://openai.com/index/dall-e-3/)、[Midjourney](https://www.midjourney.com/)
 - **特点**：生成质量高、多样性好，但推理速度较慢
 
 ### 变分自编码器（VAE）
@@ -112,7 +112,7 @@ description: Generative AI，能够生成新内容的 AI 技术
 ### 图像生成
 
 - **应用场景**：插画设计、产品图、艺术创作、图像编辑
-- **代表模型**：Stable Diffusion、Midjourney、DALL-E、Flux
+- **代表模型**：[Stable Diffusion](https://stability.ai/stable-diffusion)、[Midjourney](https://www.midjourney.com/)、[DALL-E](https://openai.com/index/dall-e-3/)、Flux
 - **关键技术**：文本到图像（Text-to-Image）、图像到图像（Image-to-Image）、ControlNet
 
 ### 音频生成
@@ -124,13 +124,13 @@ description: Generative AI，能够生成新内容的 AI 技术
 ### 视频生成
 
 - **应用场景**：短视频创作、动画制作、广告制作
-- **代表模型**：Sora、Runway、Pika、Kling
+- **代表模型**：[Sora](https://openai.com/sora/)、[Runway](https://runwayml.com/)、[Pika](https://pika.art/)、[Kling](https://klingai.com/)
 - **关键技术**：文本到视频、图像到视频、视频编辑
 
 ### 代码生成
 
 - **应用场景**：代码补全、代码解释、Bug 修复、测试生成
-- **代表模型**：GitHub Copilot、Cursor、Claude、Code Llama
+- **代表模型**：[GitHub Copilot](https://github.com/features/copilot)、[Cursor](https://www.cursor.com/)、Claude、[Code Llama](https://ai.meta.com/blog/code-llama-large-language-model-coding/)
 - **关键技术**：上下文感知、多文件理解、工具集成
 
 ## 主流框架与实现
@@ -178,11 +178,11 @@ image.save("astronaut.png")
 
 ### 开源生态
 
-- **Hugging Face**：模型库、数据集、训练框架
-- **LangChain / LlamaIndex**：大模型应用框架
-- **ComfyUI / WebUI**：Stable Diffusion 可视化界面
-- **Ollama**：本地大模型运行工具
-- **vLLM**：高性能推理服务
+- **[Hugging Face](https://huggingface.co/)**：模型库、数据集、训练框架
+- **[LangChain](https://python.langchain.com/) / [LlamaIndex](https://docs.llamaindex.ai/)**：大模型应用框架
+- **[ComfyUI](https://github.com/comfyanonymous/ComfyUI) / [WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui)**：Stable Diffusion 可视化界面
+- **[Ollama](https://ollama.com/)**：本地大模型运行工具
+- **[vLLM](https://github.com/vllm-project/vllm)**：高性能推理服务
 
 ## 工程实践
 

@@ -90,12 +90,12 @@ mel_spec_db = librosa.power_to_db(mel_spec, ref=np.max)
 
 主流端到端架构：
 
-| 架构               | 特点                       | 代表模型                    |
-| ------------------ | -------------------------- | --------------------------- |
-| CTC                | 简单高效，但独立性假设过强 | DeepSpeech、Wav2Vec 2.0     |
-| RNN-T              | 支持流式识别，工业界主流   | Whisper、Conformer          |
-| Attention-based    | 精度高，但延迟较高         | LAS、Transformer-Transducer |
-| 混合 CTC/Attention | 兼顾训练稳定性和精度       | ESPnet 默认方案             |
+| 架构               | 特点                       | 代表模型                                                                                                                                                     |
+| ------------------ | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| CTC                | 简单高效，但独立性假设过强 | [DeepSpeech](https://github.com/mozilla/DeepSpeech)、[Wav2Vec 2.0](https://ai.meta.com/blog/wav2vec-2-0-learning-robust-speech-representations-using-audio/) |
+| RNN-T              | 支持流式识别，工业界主流   | [Whisper](https://github.com/openai/whisper)、[Conformer](https://arxiv.org/abs/2005.08100)                                                                  |
+| Attention-based    | 精度高，但延迟较高         | LAS、Transformer-Transducer                                                                                                                                  |
+| 混合 CTC/Attention | 兼顾训练稳定性和精度       | ESPnet 默认方案                                                                                                                                              |
 
 ### Whisper 模型
 
@@ -149,13 +149,13 @@ for segment in result["segments"]:
 
 ### 开源模型
 
-| 模型        | 厂商       | 参数量     | 特点             |
-| ----------- | ---------- | ---------- | ---------------- |
-| Whisper     | OpenAI     | up to 1.5B | 多语言，最流行   |
-| wav2vec 2.0 | Meta       | 300M       | 自监督预训练     |
-| SenseVoice  | 阿里通义   | 150M       | 支持情感识别     |
-| Paraformer  | 阿里达摩院 | -          | 非自回归，速度快 |
-| Conformer   | -          | -          | 工业界主流架构   |
+| 模型                                                                                                    | 厂商       | 参数量     | 特点             |
+| ------------------------------------------------------------------------------------------------------- | ---------- | ---------- | ---------------- |
+| [Whisper](https://github.com/openai/whisper)                                                            | OpenAI     | up to 1.5B | 多语言，最流行   |
+| [wav2vec 2.0](https://ai.meta.com/blog/wav2vec-2-0-learning-robust-speech-representations-using-audio/) | Meta       | 300M       | 自监督预训练     |
+| SenseVoice                                                                                              | 阿里通义   | 150M       | 支持情感识别     |
+| Paraformer                                                                                              | 阿里达摩院 | -          | 非自回归，速度快 |
+| [Conformer](https://arxiv.org/abs/2005.08100)                                                           | -          | -          | 工业界主流架构   |
 
 ## 实施步骤
 

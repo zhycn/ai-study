@@ -104,9 +104,9 @@ Agent 对自身行为进行评估和改进：
 
 ## 主流框架
 
-### LangGraph
+### [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview)
 
-LangChain 推出的 Agent 框架，基于图（Graph）结构定义 Agent 的工作流：
+[LangChain](https://python.langchain.com/) 推出的 Agent 框架，基于图（Graph）结构定义 Agent 的工作流：
 
 ```python
 from langgraph.graph import StateGraph, END
@@ -127,7 +127,7 @@ graph.add_conditional_edges("agent", should_continue, {"continue": "tool", "end"
 
 特点：可视化工作流、支持循环和条件分支、与 LangChain 生态深度集成。
 
-### AutoGen
+### [AutoGen](https://microsoft.github.io/autogen/)
 
 Microsoft 推出的多 Agent 框架，支持多个 Agent 协作完成任务：
 
@@ -135,7 +135,7 @@ Microsoft 推出的多 Agent 框架，支持多个 Agent 协作完成任务：
 - **灵活拓扑**：支持多种 Agent 组织方式
 - **人类参与**：允许人类在关键时刻介入
 
-### CrewAI
+### [CrewAI](https://docs.crewai.com/)
 
 面向任务的多 Agent 编排框架：
 
@@ -375,7 +375,7 @@ for case in test_cases:
 ## 延伸阅读
 
 - [ReAct 论文](https://arxiv.org/abs/2210.03629) - Reasoning + Acting 架构的原始论文
-- [LangGraph 文档](https://langchain-ai.github.io/langgraph/)
+- [LangGraph 文档](https://docs.langchain.com/oss/python/langgraph/overview)
 - [AutoGen 文档](https://microsoft.github.io/autogen/)
 - [CrewAI 文档](https://docs.crewai.com/)
 - [OpenAI Agents SDK](https://platform.openai.com/docs/guides/agents-sdk)

@@ -46,13 +46,13 @@ description: Fine-tuning，模型微调
 
 只更新模型的一小部分参数，大幅降低训练成本：
 
-| 方法          | 原理                          | 参数量     | 适用场景         |
-| ------------- | ----------------------------- | ---------- | ---------------- |
-| LoRA          | 在权重矩阵旁路添加低秩矩阵    | 0.1%-1%    | 通用场景，最流行 |
-| QLoRA         | 量化 + LoRA，4-bit 量化后微调 | 0.1%-1%    | 资源受限场景     |
-| Prefix Tuning | 在输入前添加可训练的前缀向量  | 0.01%-0.1% | 生成任务         |
-| Prompt Tuning | 只优化提示词的嵌入表示        | 0.001%     | 分类任务         |
-| Adapter       | 在层间插入小型可训练模块      | 1%-3%      | 多任务学习       |
+| 方法                                      | 原理                                                              | 参数量     | 适用场景         |
+| ----------------------------------------- | ----------------------------------------------------------------- | ---------- | ---------------- |
+| [LoRA](https://arxiv.org/abs/2106.09685)  | 在权重矩阵旁路添加低秩矩阵                                        | 0.1%-1%    | 通用场景，最流行 |
+| [QLoRA](https://arxiv.org/abs/2305.14314) | 量化 + [LoRA](https://arxiv.org/abs/2106.09685)，4-bit 量化后微调 | 0.1%-1%    | 资源受限场景     |
+| Prefix Tuning                             | 在输入前添加可训练的前缀向量                                      | 0.01%-0.1% | 生成任务         |
+| Prompt Tuning                             | 只优化提示词的嵌入表示                                            | 0.001%     | 分类任务         |
+| Adapter                                   | 在层间插入小型可训练模块                                          | 1%-3%      | 多任务学习       |
 
 ### 按训练目标分类
 
@@ -107,21 +107,21 @@ description: Fine-tuning，模型微调
 
 关键超参数：
 
-| 参数          | 说明          | 推荐值              |
-| ------------- | ------------- | ------------------- |
-| Learning Rate | 学习率        | 1e-5 ~ 5e-4         |
-| Epochs        | 训练轮数      | 1-3（避免过拟合）   |
-| Batch Size    | 批次大小      | 根据显存调整        |
-| Max Length    | 最大序列长度  | 根据任务需求        |
-| LoRA Rank     | LoRA 秩       | 8-64                |
-| LoRA Alpha    | LoRA 缩放系数 | 通常为 Rank 的 2 倍 |
+| 参数                                           | 说明                                              | 推荐值              |
+| ---------------------------------------------- | ------------------------------------------------- | ------------------- |
+| Learning Rate                                  | 学习率                                            | 1e-5 ~ 5e-4         |
+| Epochs                                         | 训练轮数                                          | 1-3（避免过拟合）   |
+| Batch Size                                     | 批次大小                                          | 根据显存调整        |
+| Max Length                                     | 最大序列长度                                      | 根据任务需求        |
+| [LoRA](https://arxiv.org/abs/2106.09685) Rank  | [LoRA](https://arxiv.org/abs/2106.09685) 秩       | 8-64                |
+| [LoRA](https://arxiv.org/abs/2106.09685) Alpha | [LoRA](https://arxiv.org/abs/2106.09685) 缩放系数 | 通常为 Rank 的 2 倍 |
 
 ### 4. 执行训练
 
 使用训练框架执行微调：
 
 ```bash
-# 使用 LLaMA-Factory 进行 LoRA 微调
+# 使用 [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) 进行 [LoRA](https://arxiv.org/abs/2106.09685) 微调
 llamafactory-cli train \
   --model_name_or_path meta-llama/Llama-3-8B \
   --dataset my_data.json \
@@ -143,19 +143,19 @@ llamafactory-cli train \
 
 ### 6. 部署上线
 
-- **合并权重**：将 LoRA 权重合并到基础模型
-- **量化压缩**：使用 GGUF、AWQ 等格式压缩模型
-- **服务部署**：使用 vLLM、TGI 等推理框架部署
+- **合并权重**：将 [LoRA](https://arxiv.org/abs/2106.09685) 权重合并到基础模型
+- **量化压缩**：使用 [GGUF](https://github.com/ggerganov/ggml/blob/master/docs/gguf.md)、[AWQ](https://github.com/casper-hansen/AutoAWQ) 等格式压缩模型
+- **服务部署**：使用 [vLLM](https://github.com/vllm-project/vllm)、[TGI](https://github.com/huggingface/text-generation-inference) 等推理框架部署
 
 ## 主流框架
 
-| 框架              | 特点                                          | 适用场景                 |
-| ----------------- | --------------------------------------------- | ------------------------ |
-| **LLaMA-Factory** | 一站式微调平台，支持多种模型和方法            | 快速上手，适合大多数场景 |
-| **Axolotl**       | 配置驱动，社区活跃                            | 灵活的训练配置           |
-| **TRL**           | Hugging Face 官方库，与 Transformers 深度集成 | 需要深度定制             |
-| **Unsloth**       | 优化训练速度，显存占用低                      | 资源受限场景             |
-| **OpenRLHF**      | 分布式 RLHF 训练                              | 大规模偏好对齐           |
+| 框架                                                               | 特点                                          | 适用场景                 |
+| ------------------------------------------------------------------ | --------------------------------------------- | ------------------------ |
+| **[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)**      | 一站式微调平台，支持多种模型和方法            | 快速上手，适合大多数场景 |
+| **[Axolotl](https://github.com/OpenAccess-AI-Collective/axolotl)** | 配置驱动，社区活跃                            | 灵活的训练配置           |
+| **[TRL](https://huggingface.co/docs/trl)**                         | Hugging Face 官方库，与 Transformers 深度集成 | 需要深度定制             |
+| **[Unsloth](https://github.com/unslothai/unsloth)**                | 优化训练速度，显存占用低                      | 资源受限场景             |
+| **OpenRLHF**                                                       | 分布式 RLHF 训练                              | 大规模偏好对齐           |
 
 ## 常见问题与避坑
 
@@ -183,7 +183,7 @@ llamafactory-cli train \
 
 - **SFT（监督微调）**：1000-10000 条高质量样本
 - **指令微调**：5000-50000 条指令-响应对
-- **LoRA 微调**：最少 100 条即可见效，但越多越好
+- **[LoRA](https://arxiv.org/abs/2106.09685) 微调**：最少 100 条即可见效，但越多越好
 
 ::: warning 注意
 数据质量远比数量重要。1000 条精心设计的样本通常优于 10000 条低质量数据。
@@ -193,17 +193,17 @@ llamafactory-cli train \
 
 可能。这称为"灾难性遗忘"（Catastrophic Forgetting）。缓解方法：
 
-- 使用 LoRA 等 PEFT 方法，只更新少量参数
+- 使用 [LoRA](https://arxiv.org/abs/2106.09685) 等 PEFT 方法，只更新少量参数
 - 在训练数据中混入通用任务样本
 - 控制学习率和训练轮数，避免过拟合
-- 保留基础模型，用 LoRA 适配器按需加载
+- 保留基础模型，用 [LoRA](https://arxiv.org/abs/2106.09685) 适配器按需加载
 
-**Q4：QLoRA 和 LoRA 选哪个？**
+**Q4：[QLoRA](https://arxiv.org/abs/2305.14314) 和 [LoRA](https://arxiv.org/abs/2106.09685) 选哪个？**
 
-- **LoRA**：显存充足时首选，训练速度更快
-- **QLoRA**：显存受限时选择，4-bit 量化后可在单张消费级 GPU 上微调 70B 模型
+- **[LoRA](https://arxiv.org/abs/2106.09685)**：显存充足时首选，训练速度更快
+- **[QLoRA](https://arxiv.org/abs/2305.14314)**：显存受限时选择，4-bit 量化后可在单张消费级 GPU 上微调 70B 模型
 
-QLoRA 的效果与 LoRA 接近，但训练时间增加约 10%-20%。
+[QLoRA](https://arxiv.org/abs/2305.14314) 的效果与 [LoRA](https://arxiv.org/abs/2106.09685) 接近，但训练时间增加约 10%-20%。
 
 **Q5：如何判断微调是否成功？**
 
@@ -257,11 +257,11 @@ QLoRA 的效果与 LoRA 接近，但训练时间增加约 10%-20%。
 
 ## 延伸阅读
 
-- [LoRA 论文](https://arxiv.org/abs/2106.09685) - Low-Rank Adaptation 的原始论文
-- [QLoRA 论文](https://arxiv.org/abs/2305.14314) - 高效微调方法
-- [LLaMA-Factory 文档](https://github.com/hiyouga/LLaMA-Factory)
-- [Hugging Face TRL 文档](https://huggingface.co/docs/trl)
-- [Unsloth 文档](https://github.com/unslothai/unsloth)
+- [[LoRA](https://arxiv.org/abs/2106.09685) 论文](https://arxiv.org/abs/2106.09685) - Low-Rank Adaptation 的原始论文
+- [[QLoRA](https://arxiv.org/abs/2305.14314) 论文](https://arxiv.org/abs/2305.14314) - 高效微调方法
+- [[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) 文档](<https://github.com/hiyouga/[LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory)>)
+- [Hugging Face [TRL](https://huggingface.co/docs/trl) 文档](https://huggingface.co/docs/trl)
+- [[Unsloth](https://github.com/unslothai/unsloth) 文档](https://github.com/unslothai/unsloth)
 - [大语言模型](/glossary/llm)
 - [RAG 检索增强生成](/glossary/rag)
 - [提示词工程](/glossary/prompt-engineering)

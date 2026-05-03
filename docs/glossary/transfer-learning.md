@@ -112,13 +112,13 @@ for param in model.bert.parameters():
 
 ### 微调策略对比
 
-| 策略                                | 描述                           | 适用场景                  | 计算成本 | 性能         |
-| ----------------------------------- | ------------------------------ | ------------------------- | -------- | ------------ |
-| **线性探测**（Linear Probing）      | 冻结预训练模型，只训练新分类头 | 数据极少（<100 样本）     | 极低     | 较低         |
-| **部分微调**（Partial Fine-tuning） | 冻结底层，微调高层             | 数据较少（100-1000 样本） | 低       | 中           |
-| **全量微调**（Full Fine-tuning）    | 更新所有参数                   | 数据充足（>1000 样本）    | 高       | 最高         |
-| **LoRA**                            | 低秩适配，只训练少量适配参数   | 大模型微调                | 低       | 接近全量微调 |
-| **提示微调**（Prompt Tuning）       | 只训练 prompt 向量             | 大语言模型                | 极低     | 依赖模型能力 |
+| 策略                                         | 描述                           | 适用场景                  | 计算成本 | 性能         |
+| -------------------------------------------- | ------------------------------ | ------------------------- | -------- | ------------ |
+| **线性探测**（Linear Probing）               | 冻结预训练模型，只训练新分类头 | 数据极少（<100 样本）     | 极低     | 较低         |
+| **部分微调**（Partial Fine-tuning）          | 冻结底层，微调高层             | 数据较少（100-1000 样本） | 低       | 中           |
+| **全量微调**（Full Fine-tuning）             | 更新所有参数                   | 数据充足（>1000 样本）    | 高       | 最高         |
+| [**LoRA**](https://arxiv.org/abs/2106.09685) | 低秩适配，只训练少量适配参数   | 大模型微调                | 低       | 接近全量微调 |
+| **提示微调**（Prompt Tuning）                | 只训练 prompt 向量             | 大语言模型                | 极低     | 依赖模型能力 |
 
 ### LoRA（Low-Rank Adaptation）
 
@@ -202,7 +202,7 @@ def distillation_loss(student_logits, teacher_logits, labels, temperature=2.0, a
 
 ## 主流框架与实现
 
-### Hugging Face Transformers + PEFT
+### [Hugging Face Transformers](https://huggingface.co/docs/transformers/) + PEFT
 
 大模型迁移学习的标准工具链：
 
@@ -244,8 +244,8 @@ merged_model = model.merge_and_unload()
 
 ### 其他重要框架
 
-- **PyTorch**：基础深度学习框架，迁移学习的底层实现
-- **timm**：PyTorch 图像模型库，丰富的预训练视觉模型
+- **[PyTorch](https://pytorch.org/)**：基础深度学习框架，迁移学习的底层实现
+- **[timm](https://github.com/huggingface/pytorch-image-models)**：PyTorch 图像模型库，丰富的预训练视觉模型
 - **OpenCLIP**：开源 CLIP 实现，视觉-语言迁移学习
 - **Sentence Transformers**：文本 Embedding 迁移学习
 

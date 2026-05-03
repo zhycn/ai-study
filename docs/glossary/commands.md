@@ -309,7 +309,7 @@ Claude Code 使用斜杠命令系统，内置多个常用命令。
 
 自定义命令通过 `.opencode/commands/` 目录定义，每个命令是一个可执行脚本或配置文件。
 
-### LangChain Agent Executor
+### [LangChain Agent Executor](https://python.langchain.com/docs/modules/agents/)
 
 LangChain 的 Agent Executor 支持命令式交互。
 
@@ -438,12 +438,12 @@ parser.register(CommandDefinition(
 
 ## 主流框架对比
 
-| 框架/平台           | 命令格式 | 特点         | 适用场景     |
-| ------------------- | -------- | ------------ | ------------ |
-| **Claude Code**     | 斜杠命令 | 内置丰富命令 | 开发助手     |
-| **Discord Bot**     | 斜杠命令 | 平台原生支持 | 社群机器人   |
-| **Slack Bot**       | 斜杠命令 | 企业集成     | 工作流自动化 |
-| **LangChain Agent** | 工具调用 | LLM 驱动     | AI Agent     |
+| 框架/平台                                                                | 命令格式 | 特点         | 适用场景     |
+| ------------------------------------------------------------------------ | -------- | ------------ | ------------ |
+| **Claude Code**                                                          | 斜杠命令 | 内置丰富命令 | 开发助手     |
+| **Discord Bot**                                                          | 斜杠命令 | 平台原生支持 | 社群机器人   |
+| **Slack Bot**                                                            | 斜杠命令 | 企业集成     | 工作流自动化 |
+| **[LangChain Agent](https://python.langchain.com/docs/modules/agents/)** | 工具调用 | LLM 驱动     | AI Agent     |
 
 ## 最佳实践
 

@@ -25,7 +25,7 @@ Transformer 之所以成为 AI 领域的基石架构，原因在于：
 - **长距离依赖建模**：自注意力机制使任意两个位置之间的信息传递路径长度为 O(1)，有效解决长序列遗忘问题
 - **架构统一性**：同一架构可应用于 NLP、CV、Audio 等不同领域，实现**多模态统一**
 - **可扩展性**（Scalability）：模型规模可从百万参数扩展到万亿参数，性能持续提升
-- **生态繁荣**：基于 Transformer 衍生出 BERT、GPT、T5、ViT 等数百种变体，形成庞大的模型家族
+- **生态繁荣**：基于 Transformer 衍生出 [BERT](https://arxiv.org/abs/1810.04805)、GPT、[T5](https://arxiv.org/abs/1910.10683)、[ViT](https://arxiv.org/abs/2010.11929) 等数百种变体，形成庞大的模型家族
 
 ## 核心原理
 
@@ -115,12 +115,12 @@ $$\text{FFN}(x) = \max(0, xW_1 + b_1)W_2 + b_2$$
 
 ### 位置编码对比
 
-| 编码方式   | 外推能力 | 计算效率 | 主流应用         |
-| ---------- | -------- | -------- | ---------------- |
-| 正弦编码   | 差       | 高       | 原始 Transformer |
-| RoPE       | 中       | 高       | Llama、Qwen      |
-| ALiBi      | 强       | 高       | MPT、BLOOM       |
-| 学习型编码 | 差       | 中       | T5               |
+| 编码方式   | 外推能力 | 计算效率 | 主流应用                               |
+| ---------- | -------- | -------- | -------------------------------------- |
+| 正弦编码   | 差       | 高       | 原始 Transformer                       |
+| RoPE       | 中       | 高       | Llama、Qwen                            |
+| ALiBi      | 强       | 高       | MPT、BLOOM                             |
+| 学习型编码 | 差       | 中       | [T5](https://arxiv.org/abs/1910.10683) |
 
 ## 主流变体架构
 
@@ -128,9 +128,9 @@ $$\text{FFN}(x) = \max(0, xW_1 + b_1)W_2 + b_2$$
 
 仅使用 Encoder 部分，擅长**理解任务**：
 
-- **BERT**（Google）：双向编码，通过 Masked Language Model 预训练
-- **RoBERTa**（Meta）：改进 BERT 训练策略
-- **XLM-R**（Meta）：多语言理解
+- **[BERT](https://arxiv.org/abs/1810.04805)**（Google）：双向编码，通过 Masked Language Model 预训练
+- **[RoBERTa](https://arxiv.org/abs/1907.11692)**（Meta）：改进 [BERT](https://arxiv.org/abs/1810.04805) 训练策略
+- **[XLM-R](https://arxiv.org/abs/1911.02116)**（Meta）：多语言理解
 
 ### Decoder-only 架构
 
@@ -144,23 +144,23 @@ $$\text{FFN}(x) = \max(0, xW_1 + b_1)W_2 + b_2$$
 
 完整结构，擅长**序列到序列**（Seq2Seq）任务：
 
-- **T5**（Google）：统一文本到文本框架
-- **BART**（Meta）：去噪自编码器预训练
+- **[T5](https://arxiv.org/abs/1910.10683)**（Google）：统一文本到文本框架
+- **[BART](https://arxiv.org/abs/1910.13461)**（Meta）：去噪自编码器预训练
 
 ### 架构变体对比
 
-| 架构            | 注意力方向   | 代表模型             | 适用场景        | 优缺点                   |
-| --------------- | ------------ | -------------------- | --------------- | ------------------------ |
-| Encoder-only    | 双向         | BERT、RoBERTa        | 分类、NER、检索 | 理解能力强，无法生成     |
-| Decoder-only    | 单向（因果） | GPT、Llama、Qwen     | 文本生成、对话  | 通用性强，训练高效       |
-| Encoder-Decoder | 双向 + 交叉  | T5、BART             | 翻译、摘要      | 生成质量高，训练成本高   |
-| MoE             | 单向 + 路由  | Mixtral、DeepSeek V3 | 大规模生成      | 参数大、计算小，路由复杂 |
+| 架构            | 注意力方向   | 代表模型                                                                              | 适用场景        | 优缺点                   |
+| --------------- | ------------ | ------------------------------------------------------------------------------------- | --------------- | ------------------------ |
+| Encoder-only    | 双向         | [BERT](https://arxiv.org/abs/1810.04805)、[RoBERTa](https://arxiv.org/abs/1907.11692) | 分类、NER、检索 | 理解能力强，无法生成     |
+| Decoder-only    | 单向（因果） | GPT、Llama、Qwen                                                                      | 文本生成、对话  | 通用性强，训练高效       |
+| Encoder-Decoder | 双向 + 交叉  | [T5](https://arxiv.org/abs/1910.10683)、[BART](https://arxiv.org/abs/1910.13461)      | 翻译、摘要      | 生成质量高，训练成本高   |
+| MoE             | 单向 + 路由  | [Mixtral](https://mistral.ai/news/mixtral-of-experts/)、DeepSeek V3                   | 大规模生成      | 参数大、计算小，路由复杂 |
 
 ### 混合专家架构（MoE）
 
 **混合专家**（Mixture of Experts，MoE）将 FFN 替换为多个专家网络，每次只激活部分专家，实现"大模型参数、小模型计算"：
 
-- **Mixtral 8x7B**（Mistral AI）：8 个专家，每次激活 2 个
+- **[Mixtral](https://mistral.ai/news/mixtral-of-experts/) 8x7B**（Mistral AI）：8 个专家，每次激活 2 个
 - **DeepSeek V3**（深度求索）：多 token 预测 + MoE
 - **Qwen MoE**：阿里开源 MoE 系列
 
@@ -205,7 +205,7 @@ past_key_values = model(inputs, past_key_values=past_key_values)
 
 - 是 [大语言模型](/glossary/llm) 的基础架构
 - 核心是 [注意力机制](/glossary/attention)，决定了模型的序列建模能力
-- 支撑 [多模态模型](/glossary/multimodal-model) 的发展（如 ViT、CLIP）
+- 支撑 [多模态模型](/glossary/multimodal-model) 的发展（如 [ViT](https://arxiv.org/abs/2010.11929)、[CLIP](https://arxiv.org/abs/2103.00020)）
 - 通过 [Embedding](/glossary/embedding) 层将离散输入转换为连续向量
 - 衍生出 [开源模型](/glossary/open-source-model)（Llama、Qwen）和 [闭源模型](/glossary/proprietary-model)（GPT、Claude）两大阵营
 

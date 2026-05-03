@@ -194,7 +194,7 @@ if batch.status == "completed":
 
 ### 本地批量推理
 
-使用 vLLM 等框架进行本地批量推理：
+使用 [vLLM](https://github.com/vllm-project/vllm) 等框架进行本地批量推理：
 
 ```python
 from vllm import LLM, SamplingParams
@@ -238,12 +238,12 @@ for output in outputs:
 
 ### 第二步：选择批处理服务
 
-| 需求            | 推荐方案                      |
-| --------------- | ----------------------------- |
-| 使用 OpenAI API | OpenAI Batch API（50% 折扣）  |
-| 本地部署模型    | vLLM 批量推理                 |
-| 需要任务队列    | Celery + Redis                |
-| 云原生方案      | AWS Batch、Google Cloud Batch |
+| 需求            | 推荐方案                                                         |
+| --------------- | ---------------------------------------------------------------- |
+| 使用 OpenAI API | OpenAI Batch API（50% 折扣）                                     |
+| 本地部署模型    | [vLLM](https://github.com/vllm-project/vllm) 批量推理            |
+| 需要任务队列    | [Celery](https://docs.celeryq.dev/) + [Redis](https://redis.io/) |
+| 云原生方案      | AWS Batch、Google Cloud Batch                                    |
 
 ### 第三步：准备批处理输入
 

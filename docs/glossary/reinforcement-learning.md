@@ -156,7 +156,7 @@ class DQN(nn.Module):
 
 from stable_baselines3 import PPO
 
-# 使用 Stable Baselines3 训练 PPO
+# 使用 [Stable Baselines3](https://stable-baselines3.readthedocs.io/) 训练 PPO
 model = PPO(
     policy="MlpPolicy",
     env=env,
@@ -253,10 +253,10 @@ env.close()
 
 ### 其他重要框架
 
-- **Stable Baselines3**：基于 PyTorch 的 RL 算法实现，API 友好
-- **Ray RLlib**：分布式强化学习框架，适合大规模训练
+- **[Stable Baselines3](https://stable-baselines3.readthedocs.io/)**：基于 [PyTorch](https://pytorch.org/) 的 RL 算法实现，API 友好
+- **[Ray RLlib](https://docs.ray.io/en/latest/rllib/index.html)**：分布式强化学习框架，适合大规模训练
 - **CleanRL**：高质量、单文件的 RL 算法实现，适合学习
-- **Tianshou**：字节跳动开源的 RL 框架，基于 PyTorch
+- **[Tianshou](https://tianshou.readthedocs.io/)**：字节跳动开源的 RL 框架，基于 PyTorch
 - **PettingZoo**：多智能体强化学习环境
 
 ## 工程实践

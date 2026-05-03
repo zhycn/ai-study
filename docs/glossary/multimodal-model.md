@@ -134,16 +134,16 @@ $$\mathcal{L} = -\log\frac{\exp(\text{sim}(I, T) / \tau)}{\sum_{T'}\exp(\text{si
 
 ### 文生图模型
 
-- **DALL-E 3**（OpenAI）：与 GPT-4 集成，文本理解能力强
-- **Midjourney**：艺术风格突出，社区活跃
-- **Stable Diffusion 3/XL**（Stability AI）：开源可控生成
-- **FLUX**（Black Forest Labs）：高质量开源文生图
+- **[DALL-E 3](https://openai.com/index/dall-e-3/)**（OpenAI）：与 GPT-4 集成，文本理解能力强
+- **[Midjourney](https://www.midjourney.com/)**：艺术风格突出，社区活跃
+- **[Stable Diffusion](https://stability.ai/stable-diffusion) 3/XL**（[Stability AI](https://stability.ai/)）：开源可控生成
+- **[FLUX](https://blackforestlabs.ai/)**（[Black Forest Labs](https://blackforestlabs.ai/)）：高质量开源文生图
 
 ### 文生视频模型
 
-- **Sora**（OpenAI）：高质量视频生成，支持 60 秒视频
+- **[Sora](https://openai.com/sora/)**（OpenAI）：高质量视频生成，支持 60 秒视频
 - **Kling**（快手）：国产视频生成模型
-- **Runway Gen-3**：专业视频创作工具
+- **[Runway](https://runwayml.com/) Gen-3**：专业视频创作工具
 
 ## 工程实践
 
